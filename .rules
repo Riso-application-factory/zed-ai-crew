@@ -165,6 +165,12 @@ Release Notes:
 - Fetch crash reports: `script/sentry-fetch <issue-id>`
 - Generate investigation prompt from crash: `script/crash-to-prompt <issue-id>`
 
+# Human-facing communication and artifacts
+
+* Keep responses to humans focused on the problem at hand. Leave out tangential or peripheral content.
+* Markdown files are working documents for agents; HTML files are for humans to read and review (e.g., `.zed-ai-crew/product-brief.md` vs `.zed-ai-crew/product-brief.html`). When a document exists in both formats, update both in the same session so their content stays in sync.
+* HTML files follow the same discipline as human-facing responses: distill the content carefully to what a reviewer needs. Omit working notes, intermediate reasoning, and other agent-only detail.
+
 # Rules Hygiene
 
 These `.rules` files are read by every agent session. Keep them high-signal.
