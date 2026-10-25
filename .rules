@@ -178,6 +178,7 @@ Release Notes:
   - **Explanation** — why a human decision is needed and the trade-offs involved.
   - **Examples** — concrete scenarios showing how each path behaves in practice.
   - **Options** — clear, actionable choices to pick from (with a recommended option when appropriate).
+* Once a question is answered, integrate the resolved information directly into the relevant content section instead of creating or keeping a separate Q&A section.
 * Markdown files are working documents for agents write in english; HTML files are for humans to read and review write in vietnamese (e.g., `.zed-ai-crew/product-brief.md` vs `.zed-ai-crew/product-brief.html`). When a document exists in both formats, update both in the same session so their content stays in sync.
 * HTML files follow the same discipline as human-facing responses: distill the content carefully to what a reviewer needs. Omit working notes, intermediate reasoning, and other agent-only detail.
 
