@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang chủ Tài liệu — Zed AI Crew</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-brand">
+      <a href="index.html">Zed AI Crew</a>
+      <span class="brand-tag">Docs · Full Width</span>
+    </div>
+    <nav class="site-nav">
+      <a href="index.html" class="active">Trang chủ</a>
+      <a href="brief.html">Product Brief</a>
+      <a href="tech-spec.html">Tech Spec</a>
+      <a href="open-question.html">Open Questions</a>
+      <a href="spike-list.html">Spike List</a>
+      <span class="nav-sep"></span>
+      <a href="plan/00-overview.html">Kế hoạch</a>
+      <a href="plan/M0-prep-and-spikes.html">M0</a>
+      <a href="plan/M1-foundation.html">M1</a>
+      <a href="plan/M2-orchestrator.html">M2</a>
+      <a href="plan/M3-execution.html">M3</a>
+      <a href="plan/M4-github.html">M4</a>
+      <a href="plan/M5-playbook.html">M5</a>
+      <a href="plan/M6-ui.html">M6</a>
+      <a href="plan/M7-model-and-retro.html">M7</a>
+    </nav>
+  </header>
+  <main class="page-container">
+
+    <h1>Zed AI Crew — Trung tâm Tài liệu (Full Width)</h1>
+    <p>Hệ thống tài liệu thiết kế, đặc tả kỹ thuật, câu hỏi mở, danh sách spike và kế hoạch triển khai theo từng milestone của <strong>Zed AI Crew</strong>. Mọi tài liệu đều có bản <code>.html</code> (full-width cho Human đọc và review) song song với bản <code>.md</code> (dành cho Agent AI làm việc trong repo).</p>
+
+    <div class="kpi-strip">
+      <div class="kpi-box">
+        <div class="kpi-num">61 NEED</div>
+        <div class="kpi-label">Yêu cầu gốc đã được Human duyệt (Brief v3.5)</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">6 Crates · 11 Hooks</div>
+        <div class="kpi-label">Kiến trúc tách biệt & điểm nối core H1–H11 (Spec v2.2)</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">M0 → M7</div>
+        <div class="kpi-label">8 Milestone triển khai tuần tự & song song (Plan v1.1)</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">13 Spikes</div>
+        <div class="kpi-label">5 đã xong (S1–S5) · 8 trong kế hoạch (S6–S13)</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">4 Câu hỏi mở</div>
+        <div class="kpi-label">Q6–Q9 cùng 5 giả định nền tảng (A1–A5)</div>
+      </div>
+    </div>
+
+    <h2>1. Tài liệu cốt lõi (Core Documents)</h2>
+    <div class="grid-cards">
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <h3 class="card-title"><a href="brief.html">Product Brief</a></h3>
+            <span class="card-badge">v3.5 · Source 0</span>
+          </div>
+          <p class="card-desc">Nguồn gốc (Source 0) định nghĩa 61 NEED, vấn đề, mục tiêu, chỉ số bảo vệ, bảng loại session và tiêu chí Done, cấu hình theo tầng, nguồn seed và rủi ro sản phẩm.</p>
+        </div>
+        <div class="card-links">
+          <a class="btn-link" href="brief.html">Đọc bản HTML</a>
+          <a class="btn-link secondary" href="brief.html#phu-luc-b">61 NEED</a>
+          <a class="btn-link secondary" href="brief.html#session-types">Loại Session</a>
+          <a class="btn-link secondary" href="brief.md">brief.md</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <h3 class="card-title"><a href="tech-spec.html">Tech Spec</a></h3>
+            <span class="card-badge">v2.2 · Đã duyệt thiết kế</span>
+          </div>
+          <p class="card-desc">Kiến trúc 6 crate (<code>crew</code>, <code>crew_acp</code>, <code>crew_mcp</code>, <code>crew_github</code>, <code>crew_models</code>, <code>crew_ui</code>), điểm nối H1–H11, <code>CrewConnection</code>, run store SQLite, PolicyGate và truy vết 61 NEED.</p>
+        </div>
+        <div class="card-links">
+          <a class="btn-link" href="tech-spec.html">Đọc bản HTML</a>
+          <a class="btn-link secondary" href="tech-spec.html#muc-3-2">Điểm nối H1–H11</a>
+          <a class="btn-link secondary" href="tech-spec.html#phu-luc-a">Truy vết NEED</a>
+          <a class="btn-link secondary" href="tech-spec.md">tech-spec.md</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <h3 class="card-title"><a href="open-question.html">Câu hỏi mở & Giả định</a></h3>
+            <span class="card-badge">Q6–Q9 · A1–A5</span>
+          </div>
+          <p class="card-desc">Tổng hợp các câu hỏi còn mở (Q6–Q9), giả định nền tảng (A1–A5), các điểm gắn nhãn <code>[Suy luận]</code> cần xác nhận và danh sách việc cần Human thực hiện theo từng mốc.</p>
+        </div>
+        <div class="card-links">
+          <a class="btn-link" href="open-question.html">Đọc bản HTML</a>
+          <a class="btn-link secondary" href="open-question.html#muc-1">Câu hỏi Q6–Q9</a>
+          <a class="btn-link secondary" href="open-question.html#muc-4">Việc của Human</a>
+          <a class="btn-link secondary" href="open-question.md">open-question.md</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <h3 class="card-title"><a href="spike-list.html">Danh sách Spike</a></h3>
+            <span class="card-badge">S1–S13</span>
+          </div>
+          <p class="card-desc">Báo cáo tổng hợp 5 spike đã hoàn tất ngày 2026-10-25 (S1–S5, Q1b, Q3b) và đặc tả chi tiết 8 spike còn mở trong kế hoạch triển khai (S6–S13).</p>
+        </div>
+        <div class="card-links">
+          <a class="btn-link" href="spike-list.html">Đọc bản HTML</a>
+          <a class="btn-link secondary" href="spike-list.html#phan-1">Đã xong (S1–S5)</a>
+          <a class="btn-link secondary" href="spike-list.html#phan-2">Còn mở (S6–S13)</a>
+          <a class="btn-link secondary" href="spike-list.md">spike-list.md</a>
+        </div>
+      </div>
+    </div>
+
+    <h2>2. Kế hoạch triển khai theo Milestone (<code>docs/crew/plan/</code>)</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tài liệu</th>
+            <th>Milestone</th>
+            <th>Mục tiêu chính</th>
+            <th>Cần có trước</th>
+            <th>Spike</th>
+            <th>Định dạng</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="plan/00-overview.html">00 · Tổng quan kế hoạch</a></strong></td>
+            <td>Tổng quan (v1.1)</td>
+            <td>Bản đồ milestone, chiều phụ thuộc 6 crate, quy trình mỗi task, Định nghĩa Xong, quy tắc spike và bảng truy vết 61 NEED → Task.</td>
+            <td>—</td>
+            <td>—</td>
+            <td><a href="plan/00-overview.html">HTML</a> · <a href="plan/00-overview.md">MD</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="plan/M0-prep-and-spikes.html">M0 · Chuẩn bị và spike chặn</a></strong></td>
+            <td>M0 (T0.1–T0.9)</td>
+            <td>Tài liệu nguồn trong repo, kiểm điểm nối H1–H11 trên fork, <code>AGENTS.md</code>, khung 6 crate rỗng, <code>CrewFeatureFlag</code>, check tĩnh NEED 61, harness contract test.</td>
+            <td>—</td>
+            <td><a href="spike-list.html#s6">S6</a>, <a href="spike-list.html#s7">S7</a></td>
+            <td><a href="plan/M0-prep-and-spikes.html">HTML</a> · <a href="plan/M0-prep-and-spikes.md">MD</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="plan/M1-foundation.html">M1 · Nền</a></strong></td>
+            <td>M1 (T1.1–T1.14)</td>
+            <td>Run store SQLite, cấu hình theo tầng, nhật ký effect &amp; Recovery lõi, <code>SessionOptions</code> (H2), adapter ghim (H10), <code>ProviderProfile</code>, <code>CrewConnection</code> (H5d), xác nhận đăng nhập, snapshot model, đọc hạn mức, sửa lỗi đăng nhập Zed (H11).</td>
+            <td>M0</td>
+            <td><a href="spike-list.html#s12">S12</a></td>
+            <td><a href="plan/M1-foundation.html">HTML</a> · <a href="plan/M1-foundation.md">MD</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="plan/M2-orchestrator.html">M2 · Orchestrator và giao việc</a></strong></td>
+            <td>M2 (T2.1–T2.10)</td>
+            <td>Cầu nối MCP (H1), <code>PolicyGate</code> lõi &amp; <code>ModeGuard</code>, “Crew: New Session” (H5a, H5e), ROLE Orchestrator chỉ đọc, công cụ Orchestrator đợt 1, <code>DecisionCapture</code>, quy trình chọn model/provider, dừng session.</td>
+            <td>M1</td>
+            <td><a href="spike-list.html#s11">S11</a></td>
+            <td><a href="plan/M2-orchestrator.html">HTML</a> · <a href="plan/M2-orchestrator.md">MD</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="plan/M3-execution.html">M3 · Thực thi và kiểm chứng</a></strong></td>
+            <td>M3 (T3.1–T3.15)</td>
+            <td>Spawn worker trong git worktree riêng, luật gate &amp; sandbox Claude, task packet &amp; phát hiện compaction, kiểm bàn giao &amp; quét secret, commit bằng App, kiểm chứng trong Seatbelt, Evaluator độc lập, Scheduler, worktree tích hợp.</td>
+            <td>M2</td>
+            <td><a href="spike-list.html#s8">S8</a>, <a href="spike-list.html#s9">S9</a>, <a href="spike-list.html#s10">S10</a></td>
+            <td><a href="plan/M3-execution.html">HTML</a> · <a href="plan/M3-execution.md">MD</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="plan/M4-github.html">M4 · GitHub</a></strong></td>
+            <td>M4 (T4.1–T4.7)</td>
+            <td>Hướng dẫn tạo GitHub App, client REST &amp; JWT, nhập private key vào Keychain, push qua askpass bằng token installation, Issues làm nguồn sự thật, PR &amp; duyệt theo version, merge theo <code>sha</code>, đối soát effect GitHub.</td>
+            <td>M3</td>
+            <td>—</td>
+            <td><a href="plan/M4-github.html">HTML</a> · <a href="plan/M4-github.md">MD</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="plan/M5-playbook.html">M5 · Playbook và pipeline</a></strong></td>
+            <td>M5 (T5.1–T5.10)</td>
+            <td>Bộ nạp ROLE &amp; playbook, danh mục ROLE theo scrum team từ seed, workflow cho 10 loại session, <code>DoneEvaluator</code>, đối soát chỉ đọc trước implement, steering khi đổi yêu cầu (H3b), Kickoff, prototype, bản đồ quyết định &amp; tham chiếu.</td>
+            <td>M2, M3, M4</td>
+            <td>—</td>
+            <td><a href="plan/M5-playbook.html">HTML</a> · <a href="plan/M5-playbook.md">MD</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="plan/M6-ui.html">M6 · Giao diện</a></strong></td>
+            <td>M6 (T6.1–T6.8)</td>
+            <td>Tổng quan session, thread worker chỉ đọc (H5b), bề mặt Việc chờ Human (prototype rồi hiện thực), Status bar, Sidebar &amp; History (H5c), trang Settings (H7), trang Onboarding (H6), tài liệu quyết định &amp; rà soát tuân thủ Zed UI.</td>
+            <td>M1, M5</td>
+            <td>—</td>
+            <td><a href="plan/M6-ui.html">HTML</a> · <a href="plan/M6-ui.md">MD</a></td>
+          </tr>
+          <tr>
+            <td><strong><a href="plan/M7-model-and-retro.html">M7 · Chọn model, retro và manual test</a></strong></td>
+            <td>M7 (T7.1–T7.8)</td>
+            <td>Nạp danh mục <code>models.dev</code>, Terminal-Bench 2.1 &amp; Artificial Analysis, chấm điểm theo loại nhiệm vụ, eval của Crew theo cặp Model–Harness, nối <code>rank()</code> vào quy trình chọn, session retro, chuẩn bị bản build &amp; checklist manual test.</td>
+            <td>M1, M3, M5</td>
+            <td><a href="spike-list.html#s13">S13</a></td>
+            <td><a href="plan/M7-model-and-retro.html">HTML</a> · <a href="plan/M7-model-and-retro.md">MD</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>3. Tóm tắt nhanh: Câu hỏi mở (<a href="open-question.html">open-question.html</a>) &amp; Spike còn mở (<a href="spike-list.html">spike-list.html</a>)</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Mã</th>
+            <th>Loại</th>
+            <th>Nội dung tóm tắt</th>
+            <th>Ai thực hiện / trả lời</th>
+            <th>Mốc chặn / Task</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="open-question.html#q6">Q6</a></strong></td>
+            <td>Câu hỏi mở</td>
+            <td>Danh mục artifact SDLC, bộ state và điều kiện chuyển state đầy đủ theo từng workflow.</td>
+            <td>Agent đề xuất từ BMAD · Human duyệt</td>
+            <td>M5 (<a href="plan/M5-playbook.html">T5.3, T5.10</a>)</td>
+          </tr>
+          <tr>
+            <td><strong><a href="open-question.html#q7">Q7</a></strong></td>
+            <td>Câu hỏi mở</td>
+            <td>Giá trị mặc định của ngưỡng “sắp hết hạn mức”, tuổi tối đa snapshot model và giới hạn song song (kể cả Antigravity).</td>
+            <td>Human (dựa trên S10, S13)</td>
+            <td>Trước manual test (<a href="plan/M7-model-and-retro.html">T7.8</a>)</td>
+          </tr>
+          <tr>
+            <td><strong><a href="open-question.html#q8">Q8</a></strong></td>
+            <td>Câu hỏi mở</td>
+            <td>Ngưỡng cho các chỉ số “chưa đặt ngưỡng” ở Brief mục 3.2 sau khi đo baseline.</td>
+            <td>Human</td>
+            <td>Trước/trong manual test (<a href="plan/M7-model-and-retro.html">T7.8</a>)</td>
+          </tr>
+          <tr>
+            <td><strong><a href="open-question.html#q9">Q9</a></strong></td>
+            <td>Câu hỏi mở</td>
+            <td>Target repo thử nghiệm ít rủi ro dùng cho lần manual test đầu tiên.</td>
+            <td>Human</td>
+            <td>Khi Crew đủ phạm vi (<a href="plan/M7-model-and-retro.html">T7.8</a>)</td>
+          </tr>
+          <tr>
+            <td><strong><a href="spike-list.html#s6">S6</a> · <a href="spike-list.html#s7">S7</a></strong></td>
+            <td>Spike M0</td>
+            <td>API ext notification/method trên crate ACP 3.4.0 (S6); framing <code>McpServer</code> và cầu nối MCP stdio với 3 provider (S7).</td>
+            <td>Agent AI</td>
+            <td>M0 (<a href="plan/M0-prep-and-spikes.html">T0.7, T0.8</a>)</td>
+          </tr>
+          <tr>
+            <td><strong><a href="spike-list.html#s12">S12</a> · <a href="spike-list.html#s11">S11</a></strong></td>
+            <td>Spike M1–M2</td>
+            <td>Định dạng <code>/usage</code> và <code>_claude/rateLimit</code> của Claude (S12); ROLE của Codex qua <code>customInstructions</code> sau resume (S11).</td>
+            <td>Agent AI</td>
+            <td>M1 (<a href="plan/M1-foundation.html">T1.11</a>) · M2 (<a href="plan/M2-orchestrator.html">T2.10</a>)</td>
+          </tr>
+          <tr>
+            <td><strong><a href="spike-list.html#s8">S8</a> · <a href="spike-list.html#s9">S9</a> · <a href="spike-list.html#s10">S10</a></strong></td>
+            <td>Spike M3</td>
+            <td>Độ phủ gate &amp; vùng ghi (S8); hiệu lực giới hạn/deny của Claude &amp; Antigravity (S9); bộ nhớ/CPU của N workspace nền (S10).</td>
+            <td>Agent AI</td>
+            <td>M3 (<a href="plan/M3-execution.html">T3.1–T3.3</a>)</td>
+          </tr>
+          <tr>
+            <td><strong><a href="spike-list.html#s13">S13</a></strong></td>
+            <td>Spike M7</td>
+            <td>Xác định nhóm hạn mức của <code>gemini-4-argon</code> trong output <code>/usage</code> của Antigravity.</td>
+            <td>Agent AI</td>
+            <td>M7 (<a href="plan/M7-model-and-retro.html">T7.1</a>)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</body>
+</html>
