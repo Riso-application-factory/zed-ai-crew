@@ -218,7 +218,7 @@
 <ul>
 <li><strong>Terminal-Bench 2.1:</strong> repo <code>github.com/harbor-framework/terminal-bench-2-1</code>, file <code>leaderboard/submissions/*.json</code>, Apache-2.0 <span class="tag tag-verified">[Đã kiểm qua repo clone]</span>. Mỗi dòng có agent và phiên bản agent, model, effort, accuracy ± stderr, cost, thời gian.</li>
 <li><strong>models.dev <code>[[benchmarks]]</code>:</strong> có <code>harness</code>, <code>version</code>, <code>source</code>, <code>date</code>. Phần lớn do vendor tự báo, nên gắn <code>self_reported</code> <span class="tag tag-verified">[Đã kiểm]</span>.</li>
-<li><strong>Artificial Analysis</strong> (tùy chọn): API dùng header <code>x-api-key</code>; key nằm trong Keychain. Điều khoản bản miễn phí yêu cầu ghi nguồn <span class="tag tag-inferred">[Suy luận: mới thấy qua kết quả tìm kiếm, chưa đọc trang gốc]</span>, nên mọi chỗ hiện điểm từ nguồn này phải ghi nguồn.</li>
+<li><strong>Artificial Analysis</strong> (tùy chọn): API dùng header <code>x-api-key</code>; key nằm trong Keychain, lưu như T4.2 (luôn Keychain, kể cả kênh <code>dev</code>). Điều khoản bản miễn phí yêu cầu ghi nguồn <span class="tag tag-inferred">[Suy luận: mới thấy qua kết quả tìm kiếm, chưa đọc trang gốc]</span>, nên mọi chỗ hiện điểm từ nguồn này phải ghi nguồn.</li>
 </ul>
 <p><strong>Quy tắc lưu:</strong> không gộp điểm khác phiên bản benchmark hay khác harness. Lưu <code>harness_version</code> và <code>benchmark_version</code>. Ví dụ: models.dev gom Terminal-Bench 2.0, 2.1 và 4.0 chung một tên, nên phải tách theo <code>version</code> <span class="tag tag-verified">[Đã kiểm]</span>.</p>
 <p><strong>Tiêu chí nghiệm thu</strong></p>
@@ -398,7 +398,7 @@
 <li>Chạy toàn bộ contract test ở bản ghim hiện tại và ghi kết quả.</li>
 <li>Human đặt các giá trị Q7, dựa trên số đo S10 và kết quả S13:<ul><li>ngưỡng “sắp hết hạn mức”;</li><li>tuổi tối đa của snapshot model;</li><li>trần song song, kể cả trần riêng cho Antigravity.</li></ul></li>
 <li>Human chọn target repo cho lần manual test đầu tiên (Q9). Repo này phải có rủi ro thấp (brief 9).</li>
-<li>Đổi <code>CrewFeatureFlag::enabled_for_all()</code> thành <code>true</code>. Bản release không nhận override từ settings (T0.5), nên đây là cách bật cho Human. Rollback là đổi lại thành <code>false</code>.</li>
+<li>Đổi <code>CrewFeatureFlag::enabled_for_all()</code> thành <code>true</code>. Bản release không nhận override từ settings (T0.5), nên đây là cách bật cho Human. Khi <code>enabled_for_all()</code> trả <code>true</code>, settings cũng không tắt được Crew (<code>crates/feature_flags/src/store.rs:166-169</code>) <span class="tag tag-verified">[Đã kiểm]</span>, nên rollback là build lại với giá trị <code>false</code>. Ghi cách rollback này vào <code>docs/crew/manual-test.md</code>.</li>
 <li>Viết <code>docs/crew/manual-test.md</code>: thứ tự loại session nên thử, cách đọc Tổng quan, cách dừng session, cách gỡ Crew khỏi project (brief 9, Rollback).</li>
 <li>Q8 (ngưỡng chỉ số) được đặt sau khi có baseline từ các session thử.</li>
 </ol>

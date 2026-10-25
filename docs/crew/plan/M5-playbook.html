@@ -379,7 +379,7 @@
 <ul>
 <li>Cho story có tiêu chí không có task nào phủ, khi đối soát, thì có lệch và task implement vẫn <code>pending</code>.</li>
 <li>Cho đối soát đạt, khi kiểm, thì task implement chuyển <code>ready</code>.</li>
-<li>Cho worker đối soát, khi chạy, thì gate từ chối mọi yêu cầu sửa file của nó.</li>
+<li>Cho worker đối soát, khi chạy, thì gate từ chối mọi yêu cầu sửa file của nó, và H12 từ chối mọi <code>fs/write_text_file</code> của nó (T3.5).</li>
 </ul>
 <p><strong>Kiểm chứng:</strong> <code>cargo test -p crew pipeline</code></p>
 <hr>

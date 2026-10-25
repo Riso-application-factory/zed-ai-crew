@@ -80,7 +80,7 @@ Báo cáo ghi số prompt và lượng token đã dùng.
 **Nguồn**
 - **Terminal-Bench 2.1:** repo `github.com/harbor-framework/terminal-bench-2-1`, file `leaderboard/submissions/*.json`, Apache-2.0 **[Đã kiểm qua repo clone]**. Mỗi dòng có agent và phiên bản agent, model, effort, accuracy ± stderr, cost, thời gian.
 - **models.dev `[[benchmarks]]`:** có `harness`, `version`, `source`, `date`. Phần lớn do vendor tự báo, nên gắn `self_reported` **[Đã kiểm]**.
-- **Artificial Analysis** (tùy chọn): API dùng header `x-api-key`; key nằm trong Keychain. Điều khoản bản miễn phí yêu cầu ghi nguồn **[Suy luận: mới thấy qua kết quả tìm kiếm, chưa đọc trang gốc]**, nên mọi chỗ hiện điểm từ nguồn này phải ghi nguồn.
+- **Artificial Analysis** (tùy chọn): API dùng header `x-api-key`; key nằm trong Keychain, lưu như T4.2 (luôn Keychain, kể cả kênh `dev`). Điều khoản bản miễn phí yêu cầu ghi nguồn **[Suy luận: mới thấy qua kết quả tìm kiếm, chưa đọc trang gốc]**, nên mọi chỗ hiện điểm từ nguồn này phải ghi nguồn.
 
 **Quy tắc lưu:** không gộp điểm khác phiên bản benchmark hay khác harness. Lưu `harness_version` và `benchmark_version`. Ví dụ: models.dev gom Terminal-Bench 2.0, 2.1 và 4.0 chung một tên, nên phải tách theo `version` **[Đã kiểm]**.
 
@@ -198,7 +198,7 @@ Báo cáo ghi số prompt và lượng token đã dùng.
    - tuổi tối đa của snapshot model;
    - trần song song, kể cả trần riêng cho Antigravity.
 3. Human chọn target repo cho lần manual test đầu tiên (Q9). Repo này phải có rủi ro thấp (brief 9).
-4. Đổi `CrewFeatureFlag::enabled_for_all()` thành `true`. Bản release không nhận override từ settings (T0.5), nên đây là cách bật cho Human. Rollback là đổi lại thành `false`.
+4. Đổi `CrewFeatureFlag::enabled_for_all()` thành `true`. Bản release không nhận override từ settings (T0.5), nên đây là cách bật cho Human. Khi `enabled_for_all()` trả `true`, settings cũng không tắt được Crew (`crates/feature_flags/src/store.rs:166-169`) **[Đã kiểm]**, nên rollback là build lại với giá trị `false`. Ghi cách rollback này vào `docs/crew/manual-test.md`.
 5. Viết `docs/crew/manual-test.md`: thứ tự loại session nên thử, cách đọc Tổng quan, cách dừng session, cách gỡ Crew khỏi project (brief 9, Rollback).
 6. Q8 (ngưỡng chỉ số) được đặt sau khi có baseline từ các session thử.
 

@@ -50,16 +50,23 @@ Mọi dữ liệu đọc từ projection của run store, không suy từ lời 
 
 | Mục | Nội dung |
 | --- | -------- |
-| Mục tiêu | Human xem được hội thoại của worker nhưng không gõ vào được |
-| Căn cứ | NEED 50; spec 3.2 (H5b), 3.3 (Session worker) |
-| Được sửa | `crates/agent_ui/src/conversation_view/thread_view.rs` (nhánh subagent không composer, `is_subagent` ở `:1529` **[Đã kiểm]**); predicate “session worker của Crew” trong registry của `agent_servers` |
-| Bàn giao | View chỉ đọc cho thread worker |
+| Mục tiêu | Human xem được hội thoại của worker nhưng không gõ vào được và không trả lời được yêu cầu xin quyền của worker |
+| Căn cứ | NEED 50; spec 3.2 (H5b), 3.3 (Session worker), 10.1 |
+| Được sửa | `crates/agent_ui/src/conversation_view/thread_view.rs` và `crates/agent_ui/src/conversation_view.rs` (H5b: cờ chỉ đọc cho thread hoặc view; không hiện option `allow_always` cho session Crew); predicate “session Crew” và “session worker của Crew” trong registry của `agent_servers` |
+| Bàn giao | View chỉ đọc cho thread worker, hiện từ workspace của Orchestrator |
 
-**Thiết kế:** tái dùng nhánh render subagent không có composer. Thread worker mở lại sau khi Zed khởi động lại vẫn đi qua CrewConnection (T1.7), nhưng Crew không gửi prompt giao việc mới (spec 14.1 bước 3).
+**Thiết kế**
+- **H5b là cờ chỉ đọc thật**, không tái dùng nhánh subagent. `is_subagent` là `parent_session_id.is_some()` (`thread_view.rs:1268-1269`), chỉ được đặt trong `AcpThread::new` (`acp_thread.rs:3686`), `AcpConnection` truyền `None` và không có setter; giả một parent id thì sidebar không lưu thread (`conversation_view.rs:1850`) **[Đã kiểm]**.
+- View chỉ đọc không có composer. Worker có `Project` không cửa sổ (T3.4), nên thread worker hiện trong workspace của Orchestrator.
+- Session Crew không bao giờ hiện option `allow_always` trong UI. Phím tắt “allow always” của view gốc trả lời yêu cầu đang chờ đầu tiên của mọi session trong conversation (`conversation_view.rs:463-486`, `thread_view.rs:3012-3017`) **[Đã kiểm]**; với session Crew, phím tắt này không làm gì. Gate trả lời yêu cầu của worker trước khi view hiện chúng (T3.5).
+- Thread worker mở lại sau khi Zed khởi động lại vẫn đi qua CrewConnection (T1.7), nhưng Crew không gửi prompt giao việc mới (spec 14.1 bước 3).
 
 **Tiêu chí nghiệm thu**
 - Cho thread worker, khi mở, thì không có ô nhập và không gửi được tin nhắn.
 - Cho thread thường của Human, khi mở, thì vẫn có ô nhập như cũ.
+- Cho thread worker, khi Zed khởi động lại, thì thread vẫn có trong sidebar và vẫn chỉ đọc.
+- Cho session Crew có yêu cầu xin quyền đang chờ, khi Human bấm phím tắt “allow always”, thì không option nào được chọn.
+- Cho yêu cầu xin quyền của session Crew có option `allow_always`, khi view hiện yêu cầu, thì không có nút cho option đó.
 
 **Kiểm chứng:** `cargo test -p agent_ui`; chạy app, chụp thread worker.
 
@@ -156,8 +163,10 @@ Thread import đã lọc session Crew và session thăm dò từ T2.3.
 | --- | -------- |
 | Mục tiêu | Thiết lập Crew cho một project từ đầu tới lúc sẵn sàng |
 | Căn cứ | NEED 04, 05, 17; brief 4.3 (Onboarding); spec 3.2 (H6) |
-| Được sửa | `crates/onboarding` (trang crew-onboarding); `crates/crew_ui` |
+| Được sửa | `crates/onboarding` (H6); `crates/crew_ui` |
 | Bàn giao | Trang onboarding |
+
+Onboarding của Zed chỉ có một trang và không có registry trang (`crates/onboarding/src/onboarding.rs:299-301`) **[Đã kiểm]**. H6 hoặc thêm một mục Crew vào trang đó, hoặc mở một item Crew riêng từ đó; cách đã chọn ghi vào `docs/crew/hook-points.md`.
 
 **Các bước trên trang**
 1. Trạng thái đăng nhập từng provider; chưa đăng nhập thì chỉ dẫn tới luồng của Zed.
