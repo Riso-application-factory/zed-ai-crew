@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zed AI Crew — Danh sách Spike (S1–S13) — Zed AI Crew</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-brand">
+      <a href="index.html">Zed AI Crew</a>
+      <span class="brand-tag">Docs · Full Width</span>
+    </div>
+    <nav class="site-nav">
+      <a href="index.html">Trang chủ</a>
+      <a href="brief.html">Product Brief</a>
+      <a href="tech-spec.html">Tech Spec</a>
+      <a href="open-question.html">Open Questions</a>
+      <a href="spike-list.html" class="active">Spike List</a>
+      <span class="nav-sep"></span>
+      <a href="plan/00-overview.html">Kế hoạch</a>
+      <a href="plan/M0-prep-and-spikes.html">M0</a>
+      <a href="plan/M1-foundation.html">M1</a>
+      <a href="plan/M2-orchestrator.html">M2</a>
+      <a href="plan/M3-execution.html">M3</a>
+      <a href="plan/M4-github.html">M4</a>
+      <a href="plan/M5-playbook.html">M5</a>
+      <a href="plan/M6-ui.html">M6</a>
+      <a href="plan/M7-model-and-retro.html">M7</a>
+    </nav>
+  </header>
+  <main class="page-container">
+    <div class="doc-toolbar">
+      <span>Tài liệu: <code>docs/crew/spike-list.md</code> · Giao diện HTML Full-Width</span>
+      <a class="raw-link" href="spike-list.md">Xem bản Markdown (spike-list.md)</a>
+    </div>
+<h1>Zed AI Crew — Danh sách Spike (S1–S13)</h1>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Phiên bản</td>
+<td>1.0 · 2026-10-25</td>
+</tr>
+<tr>
+<td>Nguồn</td>
+<td>Tổng hợp từ <a href="brief.html">Product Brief v3.5</a> (<a href="brief.html#ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them">Phụ lục C</a>), <a href="tech-spec.html">Tech Spec v2.2</a> (<a href="tech-spec.html#muc-20">mục 20.1</a>, <a href="tech-spec.html#phu-luc-b">Phụ lục B.3</a>) và <a href="plan/00-overview.html">Kế hoạch triển khai v1.1</a> (<a href="plan/M0-prep-and-spikes.html">M0</a>–<a href="plan/M7-model-and-retro.html">M7</a>).</td>
+</tr>
+<tr>
+<td>Quy tắc Spike</td>
+<td>Code spike nằm trên nhánh <code>spike/&lt;id&gt;-&lt;tên&gt;</code> và <strong>không bao giờ merge vào <code>main</code></strong> (<a href="brief.html#need-03">NEED 03</a>). Kết quả là báo cáo <code>docs/crew/spikes/&lt;id&gt;.md</code> merge qua PR tài liệu, kèm cập nhật các task/spec bị ảnh hưởng. Không bao giờ đọc hay in nội dung file bí mật thật; luôn che email/token trước khi lưu fixture.</td>
+</tr>
+<tr>
+<td>Nhãn</td>
+<td><span class="tag tag-verified">[Đã kiểm]</span> đọc trong mã nguồn hoặc tài liệu gốc · <span class="tag tag-spike">[Spike]</span> kết quả spike 2026-10-25 · <span class="tag tag-baseline">[Baseline]</span> theo baseline provider của Human · <span class="tag tag-memory">[Nhớ]</span> kiến thức đáng tin, chưa kiểm lại · <span class="tag tag-inferred">[Suy luận]</span> cần kiểm</td>
+</tr>
+</tbody></table></div>
+<h2>Mục lục</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Phần</th>
+<th>Mục</th>
+</tr></thead><tbody>
+<tr>
+<td>Tổng quan</td>
+<td><a href="#muc-1">1. Bảng tổng hợp toàn bộ Spike (S1–S13)</a> · <a href="#muc-2">2. Quy trình và nguyên tắc chạy Spike</a></td>
+</tr>
+<tr>
+<td>Chi tiết</td>
+<td><a href="#phan-1">3. Phần 1: Các Spike đã hoàn tất (S1–S5, Q1b, Q3b)</a> · <a href="#phan-2">4. Phần 2: Các Spike còn mở trong kế hoạch (S6–S13)</a></td>
+</tr>
+</tbody></table></div>
+<hr>
+<a id="muc-1"></a>
+<h2>1. Bảng tổng hợp toàn bộ Spike (S1–S13)</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mã</th>
+<th>Tên Spike</th>
+<th>Trạng thái</th>
+<th>Milestone / Task</th>
+<th>Chặn bước / Task</th>
+<th>Nhánh / Bàn giao</th>
+</tr></thead><tbody>
+<tr>
+<td><a href="#s1">S1</a></td>
+<td>Kênh nạp ROLE và tính bền vững qua compaction, load, resume (gồm Q1 &amp; Q1b)</td>
+<td><strong>Đã xong</strong> (2026-10-25)</td>
+<td>Trước M0 (<a href="plan/M0-prep-and-spikes.html">T0.1</a>)</td>
+<td>Đã tích hợp vào Spec 6.1, 6.2, 14</td>
+<td><code>docs/crew/spikes/S1-S5.md</code></td>
+</tr>
+<tr>
+<td><a href="#s2">S2</a></td>
+<td>Trạng thái đăng nhập và hành vi lỗi <code>-32000</code> của 3 provider (Q2)</td>
+<td><strong>Đã xong</strong> (2026-10-25)</td>
+<td>Trước M0 (<a href="plan/M0-prep-and-spikes.html">T0.1</a>)</td>
+<td>Đã tích hợp vào Spec 6.5</td>
+<td><code>docs/crew/spikes/S1-S5.md</code></td>
+</tr>
+<tr>
+<td><a href="#s3">S3</a></td>
+<td>Ma trận sandbox của Claude, chặn đọc đường dẫn bí mật và <code>$TMPDIR</code> (gồm Q3 &amp; Q3b)</td>
+<td><strong>Đã xong</strong> (2026-10-25)</td>
+<td>Trước M0 (<a href="plan/M0-prep-and-spikes.html">T0.1</a>)</td>
+<td>Đã tích hợp vào Spec 6.2, 10.4</td>
+<td><code>docs/crew/spikes/S1-S5.md</code></td>
+</tr>
+<tr>
+<td><a href="#s4">S4</a></td>
+<td>Hành vi Antigravity Ultra: danh sách model, chi phí cố định, song song, compaction (Q4)</td>
+<td><strong>Đã xong</strong> (2026-10-25)</td>
+<td>Trước M0 (<a href="plan/M0-prep-and-spikes.html">T0.1</a>)</td>
+<td>Đã tích hợp vào Spec 6.1, 6.8, 13</td>
+<td><code>docs/crew/spikes/S1-S5.md</code></td>
+</tr>
+<tr>
+<td><a href="#s5">S5</a></td>
+<td>Định dạng hạn mức <code>/status</code> của Codex và <code>/usage</code> của Antigravity (Q5)</td>
+<td><strong>Đã xong</strong> (2026-10-25)</td>
+<td>Trước M0 (<a href="plan/M0-prep-and-spikes.html">T0.1</a>)</td>
+<td>Đã tích hợp vào Spec 6.7</td>
+<td><code>docs/crew/spikes/S1-S5.md</code></td>
+</tr>
+<tr>
+<td><a href="#s6">S6</a></td>
+<td>API của crate ACP 3.4.0 cho ext notification <code>_auth/status_update</code> và ext method <code>_session/steering</code></td>
+<td><strong>Còn mở</strong></td>
+<td>M0 · <a href="plan/M0-prep-and-spikes.html">T0.7</a></td>
+<td>Chặn Bước 0 → <a href="plan/M1-foundation.html">T1.8</a>, <a href="plan/M5-playbook.html">T5.6</a></td>
+<td><code>spike/S6-acp-ext</code> → <code>docs/crew/spikes/S6.md</code></td>
+</tr>
+<tr>
+<td><a href="#s7">S7</a></td>
+<td>Framing của <code>McpServer</code> trên socket và cầu nối MCP stdio với 3 provider</td>
+<td><strong>Còn mở</strong></td>
+<td>M0 · <a href="plan/M0-prep-and-spikes.html">T0.8</a></td>
+<td>Chặn Bước 0 → <a href="plan/M2-orchestrator.html">T2.1</a></td>
+<td><code>spike/S7-mcp-bridge</code> → <code>docs/crew/spikes/S7.md</code></td>
+</tr>
+<tr>
+<td><a href="#s8">S8</a></td>
+<td>Độ phủ gate và vùng ghi của từng provider ở mode worker</td>
+<td><strong>Còn mở</strong></td>
+<td>M3 · <a href="plan/M3-execution.html">T3.1</a></td>
+<td>Chặn Bước 3 → <a href="plan/M3-execution.html">T3.4</a>, <a href="plan/M3-execution.html">T3.5</a>, <a href="plan/M3-execution.html">T3.6</a></td>
+<td><code>spike/S8-gate-coverage</code> → <code>docs/crew/spikes/S8.md</code></td>
+</tr>
+<tr>
+<td><a href="#s9">S9</a></td>
+<td>Hiệu lực thực tế của <code>maxBudgetUsd</code>, <code>maxTurns</code>, <code>permissions.deny</code> (Claude) và <code>disabledTools</code> (Antigravity)</td>
+<td><strong>Còn mở</strong></td>
+<td>M3 · <a href="plan/M3-execution.html">T3.2</a></td>
+<td>Chặn Bước 3 → <a href="plan/M3-execution.html">T3.6</a>, <a href="plan/M3-execution.html">T3.13</a></td>
+<td><code>spike/S9-limits-deny</code> → <code>docs/crew/spikes/S9.md</code></td>
+</tr>
+<tr>
+<td><a href="#s10">S10</a></td>
+<td>Chi phí bộ nhớ và CPU của N workspace nền cùng N process agent (N = 1, 2, 4)</td>
+<td><strong>Còn mở</strong></td>
+<td>M3 · <a href="plan/M3-execution.html">T3.3</a></td>
+<td>Chặn Bước 3 → <a href="plan/M3-execution.html">T3.13</a>, đầu vào cho <a href="open-question.html#q7">Q7</a></td>
+<td><code>spike/S10-resources</code> → <code>docs/crew/spikes/S10.md</code></td>
+</tr>
+<tr>
+<td><a href="#s11">S11</a></td>
+<td>ROLE của Codex qua <code>customInstructions</code> khi load/resume trong process mới</td>
+<td><strong>Còn mở</strong></td>
+<td>M2 · <a href="plan/M2-orchestrator.html">T2.10</a></td>
+<td>Chặn Bước 2 → Phục hồi Orchestrator (<a href="plan/M2-orchestrator.html">T2.10</a>)</td>
+<td><code>spike/S11-codex-role-resume</code> → <code>docs/crew/spikes/S11.md</code></td>
+</tr>
+<tr>
+<td><a href="#s12">S12</a></td>
+<td>Định dạng output thật của <code>/usage</code> và cấu trúc <code>_claude/rateLimit</code> trên Claude</td>
+<td><strong>Còn mở</strong></td>
+<td>M1 · <a href="plan/M1-foundation.html">T1.11</a></td>
+<td>Chặn Bước 1 → Phần Claude của <a href="plan/M1-foundation.html">T1.12</a></td>
+<td><code>spike/S12-claude-quota</code> → <code>docs/crew/spikes/S12.md</code></td>
+</tr>
+<tr>
+<td><a href="#s13">S13</a></td>
+<td>Xác định nhóm hạn mức của <code>gemini-4-argon</code> trên Antigravity</td>
+<td><strong>Còn mở</strong></td>
+<td>M7 · <a href="plan/M7-model-and-retro.html">T7.1</a></td>
+<td>Không chặn (trong lúc chờ, Argon có hạn mức <code>unknown</code>)</td>
+<td><code>spike/S13-argon-quota-group</code> → <code>docs/crew/spikes/S13.md</code></td>
+</tr>
+</tbody></table></div>
+<hr>
+<a id="muc-2"></a>
+<h2>2. Quy trình và nguyên tắc chạy Spike</h2>
+<p>Theo <a href="plan/00-overview.html">Kế hoạch triển khai — mục 6</a>:</p>
+<ol>
+<li><strong>Nhánh tách biệt:</strong> Mọi code thử nghiệm đặt trên nhánh <code>spike/&lt;id&gt;-&lt;tên&gt;</code> và <strong>không bao giờ merge vào <code>main</code></strong> (<a href="brief.html#need-03">NEED 03</a>).</li>
+<li><strong>Bàn giao qua báo cáo tài liệu:</strong> Kết quả của spike là một file báo cáo <code>docs/crew/spikes/&lt;id&gt;.md</code> được merge vào <code>main</code> qua PR tài liệu, gồm:<ul><li>Câu hỏi cần trả lời;</li><li>Cách đo và cấu hình môi trường;</li><li>Kết quả thực tế có gắn nhãn (<code>[Spike]</code>, <code>[Đã kiểm]</code>);</li><li>Hệ quả đối với Tech Spec và các task trong <code>docs/crew/plan/</code>.</li></ul></li>
+<li><strong>Đồng bộ kế hoạch:</strong> Cùng PR báo cáo spike phải cập nhật ngay các task bị ảnh hưởng trong <code>docs/crew/plan/</code> và <code>docs/crew/tech-spec.md</code>. Nếu kết quả làm thay đổi một quyết định sản phẩm mà Human đã duyệt thì dừng và hỏi Human trước.</li>
+<li><strong>An toàn dữ liệu và hạn mức:</strong><ul><li>Spike gọi tài khoản thật sẽ tốn hạn mức; báo cáo phải ghi rõ số prompt và lượng token đã dùng.</li><li>Không bao giờ đọc hay in nội dung file bí mật thật (<code>~/.ssh</code>, Keychain…); khi kiểm chặn đọc phải dùng file bí mật giả đặt trong thư mục tạm.</li><li>Che toàn bộ email, account ID và token trước khi đưa vào báo cáo hoặc <code>test_fixtures/contract/</code>.</li></ul></li>
+</ol>
+<hr>
+<a id="phan-1"></a>
+<h2>3. Phần 1: Các Spike đã hoàn tất (S1–S5, Q1b, Q3b — ngày 2026-10-25)</h2>
+<p>Thực hiện ngày 2026-10-25 trên máy macOS của Human (fork <code>20ea81ef29</code>; ba adapter <code>claude-agent-acp@0.95.0</code>, <code>codex-acp@2.2.2</code>, <code>antigravity-acp</code> 1.4.3; crate <code>agent-client-protocol</code> 3.4.0). Task <a href="plan/M0-prep-and-spikes.html">T0.1</a> đóng gói toàn bộ kết quả này thành <code>docs/crew/spikes/S1-S5.md</code>.</p>
+<a id="s1"></a>
+<h3>S1 (Q1 &amp; Q1b) · Kênh nạp ROLE và tính bền vững qua compaction, load, resume</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Hạng mục</th>
+<th>Kết quả đã kiểm chứng <span class="tag tag-spike">[Spike]</span></th>
+<th>Hệ quả thiết kế</th>
+</tr></thead><tbody>
+<tr>
+<td>Crate ACP 3.4.0</td>
+<td>Crate <code>agent-client-protocol</code> 3.4.0 (schema 1.12.0) đã có trường <code>system_prompt</code> trên <code>new</code>, <code>load</code>, <code>fork</code>, <code>resume</code> với <code>content</code> là mảng content block.</td>
+<td>Không cần nâng kết nối ACP của Zed lên v2 (<a href="tech-spec.html#muc-6-2">Tech Spec 1.2, 6.2</a>).</td>
+</tr>
+<tr>
+<td>Claude (<code>claude-acp</code>)</td>
+<td>Nhận trường ACP <code>systemPrompt</code> (<code>mode: "append"</code>, <code>content: [{type: "text", text: "&lt;ROLE&gt;"}]</code>), ưu tiên hơn <code>_meta.systemPrompt</code>. Có hiệu lực qua 3 lượt, <strong>còn sau <code>/compact</code></strong>. Khi load/resume, option mới thay option cũ; thiếu <code>systemPrompt</code> thì rơi về preset trần. Dự phòng <code>_meta.systemPrompt</code> phải là object <code>{ "append": "&lt;ROLE&gt;" }</code> (dạng chuỗi sẽ ghi đè toàn bộ prompt gốc).</td>
+<td><code>CrewConnection</code> chặn ở <code>Agent::server()</code> để mọi đường load/resume gửi lại nguyên vẹn <code>SessionOptions</code> (<a href="tech-spec.html#muc-3-3">Tech Spec 3.3, 6.1</a>).</td>
+</tr>
+<tr>
+<td>Antigravity (<code>antigravity-acp</code>)</td>
+<td>Bỏ qua trường ACP <code>systemPrompt</code>; nhận <code>_meta.antigravity.systemPrompt.append</code> dạng chuỗi trên <code>new</code>, <code>load</code> và <code>resume</code> (kiểu khác bị bỏ qua im lặng). Không lưu ROLE cùng hội thoại; <strong>còn sau compaction</strong> (đã kiểm bằng mã vai trò chỉ có trong ROLE, vẫn nằm trong <code>&lt;user_system_instructions&gt;</code>). Đổi model không làm mất ROLE.</td>
+<td>Tự kiểm kiểu chuỗi trước khi gửi; luôn gửi lại đủ <code>SessionOptions</code> ngay từ lần load/resume đầu tiên (<a href="tech-spec.html#muc-6">Tech Spec 6.1, 6.2</a>).</td>
+</tr>
+<tr>
+<td>Codex (<code>codex-acp</code>)</td>
+<td>Qua đọc mã (<code>dist/index.js:28093-28099</code>): đọc <code>_meta.jetbrains.air.customInstructions</code> (chỉ nhận chuỗi) ở <code>newSession</code>, chuyển thành <code>developerInstructions</code> của <code>threadStart</code>; <code>loadSession</code>/<code>resumeSession</code> không đọc trường này <span class="tag tag-verified">[Đã kiểm]</span>.</td>
+<td>Kiểm chạy thật ở <a href="plan/M1-foundation.html">T1.6</a> và kiểm hành vi sau resume ở <a href="#s11">Spike S11</a> (<a href="plan/M2-orchestrator.html">T2.10</a>).</td>
+</tr>
+</tbody></table></div>
+<a id="s2"></a>
+<h3>S2 (Q2) · Xác nhận trạng thái đăng nhập của ba provider</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Provider</th>
+<th>Kết quả đã kiểm chứng <span class="tag tag-spike">[Spike]</span></th>
+<th>Hệ quả thiết kế (<a href="brief.html#need-56">NEED 56</a>, <a href="tech-spec.html#muc-6-5">Spec 6.5</a>)</th>
+</tr></thead><tbody>
+<tr>
+<td>Claude</td>
+<td>Adapter dò bằng <code>claude auth status</code>, nên thông báo <code>_auth/status_update</code> báo sai “Not logged in” khi đăng nhập bằng <code>CLAUDE_CODE_OAUTH_TOKEN</code> trong môi trường dù prompt vẫn chạy. Khi thật sự chưa đăng nhập, <code>session/new</code> vẫn thành công và prompt đầu tiên mới trả lỗi <code>-32000</code>.</td>
+<td>Bắt buộc xác nhận bằng healthcheck ping-pong trong session thăm dò dùng lại.</td>
+</tr>
+<tr>
+<td>Codex</td>
+<td>Gửi <code>_auth/status_update</code> ngay sau <code>initialize</code> và báo đúng (<code>kind = "account"</code> hoặc <code>kind = "none"</code>).</td>
+<td>Bổ sung handler <code>_auth/status_update</code> (H3a); dùng healthcheck làm dự phòng khi quá hạn.</td>
+</tr>
+<tr>
+<td>Antigravity</td>
+<td>Báo lỗi <code>-32000</code> ngay khi gọi <code>session/new</code> nếu chưa đăng nhập.</td>
+<td>Kiểm lỗi <code>-32000</code> lúc tạo session thăm dò, rồi chạy healthcheck ping-pong.</td>
+</tr>
+</tbody></table></div>
+<a id="s3"></a>
+<h3>S3 (Q3 &amp; Q3b) · Ma trận sandbox của Claude, đường dẫn bí mật và <code>$TMPDIR</code></h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Hạng mục</th>
+<th>Kết quả đã kiểm chứng <span class="tag tag-spike">[Spike]</span></th>
+<th>Hệ quả thiết kế (<a href="brief.html#need-07">NEED 07</a>, <a href="tech-spec.html#muc-6-2">Spec 6.2, 10.4</a>)</th>
+</tr></thead><tbody>
+<tr>
+<td>Ghi ngoài worktree</td>
+<td>Với <code>sandbox: { enabled: true }</code>, lệnh Bash ghi ra ngoài worktree hoặc vào <code>$HOME</code> bị chặn (<code>EPERM</code>). Lệnh Bash trong sandbox tự chạy không qua yêu cầu xin quyền (<code>autoAllowBashIfSandboxed</code>).</td>
+<td>Đặt <code>enabled: true</code>, <code>failIfUnavailable: true</code>, <code>allowUnsandboxedCommands: false</code>.</td>
+</tr>
+<tr>
+<td>Mạng</td>
+<td>Mỗi host mới phát sinh yêu cầu xin quyền <code>SandboxNetworkAccess</code>; chỉ bị chặn khi từ chối hoặc bật <code>strictAllowlist: true</code> cùng <code>allowedDomains</code>. Host đã được cho phép giữ hiệu lực tới hết session.</td>
+<td>Đặt <code>network.strictAllowlist: true</code> với <code>effective.network_allowlist</code>; gate kiểm host trong <code>SandboxNetworkAccess</code>.</td>
+</tr>
+<tr>
+<td>Đọc đường dẫn bí mật (Q3b)</td>
+<td>Mặc định Bash trong sandbox đọc được <code>~/.ssh</code>, token GitHub CLI và <code>~/Library/Keychains</code> (qua lệnh <code>security</code>). Cấu hình <code>filesystem.denyRead</code> hoặc <code>credentials.files</code> chặn được lệnh Bash đọc các đường dẫn này (kể cả <code>security</code>). Tuy nhiên tool <code>Read</code> không bị <code>denyRead</code> chặn mà đi qua yêu cầu xin quyền hoặc <code>settings.permissions.deny</code>.</td>
+<td>Kết hợp cả hai: <code>filesystem.denyRead</code> cho Bash + luật <code>Read(//&lt;đường dẫn&gt;/**)</code> trong <code>settings.permissions.deny</code> cho tool Read + gate từ chối đọc/sửa ngoài worktree. Ghi nhận rủi ro còn lại R12 (chặn theo denylist).</td>
+</tr>
+<tr>
+<td><code>$TMPDIR</code> dùng chung (Q3b)</td>
+<td><code>$TMPDIR</code> trong sandbox Claude luôn bị ép về <code>/tmp/claude-501</code> cho mọi worker trên máy, kể cả khi session tự đặt biến <code>TMPDIR</code>. <code>filesystem.denyWrite: ["/tmp/claude-501"]</code> chặn ghi được; khi đó file tạm rơi vào worktree.</td>
+<td>Chặn ghi <code>$TMPDIR</code> để cô lập dữ liệu giữa các project (<a href="brief.html#need-02">NEED 02</a>); Crew chỉ commit file khai báo và xóa file không khai báo khi worker kết thúc (<a href="plan/M3-execution.html">T3.9</a>).</td>
+</tr>
+<tr>
+<td>Option <code>allow_always</code></td>
+<td>Sửa file ngoài cwd sinh option <code>allow_always</code> (“allow all edits in … during this session”).</td>
+<td>Gate chỉ chọn theo <code>kind</code> là <code>allow_once</code> hoặc <code>reject_once</code>, cấm tuyệt đối <code>allow_always</code> / <code>reject_always</code>.</td>
+</tr>
+</tbody></table></div>
+<a id="s4"></a>
+<h3>S4 (Q4) · Hành vi Antigravity tài khoản Google AI Ultra</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Hạng mục</th>
+<th>Kết quả đã kiểm chứng <span class="tag tag-spike">[Spike]</span></th>
+<th>Hệ quả thiết kế</th>
+</tr></thead><tbody>
+<tr>
+<td>Danh sách model</td>
+<td><code>gemini-4-argon</code>, <code>gemini-3.8-flash</code>, <code>claude-opus-5-5</code>, <code>claude-sonnet-5-5</code>, <code>gpt-oss-120b-medium</code>; <code>thinking_level</code> gồm <code>low</code>, <code>medium</code>, <code>high</code>.</td>
+<td>Lưu ứng viên theo bộ ba <code>(provider, model, effort)</code> vì cùng model ID có thể xuất hiện ở nhiều provider (<a href="tech-spec.html#muc-6">Tech Spec 6.6</a>).</td>
+</tr>
+<tr>
+<td>Chi phí cố định</td>
+<td>Prompt đầu tiên của mỗi session tốn khoảng <strong>12,7 nghìn token</strong> chỉ dẫn có sẵn.</td>
+<td>Luôn dùng lại session thăm dò; cộng chi phí cố định khi ước tính chi phí worker Antigravity (<a href="tech-spec.html#muc-6-5">Tech Spec 6.5, 9.2</a>).</td>
+</tr>
+<tr>
+<td>Song song</td>
+<td>Chạy được 4 prompt song song, adapter không đặt giới hạn.</td>
+<td>Đặt trần song song ở tầng Crew (<code>parallel.per_provider.antigravity-acp</code>, <a href="open-question.html#q7">Q7</a>).</td>
+</tr>
+<tr>
+<td>Compaction</td>
+<td>Diễn ra quanh <strong>256 nghìn token</strong>, thấp hơn nhiều so với cửa sổ ~1 triệu token mà adapter báo. ACP không gửi thông báo compaction; dấu hiệu duy nhất là <code>usage_update.used</code> tụt mạnh (ví dụ từ ~210k xuống ~23k token).</td>
+<td>Phát hiện compaction bằng độ tụt <code>used</code> và tính ngân sách context của packet theo ngưỡng thực tế 256k token (<a href="tech-spec.html#muc-6">Tech Spec 6.8</a>, <a href="plan/M3-execution.html">T3.7</a>).</td>
+</tr>
+<tr>
+<td>Session lưu trữ</td>
+<td>Session được lưu dưới <code>~/.gemini/antigravity-acp/conversations/</code>, hiện trong <code>session/list</code> và thread import; không có <code>session/delete</code> qua ACP.</td>
+<td>Tái dùng session thăm dò; lọc khỏi thread import ở H5e; không xóa ngoài ACP (<a href="brief.html#need-61">NEED 61</a>).</td>
+</tr>
+</tbody></table></div>
+<a id="s5"></a>
+<h3>S5 (Q5) · Định dạng văn bản hạn mức của Codex và Antigravity</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Provider</th>
+<th>Kết quả đã kiểm chứng <span class="tag tag-spike">[Spike]</span></th>
+<th>Hệ quả thiết kế (<a href="tech-spec.html#muc-6">Tech Spec 6.7</a>, <a href="plan/M1-foundation.html">T1.12</a>)</th>
+</tr></thead><tbody>
+<tr>
+<td>Codex (<code>/status</code>)</td>
+<td>Do adapter tự sinh (không tốn lượt gọi model), giống hệt nhau qua 4 phiên bản adapter. Dạng dòng: <code>**&lt;limit&gt; &lt;label&gt;:** &lt;N&gt;% left[ (resets &lt;time&gt;)]</code> với <code>&lt;label&gt;</code> ∈ <code>Nm limit</code>, <code>Nh limit</code>, <code>Nd limit</code>, <code>Weekly limit</code>, <code>Limit</code>. Giờ reset theo múi giờ và locale của process, không có năm. Output có dòng <code>**Account:**</code> chứa email.</td>
+<td>Parse phần trăm theo cửa sổ; giờ reset parse best-effort (lỗi thì ghi <code>unknown</code>); <strong>bắt buộc bỏ dòng <code>**Account:**</code></strong> trước khi lưu (<a href="brief.html#need-02">NEED 02</a>).</td>
+</tr>
+<tr>
+<td>Antigravity (<code>/usage</code>)</td>
+<td>Adapter tự trả Markdown cố định: nhóm <code>- **&lt;group&gt;**</code>, dòng <code>*(Models within this group: …)*</code>, hai cửa sổ <code>Weekly Limit Remaining</code> và <code>Five Hour Limit Remaining</code> với giờ reset UTC tiếng Anh. Nhóm “Gemini Models” ghi “Gemini Flash, Gemini Pro”, chưa nhắc <code>gemini-4-argon</code>.</td>
+<td>Các thông báo đặc biệt (“Unable to retrieve…”, “No quota limits reported.”…) chuyển thành <code>unknown</code>. Hạn mức của Argon là <code>unknown</code> cho tới khi chạy <a href="#s13">Spike S13</a>.</td>
+</tr>
+</tbody></table></div>
+<hr>
+<a id="phan-2"></a>
+<h2>4. Phần 2: Các Spike còn mở trong kế hoạch (S6–S13)</h2>
+<a id="s6"></a>
+<h3>S6 · Ext notification và ext method trên crate ACP 3.4.0 (<a href="plan/M0-prep-and-spikes.html">T0.7</a>)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Câu hỏi</strong></td>
+<td>Dùng API nào của crate <code>agent-client-protocol</code> 3.4.0 để (a) nhận ext notification <code>_auth/status_update</code> và (b) gọi ext method <code>_session/steering</code>?</td>
+</tr>
+<tr>
+<td><strong>Căn cứ</strong></td>
+<td><a href="tech-spec.html#muc-20">Tech Spec 20.1 (S6)</a>, <a href="tech-spec.html#muc-3-2">3.2 (H3)</a></td>
+</tr>
+<tr>
+<td><strong>Chặn</strong></td>
+<td>Bước 0 → <a href="plan/M1-foundation.html">T1.8</a> (handler đăng nhập), <a href="plan/M5-playbook.html">T5.6</a> (steering khi đổi yêu cầu)</td>
+</tr>
+<tr>
+<td><strong>Nhánh &amp; Bàn giao</strong></td>
+<td>Nhánh <code>spike/S6-acp-ext</code> (không merge) → Báo cáo <code>docs/crew/spikes/S6.md</code>, cập nhật T1.8 và T5.6 nếu cần</td>
+</tr>
+<tr>
+<td><strong>Các bước</strong></td>
+<td>1. Đọc mã crate trong <code>~/.cargo/registry/src/*/agent-client-protocol-3.4.0/</code> và cách Zed dựng client ở <code>crates/agent_servers/src/acp/v1.rs</code> (<code>Client.builder()</code>, gần <code>:428-476</code>).<br>2. Trên nhánh spike, viết test với agent giả: agent gửi <code>_auth/status_update</code> ngay sau initialize; client gửi request <code>_session/steering</code> và nhận response.<br>3. Ghi lại tên API, kiểu payload, cách đăng ký handler bên cạnh các <code>on_receive_notification</code> hiện có và giới hạn nếu có.</td>
+</tr>
+<tr>
+<td><strong>Tiêu chí xong</strong></td>
+<td>Báo cáo trả lời đủ (a) và (b), có đoạn code mẫu, và test trên nhánh spike đạt (0 prompt tốn hạn mức vì dùng agent giả).</td>
+</tr>
+</tbody></table></div>
+<a id="s7"></a>
+<h3>S7 · Cầu nối MCP với ba provider (<a href="plan/M0-prep-and-spikes.html">T0.8</a>)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Câu hỏi</strong></td>
+<td>Framing của <code>McpServer</code> qua socket có chạy với một cầu nối stdio đơn giản không? Cả ba provider có khởi động MCP server stdio <code>&lt;zed&gt; --crew-mcp-bridge &lt;socket&gt;</code> và gọi được tool không?</td>
+</tr>
+<tr>
+<td><strong>Căn cứ</strong></td>
+<td><a href="tech-spec.html#muc-20">Tech Spec 20.1 (S7)</a>, <a href="tech-spec.html#muc-7">7.2</a></td>
+</tr>
+<tr>
+<td><strong>Chặn</strong></td>
+<td>Bước 0 → <a href="plan/M2-orchestrator.html">T2.1</a> (Cầu nối MCP và khung MCP server)</td>
+</tr>
+<tr>
+<td><strong>Nhánh &amp; Bàn giao</strong></td>
+<td>Nhánh <code>spike/S7-mcp-bridge</code> (không merge) → Báo cáo <code>docs/crew/spikes/S7.md</code></td>
+</tr>
+<tr>
+<td><strong>Các bước</strong></td>
+<td>1. Trên nhánh spike, thêm tạm flag <code>--crew-mcp-bridge</code> vào <code>main.rs</code> theo mẫu <code>--askpass</code> (<code>crates/zed/src/main.rs:215-219</code>): sao chép hai chiều stdin ↔ socket.<br>2. Tạo <code>McpServer::new</code> với một tool <code>crew_ping</code> (socket <code>mcp.sock</code> trong thư mục tạm <code>zed-mcp*</code>).<br>3. Với từng provider ở bản ghim, tạo session với <code>mcpServers: [{ name: "crew", command: std::env::current_exe(), args: ["--crew-mcp-bridge", &lt;socket&gt;] }]</code>, rồi gửi prompt yêu cầu gọi <code>crew_ping</code>.<br>4. Ghi lại cho từng provider: có gọi được tool không; có yêu cầu xin quyền cho tool MCP không và option là gì; Antigravity có nhận MCP stdio không.</td>
+</tr>
+<tr>
+<td><strong>Tiêu chí xong</strong></td>
+<td>Mỗi provider hoặc gọi được <code>crew_ping</code>, hoặc báo cáo nêu rõ lỗi và nguyên nhân. Chi phí khoảng 3 prompt ngắn.</td>
+</tr>
+</tbody></table></div>
+<a id="s8"></a>
+<h3>S8 · Độ phủ gate và vùng ghi ở mode worker (<a href="plan/M3-execution.html">T3.1</a>)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Câu hỏi</strong></td>
+<td>(1) Ở mode worker của từng provider, thao tác nào đi qua yêu cầu xin quyền? (2) Lệnh git ghi trong worktree có bị sandbox của Claude và Codex chặn không? (3) Khi nào Codex gửi yêu cầu nới quyền? (4) Sandbox Codex có chặn đọc không, và có cách nào qua ACP để loại <code>$TMPDIR</code> và <code>/tmp</code> khỏi vùng ghi của Codex không? (5) Mode <code>agent</code> của Codex tự duyệt những gì?</td>
+</tr>
+<tr>
+<td><strong>Căn cứ</strong></td>
+<td><a href="tech-spec.html#muc-20">Tech Spec 20.1 (S8)</a>, <a href="tech-spec.html#muc-9">9.5</a>, <a href="tech-spec.html#muc-10-4">10.4</a>. Codex <code>workspace-write</code> có <code>excludeTmpdirEnvVar: false</code>, <code>excludeSlashTmp: false</code> (<code>dist/index.js:34264-34320</code>) <span class="tag tag-verified">[Đã kiểm]</span></td>
+</tr>
+<tr>
+<td><strong>Chặn</strong></td>
+<td>Bước 3 → <a href="plan/M3-execution.html">T3.4</a> (Spawn worker), <a href="plan/M3-execution.html">T3.5</a> (Luật gate cho worker), <a href="plan/M3-execution.html">T3.6</a> (Sandbox Claude)</td>
+</tr>
+<tr>
+<td><strong>Nhánh &amp; Bàn giao</strong></td>
+<td>Nhánh <code>spike/S8-gate-coverage</code> (không merge) → Báo cáo <code>docs/crew/spikes/S8.md</code>, cập nhật Spec 10.4 và T3.5</td>
+</tr>
+<tr>
+<td><strong>Các bước</strong></td>
+<td>1. Dùng harness T0.9 với repo thử có một git worktree tạo như <code>create_worktree_workspace</code> (gitdir nằm ngoài worktree).<br>2. Với mỗi provider ở mode worker (Claude <code>default</code> có sandbox, Codex <code>workspace-write</code>, Antigravity <code>default</code>), yêu cầu agent: sửa file trong/ngoài worktree; chạy lệnh trong worktree; chạy <code>git commit</code> và <code>git push</code>; truy cập mạng; đọc một <strong>file bí mật giả</strong> trong thư mục tạm ngoài worktree; ghi vào <code>$TMPDIR</code> và <code>/tmp</code>.<br>3. Ghi lại có yêu cầu xin quyền không, các <code>kind</code> của option và kết quả thực tế (chỉ in <code>OK</code>/<code>DENIED</code>).<br>4. Lặp lại bước 2 với Codex ở mode <code>agent</code> để đối chiếu auto review.</td>
+</tr>
+<tr>
+<td><strong>Tiêu chí xong</strong></td>
+<td>Bảng trả lời đủ 5 câu hỏi; câu (4) nếu không chặn được qua ACP thì ghi vào danh sách rủi ro còn lại. Chi phí khoảng 20 lượt prompt.</td>
+</tr>
+</tbody></table></div>
+<a id="s9"></a>
+<h3>S9 · Giới hạn của Claude và chặn tool của Antigravity (<a href="plan/M3-execution.html">T3.2</a>)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Câu hỏi</strong></td>
+<td><code>maxBudgetUsd</code>, <code>maxTurns</code> và luật <code>settings.permissions.deny</code> cho tool của Claude có hiệu lực khi chạy thật không? Luật deny có chặn được lệnh Bash vốn được tự cho phép trong sandbox (<code>autoAllowBashIfSandboxed</code>), ví dụ <code>Bash(git commit:*)</code>, không? <code>_meta.agy.disabledTools</code> của Antigravity có hiệu lực không?</td>
+</tr>
+<tr>
+<td><strong>Căn cứ</strong></td>
+<td><a href="tech-spec.html#muc-20">Tech Spec 20.1 (S9)</a>, <a href="tech-spec.html#muc-6-2">6.2</a>, <a href="tech-spec.html#muc-9">9.2</a>; adapter Claude chuyển nguyên <code>_meta.claudeCode.options</code> cho SDK (<code>acp-agent.js:8570, 8688</code>) <span class="tag tag-verified">[Đã kiểm]</span></td>
+</tr>
+<tr>
+<td><strong>Chặn</strong></td>
+<td>Bước 3 → <a href="plan/M3-execution.html">T3.6</a> (Sandbox Claude), <a href="plan/M3-execution.html">T3.13</a> (Scheduler)</td>
+</tr>
+<tr>
+<td><strong>Nhánh &amp; Bàn giao</strong></td>
+<td>Nhánh <code>spike/S9-limits-deny</code> (không merge) → Báo cáo <code>docs/crew/spikes/S9.md</code></td>
+</tr>
+<tr>
+<td><strong>Tiêu chí xong</strong></td>
+<td>Mỗi tùy chọn có một test đạt hoặc kết luận không có hiệu lực; tùy chọn nào không có hiệu lực ở provider thì <a href="plan/M3-execution.html">T3.13</a> thay bằng giới hạn ở tầng Crew.</td>
+</tr>
+</tbody></table></div>
+<a id="s10"></a>
+<h3>S10 · Tài nguyên bộ nhớ và CPU của N workspace nền (<a href="plan/M3-execution.html">T3.3</a>)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Câu hỏi</strong></td>
+<td>Bộ nhớ và CPU của N workspace nền cùng N process agent là bao nhiêu với N = 1, 2, 4?</td>
+</tr>
+<tr>
+<td><strong>Căn cứ</strong></td>
+<td><a href="tech-spec.html#muc-20">Tech Spec 20.1 (S10)</a>; đầu vào cho <a href="open-question.html#q7">Brief Q7</a></td>
+</tr>
+<tr>
+<td><strong>Chặn</strong></td>
+<td>Bước 3 → <a href="plan/M3-execution.html">T3.13</a> (giá trị đề xuất cho trần song song) và <a href="plan/M7-model-and-retro.html">T7.8</a></td>
+</tr>
+<tr>
+<td><strong>Nhánh &amp; Bàn giao</strong></td>
+<td>Nhánh <code>spike/S10-resources</code> (không merge) → Báo cáo <code>docs/crew/spikes/S10.md</code></td>
+</tr>
+<tr>
+<td><strong>Cách đo</strong></td>
+<td>Mở N worker giả lập bằng N worktree workspace chạy nền, mỗi workspace một session ACP đang làm một việc ngắn có thật (ví dụ đọc và tóm tắt một file). Đo bộ nhớ và CPU của process Zed cùng các process adapter bằng công cụ của macOS, ở trạng thái rảnh và khi đang chạy.</td>
+</tr>
+<tr>
+<td><strong>Tiêu chí xong</strong></td>
+<td>Bảng có số đo cho N = 1, 2, 4 ở cả hai trạng thái, ghi cấu hình máy, đo lặp lại ít nhất hai lần. Spike cung cấp dữ kiện cho Human, không tự đặt trần.</td>
+</tr>
+</tbody></table></div>
+<a id="s11"></a>
+<h3>S11 · ROLE của Codex qua <code>customInstructions</code> khi load/resume (<a href="plan/M2-orchestrator.html">T2.10</a>)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Câu hỏi</strong></td>
+<td>ROLE của Codex truyền qua <code>_meta.jetbrains.air.customInstructions</code> có còn hiệu lực sau khi <code>load</code> hoặc <code>resume</code> trong process adapter mới không? (Phần hiệu lực ở session mới đã kiểm ở <a href="plan/M1-foundation.html">T1.6</a>).</td>
+</tr>
+<tr>
+<td><strong>Căn cứ</strong></td>
+<td><a href="tech-spec.html#muc-20">Tech Spec 20.1 (S11)</a>, <a href="tech-spec.html#muc-14">14.1 bước 4</a>; adapter Codex không đọc <code>customInstructions</code> khi <code>loadSession</code>/<code>resumeSession</code> (<code>dist/index.js:35227-35340</code>) <span class="tag tag-verified">[Đã kiểm]</span></td>
+</tr>
+<tr>
+<td><strong>Chặn</strong></td>
+<td>Bước 2 → Cách phục hồi thread Orchestrator trên Codex sau khi Zed khởi động lại (<a href="plan/M2-orchestrator.html">T2.10</a>)</td>
+</tr>
+<tr>
+<td><strong>Nhánh &amp; Bàn giao</strong></td>
+<td>Báo cáo <code>docs/crew/spikes/S11.md</code>; cập nhật <code>crates/crew/src/recovery.rs</code> và <code>ProviderProfile</code> của Codex</td>
+</tr>
+<tr>
+<td><strong>Các bước</strong></td>
+<td>Tạo session Codex có ROLE marker, gửi một lượt, tắt process adapter. Mở process mới, gọi <code>load</code> và <code>resume</code>, rồi hỏi để kiểm marker. Nếu mất ROLE: khi recovery, Crew mở thread Orchestrator mới và nắm lại trạng thái bằng <code>crew_get_state</code> (thread cũ chỉ xem). Nếu còn ROLE: resume trực tiếp qua <code>CrewConnection</code> như Claude.</td>
+</tr>
+<tr>
+<td><strong>Tiêu chí xong</strong></td>
+<td>Báo cáo có kết luận rõ ràng kèm contract test <code>role_codex_resume</code>. Chi phí khoảng 4 prompt.</td>
+</tr>
+</tbody></table></div>
+<a id="s12"></a>
+<h3>S12 · Định dạng hạn mức của Claude (<a href="plan/M1-foundation.html">T1.11</a>)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Câu hỏi</strong></td>
+<td>Định dạng output thật của lệnh <code>/usage</code> trên Claude là gì? Cấu trúc thật của <code>_meta["_claude/rateLimit"]</code> trong usage update là gì?</td>
+</tr>
+<tr>
+<td><strong>Căn cứ</strong></td>
+<td><a href="tech-spec.html#muc-20">Tech Spec 20.1 (S12)</a>, <a href="tech-spec.html#muc-6">6.7</a>; mã adapter <code>usage-markdown.js</code>, <code>acp-agent.js:6084-6094</code> <span class="tag tag-verified">[Đã kiểm]</span></td>
+</tr>
+<tr>
+<td><strong>Chặn</strong></td>
+<td>Bước 1 → Phần parser hạn mức Claude trong <a href="plan/M1-foundation.html">T1.12</a></td>
+</tr>
+<tr>
+<td><strong>Nhánh &amp; Bàn giao</strong></td>
+<td>Báo cáo <code>docs/crew/spikes/S12.md</code>; fixture đã che dữ liệu cá nhân trong <code>crates/crew_acp/test_fixtures/contract/</code></td>
+</tr>
+<tr>
+<td><strong>Các bước</strong></td>
+<td>Dùng harness <a href="plan/M0-prep-and-spikes.html">T0.9</a> gửi <code>/usage</code> trong session thăm dò của Claude, và ghi <code>_meta</code> của usage update sau một prompt ngắn. Che email và ID tài khoản trước khi lưu fixture.</td>
+</tr>
+<tr>
+<td><strong>Tiêu chí xong</strong></td>
+<td>Có fixture cho cả hai nguồn; báo cáo nêu rõ các cửa sổ (5 giờ, 7 ngày), đơn vị (<code>utilization</code>) và định dạng giờ reset (<code>resets_at</code>).</td>
+</tr>
+</tbody></table></div>
+<a id="s13"></a>
+<h3>S13 · Nhóm hạn mức của Gemini 4 Argon trên Antigravity (<a href="plan/M7-model-and-retro.html">T7.1</a>)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Câu hỏi</strong></td>
+<td>Model <code>gemini-4-argon</code> tính vào nhóm hạn mức nào trong output <code>/usage</code> của Antigravity?</td>
+</tr>
+<tr>
+<td><strong>Căn cứ</strong></td>
+<td><a href="tech-spec.html#muc-20">Tech Spec 20.1 (S13)</a>, <a href="tech-spec.html#muc-6">6.7</a>. Output <code>/usage</code> chỉ ghi nhóm “Gemini Models” gồm “Gemini Flash, Gemini Pro”, không nhắc Argon <span class="tag tag-spike">[Spike]</span></td>
+</tr>
+<tr>
+<td><strong>Ảnh hưởng</strong></td>
+<td>Không chặn bước nào; trong lúc chờ kết quả, hạn mức của Argon là <code>unknown</code> (với chính sách mặc định <code>skip</code>, Argon bị bỏ qua; với <code>ask_human</code>, Crew hỏi Human).</td>
+</tr>
+<tr>
+<td><strong>Nhánh &amp; Bàn giao</strong></td>
+<td>Báo cáo <code>docs/crew/spikes/S13.md</code>; cập nhật bảng ánh xạ model ↔ nhóm hạn mức trong <code>ProviderProfile</code> và contract test</td>
+</tr>
+<tr>
+<td><strong>Cách đo</strong></td>
+<td>1. Đọc <code>/usage</code> trước khi chạy.<br>2. Chạy một loạt prompt đủ dài với <code>gemini-4-argon</code> để phần trăm còn lại của một nhóm giảm thấy rõ.<br>3. Đọc lại <code>/usage</code> và so sánh hai nhóm.<br>4. Lặp lại thêm một lần để loại trừ trùng hợp.</td>
+</tr>
+<tr>
+<td><strong>Tiêu chí xong</strong></td>
+<td>Xác định được nhóm hạn mức của Argon (và khóa vào contract test theo phiên bản adapter), hoặc kết luận không xác định được. Ghi rõ số prompt và lượng token đã dùng.</td>
+</tr>
+</tbody></table></div>
+  </main>
+</body>
+</html>

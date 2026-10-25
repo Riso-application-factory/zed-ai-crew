@@ -1,0 +1,2669 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zed AI Crew — Product Brief — Zed AI Crew</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-brand">
+      <a href="index.html">Zed AI Crew</a>
+      <span class="brand-tag">Docs · Full Width</span>
+    </div>
+    <nav class="site-nav">
+      <a href="index.html">Trang chủ</a>
+      <a href="brief.html" class="active">Product Brief</a>
+      <a href="tech-spec.html">Tech Spec</a>
+      <a href="open-question.html">Open Questions</a>
+      <a href="spike-list.html">Spike List</a>
+      <span class="nav-sep"></span>
+      <a href="plan/00-overview.html">Kế hoạch</a>
+      <a href="plan/M0-prep-and-spikes.html">M0</a>
+      <a href="plan/M1-foundation.html">M1</a>
+      <a href="plan/M2-orchestrator.html">M2</a>
+      <a href="plan/M3-execution.html">M3</a>
+      <a href="plan/M4-github.html">M4</a>
+      <a href="plan/M5-playbook.html">M5</a>
+      <a href="plan/M6-ui.html">M6</a>
+      <a href="plan/M7-model-and-retro.html">M7</a>
+    </nav>
+  </header>
+  <main class="page-container">
+    <div class="doc-toolbar">
+      <span>Tài liệu: <code>docs/crew/brief.md</code> · Giao diện HTML Full-Width</span>
+      <a class="raw-link" href="brief.md">Xem bản Markdown (brief.md)</a>
+    </div>
+<h1>Zed AI Crew — Product Brief</h1>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Field</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Version</td>
+<td>Version: 3.5 · Source 0 · 2026-10-25 · Dành cho AI làm việc trên project này.</td>
+</tr>
+<tr>
+<td>Source</td>
+<td>Tài liệu này là nguồn gốc (Source 0) định nghĩa yêu cầu sản phẩm của Zed AI Crew, được tổ chức để tra cứu bằng mã NEED; mọi thiết kế và tài liệu khác dẫn xuất từ đây.</td>
+</tr>
+<tr>
+<td>Trạng thái</td>
+<td>61 NEED (<a href="#phu-luc-b">Phụ lục B</a>) và mọi mục của brief đã được Human đồng ý đến 2026-10-25. Trạng thái duyệt không đồng nghĩa tính năng đã được triển khai. Câu hỏi còn mở ở <a href="#muc-7">mục 7</a>.</td>
+</tr>
+<tr>
+<td>Cấu trúc</td>
+<td>Bản 3.0 sắp xếp lại brief theo 12 thành phần: 7 phần bắt buộc (mục 1–7) và 5 phần nên có với tính năng lớn (mục 8–12). NEED, quyết định, dữ kiện nền tảng và các ví dụ tầm nhìn được giữ nguyên văn từ bản 2.14.</td>
+</tr>
+<tr>
+<td>Nguồn chính</td>
+<td>NEED ở <a href="#phu-luc-b">Phụ lục B</a> là nguồn chính. Các mục tổng hợp chỉ dẫn chiếu NEED; chỗ nào khác NEED thì theo NEED (<a href="#need-39">NEED 39</a>).</td>
+</tr>
+<tr>
+<td>Không gồm</td>
+<td>Kiến trúc kỹ thuật, lựa chọn công nghệ và ước lượng thời gian thuộc tech spec/RFC viết từ brief này. <a href="#ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them">Phụ lục C</a> là dữ kiện nền tảng đã kiểm chứng, làm đầu vào cho tech spec.</td>
+</tr>
+</tbody></table></div>
+<a id="trang-thai-noi-dung"></a>
+<h2>Trạng thái nội dung</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Loại nội dung</th>
+<th>Mục</th>
+<th>Trạng thái</th>
+</tr></thead><tbody>
+<tr>
+<td>Nguyên văn bản 2.14</td>
+<td>1.1, 1.2, 2.1, 3.1, 4.1, 4.2 (bảng đầu), 4.3, 5.1–5.3, 5.4.1–5.4.4, 5.5, 5.6, Phụ lục B–D</td>
+<td>Đã duyệt</td>
+</tr>
+<tr>
+<td>Tổng hợp từ NEED và quyết định đã duyệt, không thêm yêu cầu mới</td>
+<td>1.3, 2.2, 4.2 (bảng bổ sung), 5.3.1, 5.4.5, 5.4.6, 5.7, 5.8, 6, 8, Phụ lục A</td>
+<td>Không cần duyệt riêng; NEED là nguồn chính</td>
+</tr>
+<tr>
+<td>Claude soạn mới ở bản 3.0</td>
+<td>1.4, 3.2, 3.3, 3.4, 4.4 (thứ tự xây), 7, 9, 10, 11, 12</td>
+<td>Đã duyệt (Human đồng ý 2026-10-25)</td>
+</tr>
+</tbody></table></div>
+<h2>Mục lục</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Phần</th>
+<th>Mục</th>
+</tr></thead><tbody>
+<tr>
+<td>Bắt buộc</td>
+<td><a href="#muc-1">1. Vấn đề và bối cảnh</a> · <a href="#muc-2">2. Người dùng mục tiêu</a> · <a href="#muc-3">3. Mục tiêu và tiêu chí thành công</a> · <a href="#muc-4">4. Phạm vi</a> · <a href="#muc-5">5. Luồng người dùng và yêu cầu chức năng</a> · <a href="#muc-6">6. Ràng buộc</a> · <a href="#muc-7">7. Câu hỏi mở và giả định</a></td>
+</tr>
+<tr>
+<td>Nên có</td>
+<td><a href="#muc-8">8. Thiết kế giao diện</a> · <a href="#muc-9">9. Triển khai và rollback</a> · <a href="#muc-10">10. Đo lường và tracking</a> · <a href="#muc-11">11. Vai trò và trách nhiệm</a> · <a href="#muc-12">12. Rủi ro và giảm thiểu</a></td>
+</tr>
+<tr>
+<td>Phụ lục</td>
+<td><a href="#phu-luc-a">A. Thuật ngữ</a> · <a href="#phu-luc-b">B. Danh mục NEED</a> · <a href="#ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them">C. Dữ kiện nền tảng</a> · <a href="#phu-luc-e">D. Lịch sử phiên bản</a></td>
+</tr>
+</tbody></table></div>
+<a id="muc-1"></a>
+<h2>1. Vấn đề và bối cảnh</h2>
+<a id="y-tuong"></a>
+<h3>1.1 Ý tưởng</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Một đội phát triển AI sống trong Zed. Human mô tả việc bằng ngôn ngữ tự nhiên — Crew điều phối và bàn giao OUTPUT theo loại session. Với implement, kết quả là thay đổi đã merged qua pull request.</td>
+</tr>
+</tbody></table></div>
+<a id="problem"></a>
+<h3>1.2 Vấn đề</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Vấn đề — điều phối AI bằng tay đang ăn mất giá trị của AI</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>Quy trình hiện tại chạy trên một catalog prompt có sẵn — mỗi node của workflow đi kèm <strong>hai prompt</strong> để copy tay: <strong>System</strong> (role) và <strong>Request</strong> (step).</td>
+</tr>
+</tbody></table></div>
+<a id="quy-trinh-hien-tai"></a>
+<h4>Quy trình hiện tại</h4>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Step 1</td>
+<td>Chọn step và mở thread mới.</td>
+</tr>
+<tr>
+<td>Step 2</td>
+<td>Dán hai prompt: System (role) và Request (step).</td>
+</tr>
+<tr>
+<td>Step 3</td>
+<td>AI chạy.</td>
+</tr>
+<tr>
+<td>Step 4</td>
+<td>Human đọc, trả lời và mang context đi tiếp.</td>
+</tr>
+<tr>
+<td>Step 5</td>
+<td>Review, sửa rồi lặp lại với thread mới.</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>Kỷ luật session/context và việc chuyển tiếp đều do Human giữ bằng tay.</td>
+</tr>
+</tbody></table></div>
+<a id="cac-kho-khan"></a>
+<h4>Các khó khăn</h4>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Item</td>
+<td><strong>Chuyển prompt &amp; context bằng tay</strong> — Mỗi step: thread mới + dán lại role và context. Chuyển tiếp chỉ xảy ra vì Human làm.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Code lệch kiến trúc, khó bảo trì</strong> — Đầu ra trông hợp lý nhưng không được đối chiếu với hệ thống thật.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Tài liệu review lan man</strong> — Phải đọc nhiều để quyết định ít — Human chỉ cần thông tin bắt buộc.</td>
+</tr>
+</tbody></table></div>
+<a id="su-co-da-xay-ra"></a>
+<h4>Sự cố đã xảy ra</h4>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td><strong>Project frontend/backend:</strong> yêu cầu dựng frontend cho một backend có sẵn, lấy UI của sản phẩm nổi tiếng làm hình mẫu. AI <strong>clone nguyên UI tham chiếu</strong> mà không kiểm backend — bỏ qua cả ba việc: kiểm kê capability của backend, map từng tính năng của hình mẫu sang capability đó, và kiểm chứng tích hợp end-to-end. Kết quả: hai phía không khớp nhau, sản phẩm thất bại.</td>
+</tr>
+</tbody></table></div>
+<a id="bang-chung"></a>
+<h3>1.3 Bằng chứng</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Bằng chứng</th>
+<th>Loại</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Quy trình hiện tại</td>
+<td>Quan sát của Human</td>
+<td>Mỗi step mở thread mới, dán hai prompt (System, Request); Human đọc rồi tự mang context sang bước sau (<a href="#quy-trinh-hien-tai">Quy trình hiện tại</a>)</td>
+</tr>
+<tr>
+<td>Sự cố frontend/backend</td>
+<td>Sự cố thực tế</td>
+<td>AI clone nguyên UI tham chiếu mà không kiểm backend; hai phía không khớp, sản phẩm thất bại (<a href="#su-co-da-xay-ra">Sự cố đã xảy ra</a>)</td>
+</tr>
+<tr>
+<td>Số liệu định lượng</td>
+<td>Chưa có</td>
+<td>Chưa đo số lần chuyển prompt, thời gian Human đọc để quyết định hay tỷ lệ PR bị trả về; đề xuất đo baseline ở <a href="#baseline">3.4</a></td>
+</tr>
+</tbody></table></div>
+<a id="vi-sao-bay-gio"></a>
+<h3>1.4 Vì sao bây giờ và nếu không làm thì mất gì</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Trạng thái</td>
+<td><strong>Human đồng ý (2026-10-25).</strong> Phần “vì sao bây giờ” là suy luận của Claude từ dữ kiện đã kiểm chứng.</td>
+</tr>
+<tr>
+<td>Vì sao bây giờ</td>
+<td>Các mảnh nền đã có trong Zed: ACP Registry phân phối agent chính thức của Claude, Codex và Google Antigravity; Threads Sidebar, Parallel Agents và worktree isolation; subagent view (<a href="#ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them">Phụ lục C</a>). Phần còn thiếu đúng là lớp điều phối: Zed chưa có cơ chế giao việc liên provider vừa nhận được kết quả vừa điều khiển được worker.</td>
+</tr>
+<tr>
+<td>Nếu không làm</td>
+<td>Human tiếp tục tự làm Orchestrator: chuyển prompt và context ở mọi bước, đọc nhiều để quyết định ít, và nhận kết quả trông hợp lý nhưng không được đối chiếu với hệ thống thật — đúng kiểu đã dẫn tới <a href="#su-co-da-xay-ra">sự cố frontend/backend</a>.</td>
+</tr>
+</tbody></table></div>
+<a id="muc-2"></a>
+<h2>2. Người dùng mục tiêu</h2>
+<a id="danh-cho-ai"></a>
+<h3>2.1 Dành cho ai</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td><strong>Một Human</strong> — solo developer dùng AI agents hằng ngày trên máy macOS này, trong Zed. Kiêm luôn khách hàng, product owner và người vận hành: giữ toàn bộ quyền quyết định sản phẩm.</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>AI workers là tác nhân thực thi — không nắm quyền sản phẩm. Người dùng của target-project hưởng lợi gián tiếp từ thay đổi đúng kiến trúc hơn.</td>
+</tr>
+</tbody></table></div>
+<a id="jtbd"></a>
+<h3>2.2 Công việc cần làm và không phải đối tượng</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Cách Human làm việc</td>
+<td>Theo mô tả của Human (2026-10-25): Human mô tả mong muốn bằng ngôn ngữ tự nhiên và không cần diễn đạt yêu cầu ở mức kiến trúc. Crew tự tra cứu, khảo sát hệ thống thật và các sản phẩm tham chiếu tốt trong đúng mảng, rồi đưa câu hỏi kèm khuyến nghị (<a href="#need-09">09</a>, <a href="#need-10">10</a>, <a href="#need-19">19</a>, <a href="#need-20">20</a>).</td>
+</tr>
+<tr>
+<td>Job to be done</td>
+<td>Khi có một mục tiêu cho project, Human muốn giao nó bằng một câu trong hội thoại Zed và nhận về OUTPUT đã kiểm chứng — với implement là thay đổi đã merged — mà không phải tự chia việc, chọn role, chuyển prompt hay mang context giữa các thread (<a href="#need-09">09</a>, <a href="#need-31">31</a>, <a href="#need-45">45</a>).</td>
+</tr>
+<tr>
+<td>Tình huống dùng</td>
+<td>Các loại session ở <a href="#session-types">4.3</a>: hỏi nhanh, kickoff, brainstorm, research, refine, implement, release/migration, incident, review/retro, retirement.</td>
+</tr>
+<tr>
+<td>Không phải đối tượng</td>
+<td>Nhiều người dùng hoặc team; dùng từ xa hay dịch vụ hosted; hệ điều hành khác ngoài máy macOS này (<a href="#need-01">NEED 01</a>). Người cần AI tự phê duyệt, tự release hoặc nắm quyền sản phẩm (<a href="#need-06">06</a>, <a href="#need-13">13</a>).</td>
+</tr>
+</tbody></table></div>
+<a id="muc-3"></a>
+<h2>3. Mục tiêu và tiêu chí thành công</h2>
+<a id="goals"></a>
+<h3>3.1 Mong đợi</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Item</td>
+<td><strong>Ít công hơn</strong> — Hết việc chuyển prompt và context bằng tay; đọc ít hơn để quyết định.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Code vừa hệ thống</strong> — Worker hiểu kiến trúc + kiểm chứng độc lập trước khi tới tay Human.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Phục hồi đúng</strong> — Restart tiếp tục đúng việc, không phát lại tác động đã xảy ra.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Báo cáo thật</strong> — Fail/hủy/không chắc vẫn giữ fact — không giả đã xong.</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>Chưa chốt KPI số. Đếm ticket hay CI xanh không chứng minh giá trị — OUTPUT đạt yêu cầu gốc mới là kết quả; với implement là thay đổi đã merged.</td>
+</tr>
+</tbody></table></div>
+<a id="chi-so-chinh"></a>
+<h3>3.2 Chỉ số chính</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Trạng thái</td>
+<td><strong>Human đồng ý (2026-10-25).</strong> Bản 2.x ghi “chưa chốt KPI số”. Mục tiêu bằng 0 dưới đây suy ra trực tiếp từ NEED đã duyệt; các chỉ số còn lại chỉ theo dõi xu hướng cho tới khi có baseline.</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mong đợi</th>
+<th>Chỉ số</th>
+<th>Baseline</th>
+<th>Mục tiêu</th>
+<th>Nguồn đo</th>
+</tr></thead><tbody>
+<tr>
+<td>Ít công hơn</td>
+<td>Số lần Human phải chuyển prompt hoặc context giữa các bước của một session</td>
+<td>Quy trình hiện tại: mỗi step dán 2 prompt và mang context bằng tay</td>
+<td>0 (<a href="#need-09">09</a>, <a href="#need-31">31</a>)</td>
+<td>Human xác nhận khi manual test; run store không có bước nào chờ Human chuyển context</td>
+</tr>
+<tr>
+<td>Ít công hơn</td>
+<td>Số câu hỏi hỏi lại điều đã chốt</td>
+<td>Chưa đo</td>
+<td>0 (<a href="#need-10">NEED 10</a>)</td>
+<td>Sự kiện yêu cầu quyết định (<a href="#muc-10">mục 10</a>)</td>
+</tr>
+<tr>
+<td>Ít công hơn</td>
+<td>Thời gian Human chờ tới lượt quyết định và số lượt quyết định mỗi session</td>
+<td>Chưa đo</td>
+<td>Chưa đặt ngưỡng; theo dõi xu hướng</td>
+<td>Sự kiện yêu cầu quyết định, work item age (<a href="#need-52">NEED 52</a>)</td>
+</tr>
+<tr>
+<td>Ít công hơn</td>
+<td>Human có phải mở transcript của worker để ra quyết định không</td>
+<td>Chưa đo</td>
+<td>Không cần (<a href="#need-49">49</a>, <a href="#need-51">51</a>)</td>
+<td>Human đánh giá khi manual test</td>
+</tr>
+<tr>
+<td>Code vừa hệ thống</td>
+<td>Tỷ lệ PR implement bị Human yêu cầu sửa vì lệch kiến trúc hoặc lệch hệ thống thật</td>
+<td>Chưa đo</td>
+<td>Chưa đặt ngưỡng; theo dõi xu hướng</td>
+<td>Review PR trên GitHub (<a href="#need-35">NEED 35</a>)</td>
+</tr>
+<tr>
+<td>Báo cáo thật</td>
+<td>Tỷ lệ session đạt Done theo tiêu chí của loại session</td>
+<td>Chưa đo</td>
+<td>Chưa đặt ngưỡng; theo dõi xu hướng</td>
+<td>Run store (<a href="#need-45">NEED 45</a>)</td>
+</tr>
+</tbody></table></div>
+<a id="guardrail"></a>
+<h3>3.3 Chỉ số bảo vệ</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Trạng thái</td>
+<td><strong>Human đồng ý (2026-10-25).</strong> Mỗi chỉ số ứng với một bất biến đã duyệt nên mục tiêu là 0; một lần vi phạm là lỗi phải xử lý, không phải con số để tối ưu.</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Chỉ số</th>
+<th>Mục tiêu</th>
+<th>NEED</th>
+</tr></thead><tbody>
+<tr>
+<td>Session hoặc story được báo Done khi chưa đạt tiêu chí</td>
+<td>0</td>
+<td><a href="#need-43">43</a>, <a href="#need-45">45</a></td>
+</tr>
+<tr>
+<td>Tác động bị phát lại sau crash hoặc restart (PR, issue, comment trùng)</td>
+<td>0</td>
+<td><a href="#need-44">44</a></td>
+</tr>
+<tr>
+<td>Merge khi head khác bản Human đã duyệt</td>
+<td>0</td>
+<td><a href="#need-14">14</a></td>
+</tr>
+<tr>
+<td>Context của project gửi tới provider ngoài tập được phép</td>
+<td>0</td>
+<td><a href="#need-02">02</a>, <a href="#need-27">27</a></td>
+</tr>
+<tr>
+<td>Đổi provider hoặc model giữa chừng, hoặc chọn phương án thay thế mà không có bản ghi</td>
+<td>0</td>
+<td><a href="#need-25">25</a>, <a href="#need-26">26</a></td>
+</tr>
+<tr>
+<td>Worker chạy ở mode bỏ qua xin quyền</td>
+<td>0</td>
+<td><a href="#need-07">07</a></td>
+</tr>
+<tr>
+<td>Crew đọc hoặc sửa cấu hình provider ngoài ACP</td>
+<td>0</td>
+<td><a href="#need-61">61</a></td>
+</tr>
+<tr>
+<td>Việc chờ Human bị tự hết hạn, tự đóng hoặc tự chọn thay</td>
+<td>0</td>
+<td><a href="#need-15">15</a></td>
+</tr>
+<tr>
+<td>Quy tắc hoặc cấu hình bị tự thay đổi khi Human chưa duyệt</td>
+<td>0</td>
+<td><a href="#need-54">54</a></td>
+</tr>
+</tbody></table></div>
+<a id="baseline"></a>
+<h3>3.4 Baseline</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Trạng thái</td>
+<td><strong>Human đồng ý (2026-10-25).</strong></td>
+</tr>
+<tr>
+<td>Đề xuất</td>
+<td>Trước khi manual test Crew, Human ghi lại vài session làm theo quy trình hiện tại: số prompt đã dán, số lần mang context sang bước sau, số PR bị trả về vì lệch hệ thống. Đây là điểm so sánh cho các chỉ số “chưa đo” ở <a href="#chi-so-chinh">3.2</a>.</td>
+</tr>
+</tbody></table></div>
+<a id="muc-4"></a>
+<h2>4. Phạm vi</h2>
+<a id="scope"></a>
+<h3>4.1 Trong phạm vi</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Onboarding → Kickoff / Brainstorm → Research → Refine → Implement → Release → Operate / Incident → Review / Retro → Retirement</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>Cùng một mô hình: một session nhận một INPUT → Crew chạy → OUTPUT đạt kết quả yêu cầu, có evidence phù hợp. Brainstorm bàn giao ý tưởng; implement hoàn tất khi merged. Change request, bug, dependency upgrade, migration đi cùng đường. Theo quyết định bản 2.5, Onboarding là UI thiết lập do code điều khiển (<a href="#need-04">NEED 04</a>), không phải session; xem <a href="#session-types">bảng Loại session</a>.</td>
+</tr>
+</tbody></table></div>
+<a id="ngoai-pham-vi"></a>
+<h3>4.2 Ngoài phạm vi</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Item</td>
+<td>đa người dùng / remote</td>
+</tr>
+<tr>
+<td>Item</td>
+<td>tự đổi provider âm thầm</td>
+</tr>
+<tr>
+<td>Item</td>
+<td>release khi chưa được quyền</td>
+</tr>
+<tr>
+<td>Item</td>
+<td>nút Approve trong app</td>
+</tr>
+<tr>
+<td>Item</td>
+<td>big-bang một lần xong trên target repo (dự án Crew theo <a href="#need-03">NEED 03</a>)</td>
+</tr>
+<tr>
+<td>Item</td>
+<td>OS khác ngoài macOS này</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Ngoài phạm vi, suy ra từ NEED và quyết định đã duyệt.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td>Crew quản lý lại việc đăng nhập provider (<a href="#need-56">NEED 56</a>)</td>
+</tr>
+<tr>
+<td>Item</td>
+<td>Đọc hoặc sửa cấu hình, credential, process của provider ngoài ACP (<a href="#need-61">NEED 61</a>)</td>
+</tr>
+<tr>
+<td>Item</td>
+<td>Quy tắc hoặc kinh nghiệm tự tiến hóa, tự chấm điểm (<a href="#need-31">31</a>, <a href="#need-54">54</a>)</td>
+</tr>
+<tr>
+<td>Item</td>
+<td>Nút Re-run và luồng duyệt song song ngoài hội thoại và GitHub (<a href="#need-13">NEED 13</a>)</td>
+</tr>
+<tr>
+<td>Item</td>
+<td>Phân phối Crew cho người khác (<a href="#need-01">01</a>, <a href="#need-58">58</a>)</td>
+</tr>
+</tbody></table></div>
+<a id="session-types"></a>
+<h3>4.3 Loại session, OUTPUT và tiêu chí Done</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Bảng duy nhất cho loại session, OUTPUT chính và tiêu chí Done. NEED 04, 18 và 45 tham chiếu bảng này. Human đã đồng ý toàn bộ tiêu chí Done (2026-10-25).</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Loại</th>
+<th>Đi qua</th>
+<th>OUTPUT chính</th>
+<th>Done khi</th>
+<th>Có PR</th>
+<th>Trạng thái tiêu chí</th>
+</tr></thead><tbody>
+<tr>
+<td>Onboarding</td>
+<td>UI thiết lập do code điều khiển, không phải session</td>
+<td>GitHub App đã kết nối, repo, quyền, loại chủ sở hữu repo, ruleset</td>
+<td>Kiểm tra sẵn sàng ở <a href="#need-05">NEED 05</a> đạt</td>
+<td>Không</td>
+<td>Đã chốt</td>
+</tr>
+<tr>
+<td>Hỏi nhanh</td>
+<td>Hội thoại Orchestrator</td>
+<td>Câu trả lời</td>
+<td>Trả lời đúng câu hỏi; dữ kiện có nguồn, phần suy luận có nhãn</td>
+<td>Không</td>
+<td>Đã chốt</td>
+</tr>
+<tr>
+<td>Kickoff</td>
+<td>Hội thoại Orchestrator; session Kickoff đầu tiên là Initializer</td>
+<td>Nền tảng Outer Harness: baseline check tái lập được (<a href="#need-19">#19</a>/<a href="#need-23">#23</a>), nguồn sự thật (<a href="#need-39">#39</a>), cấu hình project-scope, gồm bước verification (<a href="#need-27">#27</a>)</td>
+<td>Baseline check chạy lại từ worktree sạch cho cùng kết quả; Human đã xác nhận các giả định; file thêm vào repo đi qua PR đã merged</td>
+<td>Chỉ khi thêm file vào repo</td>
+<td>Đã chốt</td>
+</tr>
+<tr>
+<td>Brainstorm</td>
+<td>Hội thoại Orchestrator</td>
+<td>Bộ ý tưởng</td>
+<td>Đạt tiêu chí đã thống nhất</td>
+<td>Không</td>
+<td>Đã chốt (<a href="#need-45">#45</a>)</td>
+</tr>
+<tr>
+<td>Research</td>
+<td>Hội thoại Orchestrator</td>
+<td>Kết luận có căn cứ</td>
+<td>Có câu hỏi, phạm vi, nguồn của nhận định quan trọng, mức chắc chắn (<a href="#need-49">#49</a>)</td>
+<td>Không</td>
+<td>Đã chốt (<a href="#need-45">#45</a>)</td>
+</tr>
+<tr>
+<td>Refine</td>
+<td>Hội thoại Orchestrator</td>
+<td>Story đủ điều kiện</td>
+<td>Đạt điều kiện ở <a href="#need-22">#22</a></td>
+<td>Không</td>
+<td>Đã chốt (<a href="#need-45">#45</a>)</td>
+</tr>
+<tr>
+<td>Implement</td>
+<td>Hội thoại Orchestrator</td>
+<td>Thay đổi đã merged</td>
+<td>Merged, bằng chứng truy được; PR mở hoặc CI xanh chưa đủ</td>
+<td>Có</td>
+<td>Đã chốt (<a href="#need-45">#45</a>)</td>
+</tr>
+<tr>
+<td>Release / migration</td>
+<td>Hội thoại Orchestrator, cần quyền <a href="#need-06">#06</a></td>
+<td>Thay đổi được kích hoạt trên môi trường</td>
+<td>Rollout hoàn tất trong quyền đã cấp; kiểm tra sau triển khai đạt; phương án rollback đã xác nhận còn dùng được</td>
+<td>Thay đổi code đi qua Implement</td>
+<td>Đã chốt</td>
+</tr>
+<tr>
+<td>Incident</td>
+<td>Hội thoại Orchestrator, cần quyền <a href="#need-06">#06</a></td>
+<td>Dịch vụ phục hồi và bản ghi sự cố</td>
+<td>Triệu chứng gốc không còn khi kiểm lại (<a href="#need-48">#48</a>); bản ghi có timeline, nguyên nhân đã tái hiện, tác động; việc phòng ngừa đã mở thành story</td>
+<td>Sửa code đi qua Implement</td>
+<td>Đã chốt</td>
+</tr>
+<tr>
+<td>Review / retro</td>
+<td>Hội thoại Orchestrator</td>
+<td>Đề xuất cải tiến có bằng chứng (<a href="#need-54">#54</a>)</td>
+<td>Human đã quyết định từng đề xuất; đề xuất được chấp nhận đã mở thành session/story mới</td>
+<td>Không</td>
+<td>Đã chốt</td>
+</tr>
+<tr>
+<td>Retirement</td>
+<td>Hội thoại Orchestrator</td>
+<td>Thành phần được gỡ, dữ liệu xử lý theo kế hoạch</td>
+<td>PR gỡ đã merged; kiểm chứng không còn tham chiếu/hành vi cũ; dữ liệu xử lý theo phương án Human duyệt; ADR liên quan chuyển <code>superseded</code></td>
+<td>Có</td>
+<td>Đã chốt</td>
+</tr>
+</tbody></table></div>
+<a id="thu-tu-xay"></a>
+<h3>4.4 MVP, phase và thứ tự xây</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>MVP và phase</td>
+<td>Dự án Crew <strong>không có MVP hay phase bàn giao</strong> (<a href="#need-03">NEED 03</a>): phát triển liên tục trên một đường, mỗi thay đổi vào main qua kiểm chứng tự động, Human manual test khi đủ phạm vi. Trên target repo, mỗi phần bàn giao là một lát dọc dùng được (<a href="#need-21">NEED 21</a>).</td>
+</tr>
+<tr>
+<td>Để sau</td>
+<td>Không có hạng mục nào được hoãn sang phase sau. Các điểm chưa chốt nằm ở <a href="#muc-7">mục 7</a>.</td>
+</tr>
+<tr>
+<td>Thứ tự xây</td>
+<td><strong>Human đồng ý (2026-10-25); tech spec có thể điều chỉnh.</strong> NEED 03 yêu cầu triển khai theo dependency và giá trị. Bảng dưới là thứ tự phụ thuộc giữa các nhóm năng lực, không phải slice bàn giao. <a href="#need-01">01</a>, <a href="#need-03">03</a> áp dụng cho mọi bước.</td>
+</tr>
+<tr>
+<td>Ghi chú</td>
+<td>Bước 2 chọn cấu hình theo điểm của NEED 60 (bước 7); trong lúc phát triển, bước 2 chạy với cấu hình mặc định cho tới khi bước 7 xong.</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Bước</th>
+<th>Nhóm năng lực</th>
+<th>NEED</th>
+<th>Cần có trước</th>
+</tr></thead><tbody>
+<tr>
+<td>1</td>
+<td>Nền: điều khiển provider chỉ qua ACP, trạng thái provider và snapshot model, run store default-FAIL, phục hồi fact, ranh giới dữ liệu, fork theo upstream</td>
+<td><a href="#need-61">61</a>, <a href="#need-56">56</a>, <a href="#need-43">43</a>, <a href="#need-44">44</a>, <a href="#need-02">02</a>, <a href="#need-58">58</a>, <a href="#need-59">59</a></td>
+<td>—</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Orchestrator và giao việc: điểm vào duy nhất, câu hỏi cho Human, chờ, dừng, bước chỉ Human làm được, ROLE Orchestrator, provider, chọn cấu hình, nạp ROLE</td>
+<td><a href="#need-09">09</a>, <a href="#need-10">10</a>, <a href="#need-13">13</a>, <a href="#need-15">15</a>, <a href="#need-16">16</a>, <a href="#need-17">17</a>, <a href="#need-24">24</a>, <a href="#need-25">25</a>, <a href="#need-26">26</a>, <a href="#need-55">55</a></td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Thực thi và kiểm chứng: quyền môi trường, worktree và gate, nội dung ngoài, readiness và baseline, song song, giới hạn, context, bàn giao, công cụ, xung đột, xử lý lỗi, kiểm chứng độc lập</td>
+<td><a href="#need-06">06</a>, <a href="#need-07">07</a>, <a href="#need-08">08</a>, <a href="#need-19">19</a>, <a href="#need-23">23</a>, <a href="#need-29">29</a>, <a href="#need-30">30</a>, <a href="#need-31">31</a>, <a href="#need-32">32</a>, <a href="#need-33">33</a>, <a href="#need-34">34</a>, <a href="#need-37">37</a>, <a href="#need-38">38</a>, <a href="#need-46">46</a>, <a href="#need-47">47</a>, <a href="#need-48">48</a></td>
+<td>2</td>
+</tr>
+<tr>
+<td>4</td>
+<td>GitHub: GitHub App, PR và duyệt theo version, Issues làm nguồn sự thật, bên ghi duy nhất, lịch sử, phát hiện lệch</td>
+<td><a href="#need-05">05</a>, <a href="#need-14">14</a>, <a href="#need-35">35</a>, <a href="#need-39">39</a>, <a href="#need-40">40</a>, <a href="#need-41">41</a>, <a href="#need-42">42</a></td>
+<td>3</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Playbook và pipeline: vòng đời và loại session, làm rõ, prototype, kế hoạch, tham chiếu, cấu hình theo tầng, nâng cấp, đổi yêu cầu, Done, truy vết</td>
+<td><a href="#need-04">04</a>, <a href="#need-11">11</a>, <a href="#need-12">12</a>, <a href="#need-18">18</a>, <a href="#need-20">20</a>, <a href="#need-21">21</a>, <a href="#need-22">22</a>, <a href="#need-27">27</a>, <a href="#need-28">28</a>, <a href="#need-36">36</a>, <a href="#need-45">45</a>, <a href="#need-49">49</a></td>
+<td>2, 3, 4</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Quan sát và quyết định: UI quan sát, tài liệu quyết định, việc chờ Human, tìm session, tuân thủ Zed UI</td>
+<td><a href="#need-50">50</a>, <a href="#need-51">51</a>, <a href="#need-52">52</a>, <a href="#need-53">53</a>, <a href="#need-57">57</a></td>
+<td>1, 5</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Cải tiến và chọn model: cải tiến bằng kết quả đã kiểm chứng, dịch vụ chấm điểm model</td>
+<td><a href="#need-54">54</a>, <a href="#need-60">60</a></td>
+<td>1, 3, 5</td>
+</tr>
+</tbody></table></div>
+<a id="muc-5"></a>
+<h2>5. Luồng người dùng và yêu cầu chức năng</h2>
+<a id="what"></a>
+<h3>5.1 Sản phẩm làm gì</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Human giao mục tiêu trong hội thoại. Crew làm rõ kết quả cần đạt, tự tổ chức công việc trong quyền đã cấp, kiểm chứng và bàn giao.</td>
+</tr>
+</tbody></table></div>
+<a id="hop-dong-input-session-output"></a>
+<h3>5.2 Hợp đồng INPUT → SESSION → OUTPUT</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>INPUT · hiểu đúng việc được giao</td>
+<td>Một bộ đầu vào gồm yêu cầu gốc, tài liệu/tham chiếu, phạm vi và ràng buộc. Human có thể bổ sung qua nhiều lượt hội thoại; mỗi thay đổi có phiên bản và ảnh hưởng rõ.</td>
+</tr>
+<tr>
+<td>SESSION · một đơn vị công việc</td>
+<td>Một mục tiêu với tiêu chí hoàn thành, hội thoại Orchestrator và các nhiệm vụ con khi cần. Session có thể đi qua nhiều lượt chạy, chờ và phục hồi; không đồng nhất với một tin nhắn, story hay PR.</td>
+</tr>
+<tr>
+<td>OUTPUT · kết quả bàn giao chính</td>
+<td>Một kết quả có thể gồm nhiều tài liệu, thay đổi và bằng chứng liên quan. Done khi toàn bộ tiêu chí của kết quả đạt; với implement phải merged. OUTPUT có thể trở thành INPUT của session tiếp theo.</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>Cách diễn giải hợp đồng để review theo <a href="#need-04">#04</a>, <a href="#need-18">#18</a>, <a href="#need-36">#36</a>, <a href="#need-45">#45</a>. Một OUTPUT không có nghĩa là chỉ được có một file; “đang có bản nháp” khác “đã đạt kết quả”.</td>
+</tr>
+</tbody></table></div>
+<a id="runtime-playbook"></a>
+<h3>5.3 Playbook → kế hoạch và OUTPUT thực tế của session</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Playbook chứa <strong>các workflow (kịch bản quy trình) và sườn OUTPUT</strong>. Khi runtime, Orchestrator chọn workflow phù hợp từ playbook rồi điều chỉnh các bước, nhiệm vụ, cấu trúc OUTPUT và tiêu chí cho chính xác với INPUT và bối cảnh cụ thể, tạo thành pipeline runtime của session. Session hiển thị workflow đã chọn, phiên bản playbook nguồn cùng pipeline/sườn OUTPUT đã được điều chỉnh.</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>Theo <a href="#need-27">NEED 27</a>. OUTPUT được kiểm theo yêu cầu và tiêu chí thực tế; việc điền đủ các mục của template chưa đủ để Done.</td>
+</tr>
+</tbody></table></div>
+<a id="d13-seed"></a>
+<h4>5.3.1 Nguồn seed cho playbook và ROLE</h4>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Phần của Crew</th>
+<th>Nguồn seed</th>
+<th>Lưu ý</th>
+</tr></thead><tbody>
+<tr>
+<td>Câu hỏi kèm khuyến nghị, bản đồ quyết định</td>
+<td>mattpocock <code>grilling</code>, <code>wayfinder</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Brainstorm, thực hành chất lượng (bằng chứng trước khi báo xong, debug, TDD)</td>
+<td>Superpowers</td>
+<td>Bỏ “rulings, not stalls”, vòng sửa 5 lượt, tự nâng model</td>
+</tr>
+<tr>
+<td>Refine, template ticket, biểu diễn trên GitHub Issues</td>
+<td>BMAD <code>ticket-template.md</code>, <code>github-ticketing.toml</code></td>
+<td>Bỏ <code>bmad-build-auto</code>, memory-agent tự sửa</td>
+</tr>
+<tr>
+<td>Delta spec</td>
+<td>OpenSpec</td>
+<td></td>
+</tr>
+<tr>
+<td>Đối soát Đặc tả ↔ Kế hoạch ↔ Nhiệm vụ</td>
+<td>spec-kit <code>analyze.md</code>, GSD <code>gsd-plan-checker</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Abuse cases, ranh giới tin cậy</td>
+<td>GSD <code>SECURITY.md</code></td>
+<td>Bỏ <code>yolo</code> / <code>autonomous</code></td>
+</tr>
+<tr>
+<td>Hợp đồng bàn giao, kiểm chứng độc lập</td>
+<td>compound-engineering <code>implementation-worker</code> cùng result schema, <code>ce-code-review</code>, <code>testing-reviewer</code></td>
+<td>Bỏ worker ACP tự duyệt mọi quyền, gửi code sang model khác mặc định</td>
+</tr>
+<tr>
+<td>Retro → cảm biến tất định</td>
+<td>mattpocock <code>retro</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Incident</td>
+<td>wshobson <code>incident-response</code>, <code>postmortem-writing</code></td>
+<td>Bỏ duyệt bằng file cờ</td>
+</tr>
+<tr>
+<td>ROLE</td>
+<td>BMAD (Analyst, PM, PO, Architect, Dev, UX), GSD (QA, Security, Tech Lead), compound-engineering, wshobson ship-mate</td>
+<td><strong>Tự viết:</strong> Release Manager, Platform/DevOps, Delivery Manager, Business Analyst</td>
+</tr>
+<tr>
+<td>Không dùng</td>
+<td>ECC <code>continuous-learning-v2</code>, <code>/evolve</code>, <code>harness-optimizer</code>, <code>auto-update</code>; CCPM push thẳng main</td>
+<td>Tự tiến hóa, tự duyệt, bỏ qua PR</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Note</td>
+<td>Lấy nội dung, không lấy cơ chế: hooks, slash command và tool riêng của Claude Code không chạy được trên Codex/Antigravity; Crew dựng lại cổng kiểm tra thành cảm biến tất định của chính mình. Không workflow nào trong 13 repo phủ release/migration, retirement và hỏi nhanh.</td>
+</tr>
+</tbody></table></div>
+<a id="luong-chinh"></a>
+<h3>5.4 Luồng chính</h3>
+<a id="runtime-pipeline"></a>
+<a id="product-vision"></a>
+<h4>5.4.1 Từ INPUT đến pipeline runtime và OUTPUT</h4>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td><strong>Human bắt đầu Orchestrator session → nhập INPUT → Orchestrator phân tích → chọn workflow từ playbook → tạo pipeline runtime → thực thi → bàn giao OUTPUT.</strong></td>
+</tr>
+<tr>
+<td>Step 1</td>
+<td>Human bắt đầu session với ROLE Orchestrator và đưa yêu cầu/tài liệu/ràng buộc vào hội thoại.</td>
+</tr>
+<tr>
+<td>Step 2</td>
+<td>Orchestrator phân tích INPUT, tra cứu bối cảnh và làm rõ những quyết định còn thiếu để xác định kết quả cần đạt.</td>
+</tr>
+<tr>
+<td>Step 3</td>
+<td>Orchestrator chọn workflow từ playbook, cụ thể hóa thành pipeline runtime gồm các bước/nhiệm vụ, dependency, tiêu chí và OUTPUT của session đó.</td>
+</tr>
+<tr>
+<td>Step 4</td>
+<td>Crew thực thi pipeline trong quyền đã cấp, kiểm chứng rồi bàn giao OUTPUT. Human theo dõi pipeline và quyết định ở đúng hội thoại hoặc GitHub khi cần.</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>Workflow trong playbook là nguồn quy trình; pipeline runtime là kế hoạch thực thi cụ thể được tạo cho session, có thể được cập nhật khi xuất hiện công việc mới. Đây là ví dụ vận hành mong muốn, không xác nhận runtime đã được triển khai. Theo <a href="#need-09">NEED 09</a>, <a href="#need-18">NEED 18</a>, <a href="#need-21">NEED 21</a>, <a href="#need-27">NEED 27</a> và <a href="#need-45">NEED 45</a>.</td>
+</tr>
+</tbody></table></div>
+<a id="runtime-branch"></a>
+<h4>5.4.2 Chèn nhánh mới khi đang thực thi</h4>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Trong lúc Crew xử lý vấn đề A, trao đổi với Human làm phát sinh một ý tưởng cần được quản lý:</td>
+</tr>
+<tr>
+<td>Step 1</td>
+<td>Orchestrator xác định nhiệm vụ quản lý ý tưởng và chọn workflow tương ứng từ playbook.</td>
+</tr>
+<tr>
+<td>Step 2</td>
+<td>Orchestrator chèn một nhánh mới vào pipeline runtime đang có, ghi INPUT, nhiệm vụ, dependency, tiêu chí và OUTPUT riêng của nhánh; giữ liên kết về trao đổi đã làm phát sinh ý tưởng.</td>
+</tr>
+<tr>
+<td>Step 3</td>
+<td>Nếu nhánh quản lý ý tưởng không chặn A và điều kiện thực thi cho phép, hai nhánh chạy song song. Nếu A cần kết quả của nhánh ý tưởng, hoặc nhánh ý tưởng cần kết quả từ A, Orchestrator sắp thứ tự tuần tự theo dependency thực tế.</td>
+</tr>
+<tr>
+<td>Step 4</td>
+<td>Nhánh phụ thực thi workflow của mình và bàn giao OUTPUT riêng, ví dụ ý tưởng được ghi nhận có nguồn gốc, bối cảnh và kết quả xử lý; OUTPUT đó được liên kết trong session để dùng tiếp khi cần.</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>OUTPUT nhánh phụ được theo dõi riêng; mức ảnh hưởng đến việc hoàn thành session được ghi trong dependency và tiêu chí của pipeline. Nhánh có OUTPUT không tự đồng nghĩa session đã Done. Quản lý ý tưởng không tự cho phép implement ý tưởng; phần ngoài phạm vi/quyền đã cấp phải được làm rõ với Human trước. Pipeline được cập nhật theo phiên bản và không sửa ngược lịch sử Done. Theo <a href="#need-15">NEED 15</a>, <a href="#need-21">NEED 21</a>, <a href="#need-27">NEED 27</a>, <a href="#need-29">NEED 29</a>, <a href="#need-36">NEED 36</a> và <a href="#need-41">NEED 41</a>.</td>
+</tr>
+</tbody></table></div>
+<a id="vi-du-brainstorm"></a>
+<h4>5.4.3 Brainstorm</h4>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Step 1</td>
+<td>Human: “Tìm hướng giảm công review cho project này.”</td>
+</tr>
+<tr>
+<td>Step 2</td>
+<td>Crew khảo sát bối cảnh, làm rõ tiêu chí và các lựa chọn cần Human quyết định.</td>
+</tr>
+<tr>
+<td>Step 3</td>
+<td>Nếu cần worker: xác định nhiệm vụ → lấy ROLE → chọn provider, model, effort → kiểm tra khả dụng → tạo sub-thread.</td>
+</tr>
+<tr>
+<td>Step 4</td>
+<td>Đối chiếu ý tưởng với ràng buộc, bàn giao các hướng cùng đánh đổi và điểm chưa chắc.</td>
+</tr>
+<tr>
+<td>Step 5</td>
+<td><strong>OUTPUT:</strong> bộ ý tưởng đạt tiêu chí đã thống nhất. Không có bước PR; triển khai một ý tưởng là yêu cầu tiếp theo.</td>
+</tr>
+</tbody></table></div>
+<a id="vi-du-implement"></a>
+<h4>5.4.4 Implement</h4>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Step 1</td>
+<td>Human: “Triển khai story #1111.” Crew kiểm Story Ready và xác định OUTPUT.</td>
+</tr>
+<tr>
+<td>Step 2</td>
+<td>Chọn cấu hình trước từng sub-thread; giao việc theo dependency, dùng worktree khi cần sửa code.</td>
+</tr>
+<tr>
+<td>Step 3</td>
+<td>Tích hợp thay đổi, kiểm chứng độc lập đúng phiên bản và tạo PR của story.</td>
+</tr>
+<tr>
+<td>Step 4</td>
+<td>Human review trên GitHub; phản hồi yêu cầu sửa quay về vòng sửa → kiểm chứng → review. Nếu PR bị đóng, Crew chờ Human xử lý: tạo PR mới cho cùng session hoặc đóng session.</td>
+</tr>
+<tr>
+<td>Step 5</td>
+<td><strong>OUTPUT:</strong> thay đổi đã merged, truy được bằng chứng. Check xanh hoặc review hết hiệu lực đều chưa Done. Human đóng session khi chưa merged là kết thúc chưa đạt OUTPUT, không phải Done.</td>
+</tr>
+</tbody></table></div>
+<a id="luong-onboarding"></a>
+<h4>5.4.5 Onboarding project và Kickoff</h4>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Tổng hợp từ <a href="#need-04">04</a>, <a href="#need-05">05</a>, <a href="#need-19">19</a>, <a href="#need-23">23</a>, <a href="#need-39">39</a> và <a href="#config-layers">bảng Tầng cấu hình</a>.</td>
+</tr>
+<tr>
+<td>Step 1</td>
+<td>Human mở project-onboarding trong Settings phạm vi project. Đây là UI do code điều khiển, không qua LLM.</td>
+</tr>
+<tr>
+<td>Step 2</td>
+<td>Crew hướng dẫn Human tạo mới hoặc kết nối GitHub App và cài App lên đúng repo với quyền tối thiểu; Human thao tác trên github.com theo hướng dẫn.</td>
+</tr>
+<tr>
+<td>Step 3</td>
+<td>Crew xác minh danh tính App, repo đã cài, quyền, token, loại chủ sở hữu repo và ruleset của nhánh đích, rồi báo những gì còn thiếu.</td>
+</tr>
+<tr>
+<td>Step 4</td>
+<td>Human bắt đầu session Kickoff đầu tiên với Orchestrator. Kickoff là Initializer: khảo sát cách khởi chạy và kiểm tra hệ thống, đề xuất bước verification project-scope và baseline health check tái lập được, xác định nguồn sự thật.</td>
+</tr>
+<tr>
+<td>Step 5</td>
+<td><strong>OUTPUT:</strong> nền tảng Outer Harness của project, Done theo <a href="#session-types">bảng Loại session</a>. Các session sau kế thừa mà không phải dò lại từ đầu.</td>
+</tr>
+</tbody></table></div>
+<a id="luong-chon-model"></a>
+<h4>5.4.6 Chọn provider, model và hạn mức trước khi giao việc</h4>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Tổng hợp từ <a href="#need-26">26</a>, <a href="#need-56">56</a>, <a href="#need-60">60</a>, <a href="#need-61">61</a>.</td>
+</tr>
+<tr>
+<td>Step 1</td>
+<td>Orchestrator xác định nhiệm vụ và lấy ROLE từ định nghĩa.</td>
+</tr>
+<tr>
+<td>Step 2</td>
+<td>Dịch vụ chấm điểm (NEED 60) trả danh sách model phù hợp với loại nhiệm vụ: các cặp provider/model/effort được phép, xếp hạng theo loại nhiệm vụ, chi phí, tốc độ và mức cách ly, dựa trên snapshot model mới nhất.</td>
+</tr>
+<tr>
+<td>Step 3</td>
+<td>Crew kiểm hạn mức còn lại của từng ứng viên theo thứ tự xếp hạng, chỉ từ những gì provider đưa ra qua ACP. Hạn mức không đo được ghi là “không rõ”, không coi là còn đủ.</td>
+</tr>
+<tr>
+<td>Step 4</td>
+<td>Crew chọn ứng viên đầu tiên trong danh sách xếp hạng có hạn mức còn đủ. Ví dụ: ứng viên đầu là GPT-5.6 Sol trên Codex nhưng tài khoản sắp hết hạn mức thì Crew chuyển xuống ứng viên kế tiếp đạt điều kiện, có thể là một model của provider khác như Gemini 4 Argon trên Antigravity.</td>
+</tr>
+<tr>
+<td>Step 5</td>
+<td>Lựa chọn, căn cứ, điểm, hạn mức đã thấy và phương án bị bỏ qua được ghi vào bản ghi spawn trước khi sub-thread bắt đầu. Không có phương án nào đủ điều kiện thì dừng phần việc đó và hỏi Human.</td>
+</tr>
+</tbody></table></div>
+<a id="sdlc-artifacts"></a>
+<h3>5.5 Artifact và state theo SDLC</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Crew quản lý artifact theo vòng đời phát triển phần mềm (SDLC), gồm quan hệ giữa các artifact và state của từng artifact/đơn vị công việc. Những nhóm Human nêu dưới đây chỉ là một phần của tầm nhìn, không phải danh mục đầy đủ:</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Nhóm</th>
+<th>Ví dụ artifact / cấu trúc</th>
+<th>Crew cần theo dõi</th>
+</tr></thead><tbody>
+<tr>
+<td>Tài liệu product</td>
+<td><code>product-brief</code>, <code>PRD</code>, <code>SRS</code>, …</td>
+<td>Nguồn chính, phiên bản, state của tài liệu, quyết định liên quan và các artifact dẫn xuất/phụ thuộc</td>
+</tr>
+<tr>
+<td>Epic hierarchy</td>
+<td><code>Idea → Epic → Feature → User Story → Task → Sub-task</code></td>
+<td>Quan hệ phân rã/liên kết từ ý tưởng đến công việc chi tiết, state của từng mục, dependency, tiêu chí và bằng chứng liên quan</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Note</td>
+<td>Chuỗi epic hierarchy thể hiện quan hệ tổ chức công việc; state là một thuộc tính vòng đời riêng của mỗi mục. Mỗi loại tài liệu và cấp công việc cần có các state, điều kiện chuyển state và trách nhiệm/quyền chuyển phù hợp. Ví dụ hoàn tất một Task không tự chứng minh User Story, Feature, Epic hoặc OUTPUT session đã đạt tiêu chí.</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>Danh mục artifact, bộ state và các chuyển trạng thái cụ thể sẽ được làm rõ theo loại artifact/workflow; không coi các ví dụ trên là state machine đã chốt hoặc buộc mọi session phải tạo đủ tài liệu/cấp hierarchy. Quản lý artifact vẫn giữ nguồn chính ở <a href="#need-39">NEED 39</a>, lịch sử ở <a href="#need-41">NEED 41</a>, fact thực thi ở <a href="#need-43">NEED 43</a> và điều kiện Done ở <a href="#need-45">NEED 45</a>.</td>
+</tr>
+</tbody></table></div>
+<a id="cau-hinh-theo-tang"></a>
+<h3>5.6 Cấu hình theo tầng</h3>
+<a id="vision-config"></a>
+<h4>5.6.1 Mọi thứ là cấu hình</h4>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td><strong>Playbook, workflow, ROLE, profile, tiêu chí, quyền và tập provider/model/effort đều là cấu hình — không giá trị nào hardcode trong code; mỗi loại cấu hình thuộc đúng một tầng ở <a href="#config-layers">bảng Tầng cấu hình</a>.</strong></td>
+</tr>
+<tr>
+<td>Step 1</td>
+<td>Human chỉnh một định nghĩa — ví dụ ROLE hoặc workflow trong playbook — ở tầng của nó (user-scope cho ROLE và workflow, project-scope cho bước verification); thay đổi được ghi thành phiên bản cấu hình mới.</td>
+</tr>
+<tr>
+<td>Step 2</td>
+<td>Session mới dùng phiên bản mới; session đang chạy giữ bản đã xác định, tiếp tục tương thích hoặc dừng có lý do rõ, không âm thầm đổi hành vi.</td>
+</tr>
+<tr>
+<td>Step 3</td>
+<td>Mỗi session ghi phiên bản playbook nguồn cùng cặp cấu hình Model–Harness thực tế; cấu hình tham chiếu thành phần đã đổi hoặc bị provider rút được báo lệch để Human xử lý.</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>Không tầng cấu hình nào tắt gate Human hay kiểm chứng; ROLE không gắn cứng provider/model. Đây là ví dụ vận hành mong muốn, không xác nhận cơ chế cấu hình đã được triển khai. Theo <a href="#need-24">NEED 24</a>, <a href="#need-27">NEED 27</a>, <a href="#need-28">NEED 28</a> và <a href="#need-56">NEED 56</a>.</td>
+</tr>
+</tbody></table></div>
+<a id="config-layers"></a>
+<h4>5.6.2 Tầng cấu hình</h4>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Cấu hình được chia tầng, không cô lập hay override toàn bộ theo project. Mỗi loại cấu hình thuộc đúng một tầng. Cột “Nguồn” ghi phần nào Human đã quyết định và phần nào Claude đề xuất để hoàn chỉnh bảng.</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Tầng</th>
+<th>Nơi giữ</th>
+<th>Ai quản lý</th>
+<th>Gồm</th>
+<th>Crew làm gì</th>
+<th>Nguồn</th>
+</tr></thead><tbody>
+<tr>
+<td>Đăng nhập provider (toàn cục)</td>
+<td>Zed và provider (keychain, home của provider)</td>
+<td>Zed</td>
+<td>Đăng nhập Claude, Codex, Antigravity qua ACP</td>
+<td>Không quản lý lại; chỉ đọc trạng thái (<a href="#need-56">#56</a>)</td>
+<td>Human</td>
+</tr>
+<tr>
+<td>Thiết lập riêng của provider</td>
+<td><code>~/.claude</code>, <code>~/.codex</code>, <code>~/.gemini</code></td>
+<td>Human, qua công cụ của provider</td>
+<td>Hooks, memory, skills, settings của provider</td>
+<td>Không đọc, không sửa, không cô lập; chỉ ghi những gì provider báo qua ACP (phiên bản, mode, config options) vào bản ghi spawn (<a href="#need-26">#26</a>, <a href="#need-61">NEED 61</a>)</td>
+<td>Human (2026-10-25)</td>
+</tr>
+<tr>
+<td>Crew user-scope</td>
+<td>Cấu hình Crew của Human, dùng chung mọi project</td>
+<td>Human</td>
+<td>SDLC playbook, workflow, sườn OUTPUT, ROLE, profile, tiêu chí chung, tập provider/model/effort được phép, ngưỡng hạn mức, chính sách chọn model (<a href="#need-60">#60</a>)</td>
+<td>Một bộ cho mọi project, có phiên bản (<a href="#need-28">#28</a>)</td>
+<td>Human (2026-10-25)</td>
+</tr>
+<tr>
+<td>Crew project-scope</td>
+<td>Settings phạm vi project (<a href="#need-04">#04</a>), không nằm trong repo Crew (<a href="#need-02">#02</a>)</td>
+<td>Human, thiết lập ở Kickoff</td>
+<td>Bước verification: lệnh build, test, lint, chạy app, baseline health check (<a href="#need-19">#19</a>/<a href="#need-23">#23</a>); quyền môi trường (<a href="#need-06">#06</a>); GitHub App và repo (<a href="#need-05">#05</a>); loại chủ sở hữu repo (<a href="#need-39">#39</a>); thu hẹp tập provider được nhận context của project (<a href="#need-02">#02</a>)</td>
+<td>Kickoff khảo sát và đề xuất; Human duyệt</td>
+<td>Human cho verification và quy tắc chỉ thu hẹp (2026-10-25); <a href="#need-05">#05</a>/<a href="#need-06">#06</a> vốn theo project</td>
+</tr>
+<tr>
+<td>Quy ước trong target repo</td>
+<td><code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>.claude/</code> trong repo</td>
+<td>Chủ repo</td>
+<td>Quy ước code, lệnh của dự án</td>
+<td>Provider tự đọc; Crew coi là Guides (<a href="#need-39">#39</a>)</td>
+<td>Đã có (<a href="#need-39">#39</a>)</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Rule</td>
+<td>Human đồng ý (2026-10-25): project-scope chỉ được thu hẹp cấu hình user-scope về quyền và provider, không được nới rộng. Không tầng nào tắt gate Human hay kiểm chứng.</td>
+</tr>
+</tbody></table></div>
+<a id="ngoai-le"></a>
+<h3>5.7 Tình huống ngoại lệ và lỗi</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Tổng hợp từ NEED; hành vi chi tiết và ranh giới nằm trong NEED được dẫn.</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Tình huống</th>
+<th>Hành vi bắt buộc</th>
+<th>NEED</th>
+</tr></thead><tbody>
+<tr>
+<td>Human chưa trả lời câu hỏi hoặc quyết định</td>
+<td>Nhánh phụ thuộc giữ trạng thái chờ, không timeout; nhánh độc lập chạy tiếp; mục chờ hiện trong danh sách việc cần Human</td>
+<td><a href="#need-15">15</a>, <a href="#need-52">52</a></td>
+</tr>
+<tr>
+<td>Human muốn dừng, kể cả khi Orchestrator không phản hồi</td>
+<td>Dừng qua hội thoại hoặc control Stop/Cancel; đối soát tác động đã xảy ra trước khi xác nhận; dừng không đồng nghĩa Done hay rollback</td>
+<td><a href="#need-16">16</a></td>
+</tr>
+<tr>
+<td>Thử 3 giải pháp mà vấn đề vẫn không được giải quyết</td>
+<td>Dừng xử lý vấn đề đó, báo từng giải pháp đã thử kèm bằng chứng, chờ Human; không thử giải pháp thứ tư</td>
+<td><a href="#need-37">37</a></td>
+</tr>
+<tr>
+<td>Lỗi do hạ tầng: port bận, timeout, thiếu tài nguyên, state bẩn</td>
+<td>Phân biệt với lỗi code; khôi phục môi trường, thử lại có giới hạn; không tính vào 3 lần</td>
+<td><a href="#need-38">38</a>, <a href="#need-46">46</a>, <a href="#need-48">48</a></td>
+</tr>
+<tr>
+<td>Crash, tắt máy hoặc restart giữa chừng</td>
+<td>Khôi phục fact, đối soát tác động đã xảy ra; không phát lại tool call, PR, issue hay hành động môi trường</td>
+<td><a href="#need-44">44</a></td>
+</tr>
+<tr>
+<td>PR bị đóng trước khi merge</td>
+<td>Báo và chờ Human: tạo PR mới cho cùng session hoặc đóng session; giữ lịch sử PR cũ</td>
+<td><a href="#need-35">35</a></td>
+</tr>
+<tr>
+<td>Code đổi sau khi Human duyệt PR</td>
+<td>Kiểm chứng và duyệt lại; chỉ merge khi head trùng bản Human đã duyệt</td>
+<td><a href="#need-14">14</a></td>
+</tr>
+<tr>
+<td>Human sửa issue trực tiếp trên GitHub</td>
+<td>Phát hiện lệch, báo trước bước tiếp theo; không ghi đè im lặng</td>
+<td><a href="#need-40">40</a>, <a href="#need-42">42</a></td>
+</tr>
+<tr>
+<td>Kết quả của bước trước làm đổi hợp đồng mà bước sau đang dựa vào</td>
+<td>Đánh dấu OUTPUT và kế hoạch phụ thuộc là hết hiệu lực hoặc cần đối chiếu trước khi chạy tiếp</td>
+<td><a href="#need-29">29</a>, <a href="#need-42">42</a></td>
+</tr>
+<tr>
+<td>Human đổi yêu cầu giữa chừng</td>
+<td>Chỉ ra ảnh hưởng, cập nhật đặc tả và kế hoạch theo delta, dừng phần hết hiệu lực; áp vào worker bằng steering (Claude, Codex) hoặc cancel rồi gửi prompt mới (Antigravity); thay đổi sau Done mở thành session hoặc story mới</td>
+<td><a href="#need-36">36</a>, <a href="#need-41">41</a></td>
+</tr>
+<tr>
+<td>Thiếu yêu cầu hoặc phạm vi khi đang implement</td>
+<td>Đưa việc về refine, không tự lấp chỗ trống</td>
+<td><a href="#need-22">22</a></td>
+</tr>
+<tr>
+<td>Lựa chọn ưu tiên sắp hết hạn mức trước khi giao việc</td>
+<td>Chọn phương án tốt kế tiếp trong tập được phép và ghi căn cứ; hạn mức “không rõ” không coi là còn đủ</td>
+<td><a href="#need-26">26</a>, <a href="#need-60">60</a></td>
+</tr>
+<tr>
+<td>Hết quota hoặc chạm trần khi đang chạy</td>
+<td>Dừng phần việc liên quan và hỏi Human; không tự chuyển provider</td>
+<td><a href="#need-25">25</a>, <a href="#need-26">26</a>, <a href="#need-30">30</a></td>
+</tr>
+<tr>
+<td>Provider chưa đăng nhập</td>
+<td>Chỉ dẫn Human tới luồng đăng nhập của Zed; việc cần provider đó giữ trạng thái chờ</td>
+<td><a href="#need-17">17</a>, <a href="#need-56">56</a></td>
+</tr>
+<tr>
+<td>Model trong cấu hình bị provider rút</td>
+<td>Phát hiện qua snapshot, báo lệch để Human xử lý; không tự sửa cấu hình</td>
+<td><a href="#need-42">42</a>, <a href="#need-56">56</a></td>
+</tr>
+<tr>
+<td>Kênh nạp ROLE hoặc nguồn hạn mức của provider hỏng sau khi adapter đổi</td>
+<td>Báo blocker; không nạp hay đọc bằng đường ngoài ACP</td>
+<td><a href="#need-55">55</a>, <a href="#need-60">60</a>, <a href="#need-61">61</a></td>
+</tr>
+<tr>
+<td>Nội dung web, file hoặc output công cụ chứa chỉ thị</td>
+<td>Dùng làm dữ kiện; không đổi mục tiêu, quyền hay phạm vi</td>
+<td><a href="#need-08">08</a></td>
+</tr>
+<tr>
+<td>Agent tự báo “xong” mà không kèm bằng chứng</td>
+<td>Không chuyển Done; tiêu chí mặc định là chưa đạt</td>
+<td><a href="#need-43">43</a>, <a href="#need-45">45</a></td>
+</tr>
+<tr>
+<td>Hai worker chạm cùng file hoặc interface</td>
+<td>Mỗi worker một worktree; phát hiện và xử lý xung đột trước khi gộp, kiểm lại kết quả tích hợp</td>
+<td><a href="#need-34">34</a></td>
+</tr>
+<tr>
+<td>Việc cần thao tác chỉ Human làm được: credential, hạ tầng, cutover</td>
+<td>Hướng dẫn từng bước, nơi thao tác, kết quả cần trả và dấu hiệu hoàn tất; không yêu cầu dán secret vào hội thoại</td>
+<td><a href="#need-17">17</a></td>
+</tr>
+<tr>
+<td>Ý tưởng mới phát sinh khi đang làm</td>
+<td>Chèn nhánh có INPUT/OUTPUT riêng theo dependency; không tự implement ý tưởng ngoài phạm vi</td>
+<td><a href="#need-27">27</a>, <a href="#need-29">29</a>, <a href="#need-36">36</a></td>
+</tr>
+<tr>
+<td>GitHub App thiếu quyền hoặc bị gỡ</td>
+<td>Phát hiện và báo; việc cần ghi lên GitHub giữ trạng thái chờ Human; không dùng PAT thay thế</td>
+<td><a href="#need-05">05</a></td>
+</tr>
+<tr>
+<td>Update ACP không nhận diện được bị bỏ</td>
+<td>Đối soát trạng thái với git, GitHub và kết quả lệnh; ghi log update bị bỏ</td>
+<td><a href="#need-43">43</a>, <a href="#need-50">50</a></td>
+</tr>
+<tr>
+<td>Session thăm dò của Antigravity không đóng được</td>
+<td>Chỉ mở session thăm dò khi snapshot model quá ngưỡng tuổi</td>
+<td><a href="#need-56">56</a></td>
+</tr>
+</tbody></table></div>
+<a id="nhom-yeu-cau"></a>
+<h3>5.8 Yêu cầu chức năng theo nhóm</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Mỗi nhóm là một user story ở mức epic, theo đúng Topic của NEED. Tiêu chí nghiệm thu của nhóm là cột “Required outcome” của từng NEED trong nhóm (<a href="#phu-luc-b">Phụ lục B</a>); <a href="#session-types">bảng Loại session</a> là tiêu chí Done theo loại session.</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Nhóm</th>
+<th>User story</th>
+<th>NEED</th>
+</tr></thead><tbody>
+<tr>
+<td>Ranh giới bất biến, bảo mật &amp; kết nối nền tảng</td>
+<td>Là Human, tôi muốn Crew làm việc trong ranh giới đã định — một máy macOS, repo private, quyền theo project, chỉ điều khiển provider qua ACP — để giao việc tự động mà không mất kiểm soát dữ liệu và môi trường.</td>
+<td><a href="#need-01">01</a>, <a href="#need-02">02</a>, <a href="#need-03">03</a>, <a href="#need-04">04</a>, <a href="#need-05">05</a>, <a href="#need-06">06</a>, <a href="#need-07">07</a>, <a href="#need-08">08</a>, <a href="#need-58">58</a>, <a href="#need-59">59</a>, <a href="#need-61">61</a></td>
+</tr>
+<tr>
+<td>Giao việc, làm rõ &amp; cổng quyết định của Human</td>
+<td>Là Human, tôi muốn giao việc bằng một câu và chỉ quyết định trong hội thoại hoặc trên GitHub, với câu hỏi có bối cảnh, ví dụ và khuyến nghị, để giữ quyền sản phẩm mà không phải điều phối.</td>
+<td><a href="#need-09">09</a>, <a href="#need-10">10</a>, <a href="#need-11">11</a>, <a href="#need-12">12</a>, <a href="#need-13">13</a>, <a href="#need-14">14</a>, <a href="#need-15">15</a>, <a href="#need-16">16</a>, <a href="#need-17">17</a></td>
+</tr>
+<tr>
+<td>Khảo sát hệ thống, đặc tả &amp; chuẩn bị kế hoạch</td>
+<td>Là Human, tôi muốn Crew hiểu hệ thống thật và chuyển mục tiêu thành kế hoạch có tiêu chí kiểm được trước khi code, để kết quả không lệch kiến trúc.</td>
+<td><a href="#need-18">18</a>, <a href="#need-19">19</a>, <a href="#need-20">20</a>, <a href="#need-21">21</a>, <a href="#need-22">22</a>, <a href="#need-23">23</a></td>
+</tr>
+<tr>
+<td>Cấu hình Outer Harness, ROLE &amp; phân bổ provider ACP</td>
+<td>Là Human, tôi muốn mỗi nhiệm vụ được giao cho đúng ROLE, provider, model và effort trong cấu hình và hạn mức cho phép, có ghi lý do, để cân bằng chất lượng, chi phí và hạn mức.</td>
+<td><a href="#need-24">24</a>, <a href="#need-25">25</a>, <a href="#need-26">26</a>, <a href="#need-27">27</a>, <a href="#need-28">28</a>, <a href="#need-55">55</a>, <a href="#need-56">56</a>, <a href="#need-60">60</a></td>
+</tr>
+<tr>
+<td>Điều phối thực thi, ngữ cảnh &amp; tích hợp nhánh</td>
+<td>Là Human, tôi muốn các worker chạy song song theo dependency thật, bàn giao có hợp đồng và không giẫm việc nhau, để việc lớn tiến nhanh mà kết quả tích hợp vẫn đúng.</td>
+<td><a href="#need-29">29</a>, <a href="#need-30">30</a>, <a href="#need-31">31</a>, <a href="#need-32">32</a>, <a href="#need-33">33</a>, <a href="#need-34">34</a>, <a href="#need-35">35</a>, <a href="#need-36">36</a>, <a href="#need-37">37</a>, <a href="#need-38">38</a></td>
+</tr>
+<tr>
+<td>Nguồn sự thật, lịch sử &amp; kiểm chứng chất lượng</td>
+<td>Là Human, tôi muốn trạng thái và Done dựa trên bằng chứng kiểm chứng độc lập, truy được tới yêu cầu, để tin được kết quả mà không phải đọc transcript.</td>
+<td><a href="#need-39">39</a>, <a href="#need-40">40</a>, <a href="#need-41">41</a>, <a href="#need-42">42</a>, <a href="#need-43">43</a>, <a href="#need-44">44</a>, <a href="#need-45">45</a>, <a href="#need-46">46</a>, <a href="#need-47">47</a>, <a href="#need-48">48</a>, <a href="#need-49">49</a></td>
+</tr>
+<tr>
+<td>Quan sát, tài liệu quyết định &amp; cải tiến liên tục</td>
+<td>Là Human, tôi muốn thấy team đang làm gì, việc nào đang chờ mình, và nhận đề xuất cải tiến có bằng chứng, để quyết định nhanh và Crew tốt dần lên theo những gì tôi duyệt.</td>
+<td><a href="#need-50">50</a>, <a href="#need-51">51</a>, <a href="#need-52">52</a>, <a href="#need-53">53</a>, <a href="#need-54">54</a>, <a href="#need-57">57</a></td>
+</tr>
+</tbody></table></div>
+<a id="muc-6"></a>
+<h2>6. Ràng buộc</h2>
+<h3>6.1 Ràng buộc sản phẩm</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Loại</th>
+<th>Ràng buộc</th>
+<th>NEED / quyết định</th>
+</tr></thead><tbody>
+<tr>
+<td>Thời hạn</td>
+<td>Không có deadline; triển khai theo dependency và giá trị</td>
+<td><a href="#need-03">03</a></td>
+</tr>
+<tr>
+<td>Cách phát triển Crew</td>
+<td>Phát triển liên tục trên một đường; mỗi thay đổi vào main qua kiểm chứng tự động; không code thử trong main; Human manual test khi đủ phạm vi</td>
+<td><a href="#need-03">03</a></td>
+</tr>
+<tr>
+<td>Nền tảng</td>
+<td>Một Human, máy macOS này, project local trong Zed</td>
+<td><a href="#need-01">01</a></td>
+</tr>
+<tr>
+<td>Dữ liệu và quyền riêng tư</td>
+<td>Target repo private; dữ liệu không rò sang repo Crew hay project khác; chỉ gửi context cần thiết tới provider được phép; repo Crew private</td>
+<td><a href="#need-02">02</a>, <a href="#need-58">58</a></td>
+</tr>
+<tr>
+<td>Quyền và an ninh thực thi</td>
+<td>Quyền môi trường theo project, merge tách khỏi release; gate của Crew và sandbox provider, cấm mode bỏ qua xin quyền; nội dung ngoài không thành mệnh lệnh</td>
+<td><a href="#need-06">06</a>, <a href="#need-07">07</a>, <a href="#need-08">08</a></td>
+</tr>
+<tr>
+<td>Điều khiển provider</td>
+<td>Chỉ qua ACP; đăng nhập do Zed quản lý toàn cục</td>
+<td><a href="#need-61">61</a></td>
+</tr>
+<tr>
+<td>Danh tính GitHub</td>
+<td>GitHub App là thông tin xác thực GitHub duy nhất, không dùng PAT; credential trong macOS Keychain</td>
+<td><a href="#need-05">05</a></td>
+</tr>
+<tr>
+<td>Điều khoản provider</td>
+<td>Mỗi provider dùng đúng điều khoản gói/tài khoản khi bị điều khiển tự động; Antigravity có giới hạn song song mặc định</td>
+<td><a href="#need-25">25</a></td>
+</tr>
+<tr>
+<td>Tài nguyên</td>
+<td>Chạy vừa sức máy và trần đã đặt; dữ liệu thiếu không coi là 0</td>
+<td><a href="#need-30">30</a></td>
+</tr>
+<tr>
+<td>Giao diện và trợ năng</td>
+<td>Dùng nguyên component của Zed; theme sáng/tối và cỡ chữ; trạng thái có chữ/icon đi cùng màu; chi tiết mở được bằng bàn phím; không bắt hover để đọc thông tin thiết yếu</td>
+<td><a href="#need-50">50</a>, <a href="#need-57">57</a></td>
+</tr>
+<tr>
+<td>Chất lượng</td>
+<td>ISO 25010; kiểm soát bảo mật, trust boundaries, bảo vệ dữ liệu nhạy cảm và rollback ngay từ thiết kế</td>
+<td><a href="#need-03">03</a></td>
+</tr>
+<tr>
+<td>Fork</td>
+<td>Giữ được theo upstream Zed; code Crew trong crate riêng, điểm nối tối thiểu</td>
+<td><a href="#need-59">59</a></td>
+</tr>
+</tbody></table></div>
+<h3>6.2 Phụ thuộc bên thứ ba</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Phiên bản ghi tại thời điểm kiểm chứng (2026-10-25). Adapter của worker được ghim theo <a href="#need-28">NEED 28</a>; dữ kiện chi tiết ở <a href="#ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them">Phụ lục C</a>.</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Phụ thuộc</th>
+<th>Điểm đã kiểm</th>
+<th>Ảnh hưởng tới</th>
+</tr></thead><tbody>
+<tr>
+<td>Zed upstream</td>
+<td>Commit <code>347f171</code> (2026-10-24); fork của Human ở <code>20ea81ef29</code> theo baseline provider</td>
+<td><a href="#need-57">57</a>, <a href="#need-59">59</a></td>
+</tr>
+<tr>
+<td>Agent Client Protocol</td>
+<td>Zed kết nối bằng ACP v1; đường v2 hiện chỉ dùng trong test. Crate 3.4.0 của fork (schema 1.12.0) đã có trường <code>systemPrompt</code> (spike 2026-10-25)</td>
+<td><a href="#need-43">43</a>, <a href="#need-61">61</a></td>
+</tr>
+<tr>
+<td>Claude Agent ACP</td>
+<td><code>@agentclientprotocol/claude-agent-acp@0.95.0</code>, phân phối qua npx</td>
+<td><a href="#need-07">07</a>, <a href="#need-55">55</a>, <a href="#need-56">56</a></td>
+</tr>
+<tr>
+<td>Codex ACP</td>
+<td><code>@agentclientprotocol/codex-acp@2.2.2</code>, phân phối qua npx</td>
+<td><a href="#need-07">07</a>, <a href="#need-55">55</a>, <a href="#need-60">60</a></td>
+</tr>
+<tr>
+<td>Google Antigravity ACP</td>
+<td><code>antigravity-acp</code> 1.4.3, binary do Google LLC phát hành</td>
+<td><a href="#need-25">25</a>, <a href="#need-55">55</a></td>
+</tr>
+<tr>
+<td>ACP Registry</td>
+<td>Nguồn cài adapter của Zed</td>
+<td><a href="#need-28">28</a></td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td>GitHub App, Issues và sub-issues, issue types (chỉ repo của tổ chức), rulesets; API notifications không dùng được với GitHub App</td>
+<td><a href="#need-05">05</a>, <a href="#need-14">14</a>, <a href="#need-39">39</a></td>
+</tr>
+<tr>
+<td>Dữ liệu benchmark và danh mục model</td>
+<td>models.dev, Terminal-Bench, Artificial Analysis và các nguồn khác trong nghiên cứu cho NEED 60</td>
+<td><a href="#need-60">60</a></td>
+</tr>
+<tr>
+<td>Nguồn seed playbook/ROLE</td>
+<td>13 repo trong <a href="#d13-seed">bản đồ seed</a></td>
+<td><a href="#need-27">27</a>, <a href="#need-55">55</a></td>
+</tr>
+</tbody></table></div>
+<a id="muc-7"></a>
+<h2>7. Câu hỏi mở và giả định</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Trạng thái</td>
+<td>Chỉ liệt kê điểm chưa có câu trả lời. Câu hỏi nào đã trả lời được đưa thẳng vào nội dung liên quan (NEED, Phụ lục C) và bỏ khỏi bảng. Không có hạn chót theo ngày vì Crew không có deadline (<a href="#need-03">NEED 03</a>); cột “Khi nào” là thời điểm phải có câu trả lời.</td>
+</tr>
+</tbody></table></div>
+<h3>7.1 Câu hỏi mở</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>#</th>
+<th>Câu hỏi</th>
+<th>Ảnh hưởng</th>
+<th>Ai trả lời</th>
+<th>Khi nào</th>
+</tr></thead><tbody>
+<tr>
+<td>Q6</td>
+<td>Danh mục artifact SDLC, bộ state và điều kiện chuyển state đầy đủ là gì? Bản 2.x ghi là chưa chốt.</td>
+<td><a href="#need-39">39</a>, <a href="#need-43">43</a></td>
+<td>Claude đề xuất từ nguồn seed (state machine của BMAD); Human duyệt</td>
+<td>Khi đặc tả workflow</td>
+</tr>
+<tr>
+<td>Q7</td>
+<td>Giá trị mặc định của ngưỡng “sắp hết hạn mức”, ngưỡng tuổi snapshot model và giới hạn song song của Antigravity?</td>
+<td><a href="#need-25">25</a>, <a href="#need-26">26</a>, <a href="#need-56">56</a></td>
+<td>Human, cấu hình user-scope</td>
+<td>Trước manual test</td>
+</tr>
+<tr>
+<td>Q8</td>
+<td>Ngưỡng cho các chỉ số “chưa đặt ngưỡng” ở <a href="#chi-so-chinh">3.2</a></td>
+<td><a href="#muc-3">Mục 3</a></td>
+<td>Human, sau khi có baseline</td>
+<td>Trước manual test</td>
+</tr>
+<tr>
+<td>Q9</td>
+<td>Target repo nào dùng cho lần manual test đầu tiên?</td>
+<td><a href="#muc-9">Mục 9</a></td>
+<td>Human</td>
+<td>Khi Crew đủ phạm vi</td>
+</tr>
+</tbody></table></div>
+<h3>7.2 Giả định</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>#</th>
+<th>Giả định</th>
+<th>Nếu sai thì</th>
+</tr></thead><tbody>
+<tr>
+<td>A1</td>
+<td>Human đã đăng nhập các provider qua Zed trên máy macOS này</td>
+<td>Crew chỉ dẫn tới luồng đăng nhập của Zed (<a href="#need-56">NEED 56</a>)</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>Target repo nằm trên GitHub; brief không định nghĩa forge khác</td>
+<td>Phải viết lại <a href="#need-05">05</a>, <a href="#need-35">35</a>, <a href="#need-39">39</a>–<a href="#need-42">42</a></td>
+</tr>
+<tr>
+<td>A3</td>
+<td>Adapter ở phiên bản đã ghim giữ hành vi đã quan sát: kênh system prompt, mode, thông báo trạng thái đăng nhập</td>
+<td>Test chặn báo lỗi và Crew báo blocker (<a href="#need-55">NEED 55</a>)</td>
+</tr>
+<tr>
+<td>A4</td>
+<td>Zed upstream giữ ACP Registry và các bề mặt UI mà Crew dùng</td>
+<td>Đồng bộ upstream bị chặn (<a href="#need-59">NEED 59</a>)</td>
+</tr>
+<tr>
+<td>A5</td>
+<td>Provider cho phép dùng gói/tài khoản hiện tại khi bị điều khiển tự động qua adapter chính thức</td>
+<td>Giới hạn hoặc tắt provider đó (<a href="#need-25">NEED 25</a>)</td>
+</tr>
+</tbody></table></div>
+<a id="muc-8"></a>
+<h2>8. Thiết kế giao diện</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Nguyên tắc</td>
+<td>Không có wireframe hay file Figma riêng: mọi bề mặt của Crew dùng trực tiếp nguyên mẫu và component có sẵn của Zed, cùng màu ngữ nghĩa, font, icon, density và hành vi focus/keyboard (<a href="#need-57">NEED 57</a>). Câu hỏi thiết kế chưa rõ được chốt bằng prototype dễ chạy, không vẽ trước rồi ép Zed theo (<a href="#need-12">NEED 12</a>).</td>
+</tr>
+<tr>
+<td>Quan sát tách khỏi quyết định</td>
+<td>UI quan sát không có nút Approve/Re-run; quyết định nằm trong hội thoại hoặc trên GitHub (<a href="#need-13">NEED 13</a>). Stop/Cancel là điều khiển an toàn (<a href="#need-16">NEED 16</a>).</td>
+</tr>
+<tr>
+<td>Trạng thái thiết kế</td>
+<td>Chưa có thiết kế hình ảnh nào được chốt. Sự tồn tại của một thành phần tương tự trong Zed không chứng minh Crew dùng được nó; phải kiểm khi triển khai (<a href="#need-57">NEED 57</a>).</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Nhu cầu</th>
+<th>Bề mặt Zed tái dùng</th>
+<th>NEED</th>
+</tr></thead><tbody>
+<tr>
+<td>Giao việc, trả lời câu hỏi, dừng</td>
+<td>Agent Panel: composer, chọn context, thông báo</td>
+<td><a href="#need-09">09</a>, <a href="#need-10">10</a>, <a href="#need-16">16</a></td>
+</tr>
+<tr>
+<td>Danh sách session theo project, chuyển session, lịch sử, lưu trữ</td>
+<td>Threads Sidebar, Thread History</td>
+<td><a href="#need-53">53</a></td>
+</tr>
+<tr>
+<td>Quan sát worker, chỉ đọc</td>
+<td>Subagent read-only thread view</td>
+<td><a href="#need-50">50</a></td>
+</tr>
+<tr>
+<td>Tổng quan session, pipeline, diff, tài liệu quyết định</td>
+<td>Workspace item (tab), Diff View, Markdown Preview</td>
+<td><a href="#need-50">50</a>, <a href="#need-51">51</a></td>
+</tr>
+<tr>
+<td>Việc đang chờ Human</td>
+<td>Chưa chọn bề mặt; chốt bằng prototype</td>
+<td><a href="#need-12">12</a>, <a href="#need-52">52</a></td>
+</tr>
+<tr>
+<td>Trạng thái nhanh</td>
+<td>Status bar</td>
+<td><a href="#need-43">43</a>, <a href="#need-50">50</a></td>
+</tr>
+<tr>
+<td>Onboarding Crew</td>
+<td>Trang Onboarding của Zed</td>
+<td><a href="#need-04">04</a></td>
+</tr>
+<tr>
+<td>Onboarding project, cấu hình user-scope và project-scope</td>
+<td>Settings Editor</td>
+<td><a href="#need-04">04</a>, <a href="#need-05">05</a>, <a href="#need-27">27</a></td>
+</tr>
+<tr>
+<td>Điều hướng</td>
+<td>Action trong Command Palette</td>
+<td><a href="#need-57">57</a></td>
+</tr>
+</tbody></table></div>
+<a id="muc-9"></a>
+<h2>9. Triển khai và rollback</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Trạng thái</td>
+<td><strong>Human đồng ý (2026-10-25).</strong></td>
+</tr>
+<tr>
+<td>Phát triển</td>
+<td>Liên tục trên một đường (<a href="#need-03">NEED 03</a>); mỗi thay đổi vào main qua kiểm chứng tự động, gồm chạy app thật cho thay đổi UI; đồng bộ upstream theo nhịp định kỳ (<a href="#need-59">NEED 59</a>).</td>
+</tr>
+<tr>
+<td>Feature flag</td>
+<td>Đặt Crew sau một feature flag trong fork (Zed có sẵn crate <code>feature_flags</code>), để bản fork vẫn dùng được như Zed bình thường trong lúc Crew chưa đủ phạm vi.</td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Khi đủ phạm vi, Human manual test trên một target repo thử nghiệm ít rủi ro (Q9), rồi bật cho các project khác qua onboarding (<a href="#need-04">04</a>, <a href="#need-05">05</a>).</td>
+</tr>
+<tr>
+<td>Migration</td>
+<td>Không có dữ liệu cũ cần chuyển. Catalog prompt của quy trình hiện tại không dùng làm nguồn; playbook và ROLE khởi tạo từ <a href="#d13-seed">bản đồ seed</a>.</td>
+</tr>
+<tr>
+<td>Rollback</td>
+<td>Tắt Crew cho một project bằng cách gỡ cấu hình project-scope; những gì Crew đã merge vào repo giữ nguyên như mọi thay đổi khác. Quay về phiên bản Crew hoặc phiên bản adapter đã ghim trước đó; session đang chạy giữ phiên bản cấu hình đã xác định (<a href="#need-28">NEED 28</a>). Gỡ GitHub App khỏi repo là thao tác của Human trên github.com (<a href="#need-05">05</a>, <a href="#need-17">17</a>).</td>
+</tr>
+</tbody></table></div>
+<a id="muc-10"></a>
+<h2>10. Đo lường và tracking</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Trạng thái</td>
+<td><strong>Human đồng ý (2026-10-25).</strong></td>
+</tr>
+<tr>
+<td>Nguyên tắc</td>
+<td>Sự kiện là fact có cấu trúc trong run store cục bộ (<a href="#need-43">43</a>, <a href="#need-49">49</a>); không gửi telemetry ra ngoài máy (<a href="#need-02">NEED 02</a>). Mỗi sự kiện gắn session, phiên bản INPUT/OUTPUT và cặp Model–Harness khi có liên quan.</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Sự kiện</th>
+<th>Trường chính</th>
+<th>Phục vụ</th>
+</tr></thead><tbody>
+<tr>
+<td>Session tạo / kết thúc</td>
+<td>Loại session, phiên bản INPUT và playbook; kết thúc là Done hay đóng khi chưa đạt</td>
+<td>Tỷ lệ Done (<a href="#chi-so-chinh">3.2</a>), <a href="#need-18">18</a>, <a href="#need-45">45</a></td>
+</tr>
+<tr>
+<td>Yêu cầu quyết định / Human trả lời</td>
+<td>Câu hỏi, có phải hỏi lại điều đã chốt không, thời gian chờ</td>
+<td>Ít công hơn (<a href="#chi-so-chinh">3.2</a>), <a href="#need-10">10</a>, <a href="#need-52">52</a></td>
+</tr>
+<tr>
+<td>Spawn worker</td>
+<td>ROLE, provider, model, effort, kênh nạp ROLE, phiên bản adapter, điểm và hạn mức đã thấy, phương án bị bỏ qua</td>
+<td><a href="#guardrail">Chỉ số bảo vệ</a>, <a href="#need-26">26</a>, <a href="#need-28">28</a>, <a href="#need-55">55</a></td>
+</tr>
+<tr>
+<td>Bàn giao nhận / trả lại</td>
+<td>Kết quả kiểm tất định, lý do trả lại</td>
+<td><a href="#need-32">32</a></td>
+</tr>
+<tr>
+<td>Kiểm chứng</td>
+<td>Sensor tất định, evaluator độc lập, đạt hay không, lỗi code hay nhiễu hạ tầng</td>
+<td><a href="#need-38">38</a>, <a href="#need-46">46</a></td>
+</tr>
+<tr>
+<td>Giải pháp không thành / dừng sau 3 lần</td>
+<td>Vấn đề, giải pháp đã thử, bằng chứng</td>
+<td><a href="#need-37">37</a></td>
+</tr>
+<tr>
+<td>PR mở / yêu cầu sửa / merged / đóng</td>
+<td>Head đã duyệt; lý do yêu cầu sửa phân loại từ nội dung review (lệch kiến trúc, sai spec, khác)</td>
+<td>Code vừa hệ thống (<a href="#chi-so-chinh">3.2</a>), <a href="#guardrail">chỉ số bảo vệ</a>, <a href="#need-14">14</a>, <a href="#need-35">35</a></td>
+</tr>
+<tr>
+<td>Stop/Cancel</td>
+<td>Kênh (hội thoại hay UI), phần đã dừng, tác động còn lại</td>
+<td><a href="#need-16">16</a></td>
+</tr>
+<tr>
+<td>Phục hồi</td>
+<td>Tác động phát hiện đã xảy ra, tác động bỏ qua không phát lại</td>
+<td><a href="#guardrail">Chỉ số bảo vệ</a>, <a href="#need-44">44</a></td>
+</tr>
+<tr>
+<td>Hạn mức và usage</td>
+<td>Provider, nguồn (đo được, ước tính, không rõ), token và chi phí</td>
+<td><a href="#need-26">26</a>, <a href="#need-30">30</a>, <a href="#need-60">60</a></td>
+</tr>
+<tr>
+<td>Update ACP bị bỏ</td>
+<td>Provider, loại update</td>
+<td><a href="#need-43">43</a>, <a href="#need-50">50</a></td>
+</tr>
+<tr>
+<td>Vi phạm chỉ số bảo vệ</td>
+<td>Chỉ số, session, bằng chứng</td>
+<td><a href="#guardrail">Chỉ số bảo vệ</a></td>
+</tr>
+</tbody></table></div>
+<a id="muc-11"></a>
+<h2>11. Vai trò và trách nhiệm</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Trạng thái</td>
+<td><strong>Human đồng ý (2026-10-25).</strong> Bảng 11.1 là vai trò khi xây dự án Crew; bảng 11.2 tóm tắt vai trò khi Crew làm việc trên target repo, vốn đã có trong NEED.</td>
+</tr>
+</tbody></table></div>
+<h3>11.1 Khi xây dự án Crew</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Vai trò</th>
+<th>Ai</th>
+<th>Trách nhiệm</th>
+</tr></thead><tbody>
+<tr>
+<td>Product owner, người duyệt cuối</td>
+<td>Human</td>
+<td>Quyết định sản phẩm; duyệt brief và các quyết định lớn trong tech spec; đặt giá trị cấu hình mặc định; manual test khi đủ phạm vi (<a href="#need-03">NEED 03</a>)</td>
+</tr>
+<tr>
+<td>Tech lead / architect</td>
+<td>Agent AI phát triển</td>
+<td>Viết tech spec/RFC từ brief; chốt điểm nối với core Zed (<a href="#need-59">NEED 59</a>); trả lời các câu hỏi kỹ thuật còn mở ở <a href="#muc-7">mục 7</a> bằng spike</td>
+</tr>
+<tr>
+<td>Implementer</td>
+<td>Agent AI phát triển</td>
+<td>Code theo tech spec; mọi thay đổi qua kiểm chứng tự động trước khi vào main</td>
+</tr>
+<tr>
+<td>Kiểm chứng độc lập</td>
+<td>Agent AI khác tác giả, context mới</td>
+<td>Đối chiếu thay đổi với brief và tech spec; bắt phần thiếu, phần mâu thuẫn và code không được yêu cầu trước khi vào main</td>
+</tr>
+<tr>
+<td>QA cuối</td>
+<td>Human</td>
+<td>Manual test trên target repo thử nghiệm (<a href="#muc-9">mục 9</a>)</td>
+</tr>
+</tbody></table></div>
+<h3>11.2 Khi Crew làm việc trên target repo</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Vai trò</th>
+<th>Ai</th>
+<th>Trách nhiệm</th>
+<th>NEED</th>
+</tr></thead><tbody>
+<tr>
+<td>Product owner</td>
+<td>Human</td>
+<td>Giữ quyền sản phẩm; trả lời quyết định trong hội thoại; duyệt PR trên GitHub; cấp quyền môi trường</td>
+<td><a href="#need-06">06</a>, <a href="#need-09">09</a>, <a href="#need-13">13</a>, <a href="#need-14">14</a></td>
+</tr>
+<tr>
+<td>Orchestrator</td>
+<td>ROLE chạy trên một provider ACP</td>
+<td>Điểm vào duy nhất để giao việc; làm rõ, lập pipeline, chọn cấu hình, giao việc, tích hợp, bàn giao</td>
+<td><a href="#need-09">09</a>, <a href="#need-24">24</a>, <a href="#need-26">26</a>, <a href="#need-27">27</a></td>
+</tr>
+<tr>
+<td>Worker</td>
+<td>Sub-thread mang ROLE theo scrum team</td>
+<td>Thực thi nhiệm vụ trong worktree và trả bàn giao có hợp đồng</td>
+<td><a href="#need-07">07</a>, <a href="#need-32">32</a>, <a href="#need-55">55</a></td>
+</tr>
+<tr>
+<td>Evaluator độc lập</td>
+<td>Worker khác tác giả, context mới</td>
+<td>Kiểm code và test trên luồng thật, đối chiếu với đặc tả</td>
+<td><a href="#need-46">46</a></td>
+</tr>
+</tbody></table></div>
+<a id="muc-12"></a>
+<h2>12. Rủi ro và giảm thiểu</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Trạng thái</td>
+<td><strong>Human đồng ý (2026-10-25).</strong> Cột “Mức” là đánh giá của Claude, không phải số đo.</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>#</th>
+<th>Rủi ro</th>
+<th>Mức</th>
+<th>Giảm thiểu</th>
+<th>NEED / quyết định</th>
+</tr></thead><tbody>
+<tr>
+<td>R1</td>
+<td>Qua ACP, Crew không giam được worker vào worktree. Tiền lệ gần nhất (compound-engineering) tự ghi: “No route currently confines the worker to its workspace”</td>
+<td>Cao</td>
+<td>Hai lớp: gate của Crew tại yêu cầu xin quyền và sandbox của provider (cấu hình sandbox Claude theo spike 2026-10-25, ghi ở NEED 07); cấm mode bỏ qua xin quyền; Antigravity tài khoản cá nhân chỉ nhận việc không cần lệnh rủi ro; rủi ro còn lại được ghi rõ</td>
+<td><a href="#need-07">07</a></td>
+</tr>
+<tr>
+<td>R2</td>
+<td>Kênh không chính thức hỏng khi adapter đổi: ROLE của Codex qua <code>_meta.jetbrains.air</code>, hạn mức Codex qua text <code>/status</code>, hạn mức Antigravity qua text <code>/usage</code></td>
+<td>Trung bình</td>
+<td>Ghim adapter; test chặn cho kênh không chính thức; báo blocker, không lấy bằng đường khác</td>
+<td><a href="#need-28">28</a>, <a href="#need-55">55</a>, <a href="#need-60">60</a>, <a href="#need-61">61</a></td>
+</tr>
+<tr>
+<td>R3</td>
+<td>Upstream Zed thay đổi liên tục (commit mới nhất 2026-10-24, một ngày trước khi kiểm; <code>agent_panel.rs</code> hơn 5.000 dòng) làm vỡ điểm nối</td>
+<td>Cao</td>
+<td>Code Crew trong crate riêng, điểm nối tối thiểu, test chặn khi đồng bộ upstream</td>
+<td><a href="#need-59">59</a></td>
+</tr>
+<tr>
+<td>R4</td>
+<td>Human chỉ manual test ở cuối nên lỗi tích hợp và lỗi UX lộ muộn, giống <a href="#su-co-da-xay-ra">sự cố frontend/backend</a></td>
+<td>Trung bình</td>
+<td>Kiểm chứng tự động end-to-end liên tục, chạy app thật cho thay đổi UI; thứ tự xây theo dependency (<a href="#thu-tu-xay">4.4</a>)</td>
+<td><a href="#need-03">03</a></td>
+</tr>
+<tr>
+<td>R5</td>
+<td>Tài khoản provider bị hạn chế khi bị điều khiển tự động; cộng đồng đã báo nhiều trường hợp khóa tài khoản Antigravity vì công cụ bên thứ ba</td>
+<td>Trung bình</td>
+<td>Chỉ dùng adapter chính thức; tuân điều khoản gói/tài khoản; giới hạn song song Antigravity</td>
+<td><a href="#need-25">25</a></td>
+</tr>
+<tr>
+<td>R6</td>
+<td>Dữ liệu hạn mức thiếu hoặc sai</td>
+<td>Cao</td>
+<td>“Không rõ” không coi là còn đủ; chọn phương án kế tiếp có ghi căn cứ; hết giữa chừng thì dừng và hỏi Human</td>
+<td><a href="#need-26">26</a>, <a href="#need-30">30</a>, <a href="#need-60">60</a></td>
+</tr>
+<tr>
+<td>R7</td>
+<td>Benchmark công khai lệch: nhiễm dữ liệu, khác harness hoặc phiên bản, vendor tự báo; không có benchmark nào đo harness Antigravity</td>
+<td>Cao</td>
+<td>Lưu điểm theo phiên bản và harness; ưu tiên eval của chính Crew; điểm thiếu ghi “chưa đánh giá”</td>
+<td><a href="#need-60">60</a></td>
+</tr>
+<tr>
+<td>R8</td>
+<td>Nội dung seed mang theo cơ chế trái nguyên tắc: tự duyệt, tự tiến hóa, merge không qua review</td>
+<td>Trung bình</td>
+<td>Lấy nội dung, không lấy cơ chế; áp danh sách “không dùng” của <a href="#d13-seed">bản đồ seed</a></td>
+<td><a href="#need-27">27</a>, <a href="#need-54">54</a></td>
+</tr>
+<tr>
+<td>R9</td>
+<td>Update ACP bị bỏ không báo khiến trạng thái sai</td>
+<td>Trung bình</td>
+<td>Đối soát với git, GitHub và kết quả lệnh; ghi log update bị bỏ</td>
+<td><a href="#need-43">43</a>, <a href="#need-50">50</a></td>
+</tr>
+<tr>
+<td>R10</td>
+<td>Phạm vi lớn (61 NEED) không chia slice nên lâu mới tới trạng thái thử được</td>
+<td>Trung bình</td>
+<td>Thứ tự xây theo dependency; feature flag để bản fork vẫn dùng được hằng ngày (<a href="#muc-9">mục 9</a>)</td>
+<td><a href="#need-03">03</a></td>
+</tr>
+<tr>
+<td>R11</td>
+<td>Nội dung web, file hoặc output công cụ chứa chỉ thị độc hại</td>
+<td>Trung bình</td>
+<td>Nội dung ngoài chỉ là dữ kiện; không đổi mục tiêu, quyền hay phạm vi</td>
+<td><a href="#need-08">08</a></td>
+</tr>
+<tr>
+<td>R12</td>
+<td>Sandbox của Claude chặn đọc theo danh sách chặn: file bí mật ở đường dẫn không có trong danh sách vẫn đọc được bằng lệnh Bash</td>
+<td>Trung bình</td>
+<td>Danh sách đường dẫn bí mật ở user-scope, project được thêm; luật <code>Read(//…)</code> cho tool Read; gate từ chối đọc và sửa ngoài worktree; ghi là rủi ro còn lại</td>
+<td><a href="#need-07">07</a></td>
+</tr>
+<tr>
+<td>R13</td>
+<td>Trạng thái đăng nhập của Claude báo sai khi đăng nhập qua token môi trường, làm readiness hiển thị sai</td>
+<td>Trung bình</td>
+<td>Xác nhận đăng nhập Claude bằng healthcheck ping-pong, không dựa vào thông báo trạng thái</td>
+<td><a href="#need-23">23</a>, <a href="#need-56">56</a></td>
+</tr>
+</tbody></table></div>
+<a id="phu-luc-a"></a>
+<h2>Phụ lục A. Thuật ngữ</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>Tóm tắt nghĩa thuật ngữ dùng trong brief; định nghĩa đầy đủ nằm trong NEED được dẫn.</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Thuật ngữ</th>
+<th>Nghĩa</th>
+<th>NEED</th>
+</tr></thead><tbody>
+<tr>
+<td>Human</td>
+<td>Người dùng duy nhất của Crew; kiêm khách hàng, product owner và người vận hành</td>
+<td><a href="#need-01">01</a></td>
+</tr>
+<tr>
+<td>Crew</td>
+<td>Zed AI Crew: đội phát triển AI sống trong bản fork Zed</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Target repo / target-project</td>
+<td>Repo mà Crew làm việc trên đó, khác với repo của chính Crew</td>
+<td><a href="#need-02">02</a>, <a href="#need-58">58</a></td>
+</tr>
+<tr>
+<td>Provider</td>
+<td>Agent ACP mà Crew điều khiển: Claude Agent, Codex, Google Antigravity</td>
+<td><a href="#need-25">25</a>, <a href="#need-61">61</a></td>
+</tr>
+<tr>
+<td>Orchestrator</td>
+<td>ROLE điều phối, điểm vào duy nhất để giao việc; chạy trên một provider bất kỳ</td>
+<td><a href="#need-09">09</a>, <a href="#need-24">24</a></td>
+</tr>
+<tr>
+<td>Worker / sub-thread</td>
+<td>Thread ACP do Orchestrator tạo để thực hiện một nhiệm vụ, mang một ROLE</td>
+<td><a href="#need-26">26</a>, <a href="#need-55">55</a></td>
+</tr>
+<tr>
+<td>ROLE</td>
+<td>Trách nhiệm chuyên môn gán cho nhiệm vụ: tập trách nhiệm, chuẩn đầu ra, quy ước bàn giao, prompt</td>
+<td><a href="#need-55">55</a></td>
+</tr>
+<tr>
+<td>INPUT · SESSION · OUTPUT</td>
+<td>Hợp đồng công việc: đầu vào, đơn vị công việc, kết quả bàn giao (<a href="#hop-dong-input-session-output">5.2</a>)</td>
+<td><a href="#need-04">04</a>, <a href="#need-45">45</a></td>
+</tr>
+<tr>
+<td>OUTPUT chính / OUTPUT nhánh</td>
+<td>Kết quả quyết định Done của session / kết quả riêng của một nhánh phát sinh</td>
+<td><a href="#need-45">45</a></td>
+</tr>
+<tr>
+<td>Playbook · workflow · pipeline runtime</td>
+<td>Kho kịch bản quy trình · một kịch bản · kế hoạch thực thi cụ thể tạo cho một session</td>
+<td><a href="#need-27">27</a></td>
+</tr>
+<tr>
+<td>Outer Harness / Inner Harness</td>
+<td>Lớp của Crew (hợp đồng nhiệm vụ, Guides, Sensors, ranh giới quyền) / cơ chế thực thi nội tại của provider</td>
+<td><a href="#need-07">07</a>, <a href="#need-27">27</a></td>
+</tr>
+<tr>
+<td>Guides · Sensors</td>
+<td>Định hướng trước hành động (quy ước, glossary, ADR) · cảm biến kiểm tra tất định (build, test, lint)</td>
+<td><a href="#need-19">19</a>, <a href="#need-39">39</a>, <a href="#need-46">46</a></td>
+</tr>
+<tr>
+<td>Gate</td>
+<td>Điểm Crew trả lời yêu cầu xin quyền của agent theo chính sách project</td>
+<td><a href="#need-07">07</a></td>
+</tr>
+<tr>
+<td>Run store</td>
+<td>Kho fact thực thi có cấu trúc, nguồn của trạng thái session và nhiệm vụ</td>
+<td><a href="#need-43">43</a></td>
+</tr>
+<tr>
+<td>Default-FAIL</td>
+<td>Tiêu chí chỉ chuyển sang đạt khi có bằng chứng kiểm chứng hợp lệ</td>
+<td><a href="#need-43">43</a></td>
+</tr>
+<tr>
+<td>Flow-forward</td>
+<td>Hồ sơ đã Done bị khóa; thay đổi về sau thành session hoặc story mới</td>
+<td><a href="#need-41">41</a></td>
+</tr>
+<tr>
+<td>Done</td>
+<td>OUTPUT chính đạt tiêu chí của loại session (<a href="#session-types">4.3</a>); với implement là đã merged</td>
+<td><a href="#need-45">45</a></td>
+</tr>
+<tr>
+<td>Story Ready</td>
+<td>Story đủ điều kiện implement: tiêu chí nghiệm thu quan sát được, phạm vi ngoài, giả định đã duyệt</td>
+<td><a href="#need-18">18</a>, <a href="#need-22">22</a></td>
+</tr>
+<tr>
+<td>Delta spec</td>
+<td>Đặc tả chỉ phần hành vi thay đổi trên hệ thống có sẵn</td>
+<td><a href="#need-19">19</a></td>
+</tr>
+<tr>
+<td>Lát dọc dùng được</td>
+<td>Phần bàn giao trên target repo: một hành vi xuyên các tầng, dùng, demo và kiểm chứng được</td>
+<td><a href="#need-21">21</a></td>
+</tr>
+<tr>
+<td>User-scope / project-scope</td>
+<td>Tầng cấu hình dùng chung mọi project / riêng một project</td>
+<td><a href="#need-27">27</a></td>
+</tr>
+<tr>
+<td>Model–Harness pair</td>
+<td>Cặp model cùng harness (provider, adapter, phiên bản playbook/cấu hình Crew) đã tạo hoặc kiểm một kết quả</td>
+<td><a href="#need-49">49</a></td>
+</tr>
+<tr>
+<td>Snapshot model</td>
+<td>Danh mục model và capability của provider tại một thời điểm, có cache và tuổi</td>
+<td><a href="#need-56">56</a></td>
+</tr>
+<tr>
+<td>Fresh-Context Evaluator</td>
+<td>Người kiểm khác tác giả, bắt đầu với context mới</td>
+<td><a href="#need-46">46</a></td>
+</tr>
+<tr>
+<td>Work item age</td>
+<td>Thời gian một mục đang dở, bị ngâm hoặc bị chặn</td>
+<td><a href="#need-50">50</a>, <a href="#need-52">52</a></td>
+</tr>
+</tbody></table></div>
+<a id="phu-luc-b"></a>
+<h2>Phụ lục B. Danh mục NEED</h2>
+<a id="needs"></a>
+<h3>B.1 Danh sách NEED</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>61 NEED xếp theo số. Bản 3.2 bỏ cách chia theo phạm vi áp dụng (Crew repository / Target repository) vì cách chia đó sai (Human, 2026-10-25). Topic của từng NEED giữ nguyên.</td>
+</tr>
+</tbody></table></div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>NEED</th>
+<th>Description</th>
+<th>Required outcome</th>
+<th>Boundary</th>
+</tr></thead><tbody>
+<tr>
+<td><a id="need-01"></a> <strong>NEED 01 — Một Human · máy macOS này · project local</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew phục vụ một Human, chạy trên máy macOS này và làm việc với project local trong Zed.</td>
+<td>Toàn bộ trải nghiệm và vận hành đáp ứng bối cảnh một Human trên máy local đã xác định.</td>
+<td>Không mở rộng thành sản phẩm nhiều người dùng, dịch vụ hosted hoặc hỗ trợ hệ điều hành khác trong phạm vi hiện tại.</td>
+</tr>
+<tr>
+<td><a id="need-02"></a> <strong>NEED 02 — Target repository privacy and data boundaries</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>The target-project repository stays private; its data must not leak into the Crew repository or another project. Running Crew locally does not mean ACP providers process data entirely on this machine: only necessary context may be sent under the project's permissions and configuration. Secrets, logs, notifications and support exports follow the same target-project data boundaries.</td>
+<td>Context and operational support data stay within the authorized project and provider scope.</td>
+<td>A private repository does not replace data boundaries between projects; private target-project data must not become shared content. Crew repository visibility is specified separately in <a href="#need-58">NEED 58</a>.</td>
+</tr>
+<tr>
+<td><a id="need-03"></a> <strong>NEED 03 — ISO 25010 · phát triển liên tục · không code thử trong main · không deadline</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Chất lượng được xem theo ISO 25010; mục tiêu phủ các kịch bản Human cần, triển khai theo dependency và giá trị, không theo deadline. Crew được phát triển liên tục trên một đường, không chia slice bàn giao cho Human; Human chỉ manual test khi toàn bộ phạm vi đã xong. Trong suốt quá trình, mỗi thay đổi vào main vẫn qua kiểm chứng tự động (build, test, lint, chạy app thật cho thay đổi UI). Thiết kế giấu độ phức tạp sau interface đủ đơn giản để dễ bảo trì; tích hợp sẵn kiểm soát bảo mật, ranh giới tin cậy (trust boundaries), bảo vệ dữ liệu nhạy cảm và khả năng khôi phục/đảo ngược (rollback) ngay từ thiết kế; không code thử trong main.</td>
+<td>Mỗi thay đổi vào main đã qua kiểm chứng tự động, an toàn trước các kịch bản lạm dụng hoặc lỗi vận hành trong phạm vi liên quan, và việc thay đổi tập trung trong kiến trúc phù hợp với repo; khi toàn bộ phạm vi hoàn tất, sản phẩm sẵn sàng cho Human manual test.</td>
+<td>Không bắt module cùng kích thước, cùng số method hoặc một framework cố định; không coi giao đủ ticket là thay thế chất lượng sản phẩm. Lát dọc dùng được áp cho việc Crew làm trên target repo theo #21, không áp cho việc phát triển chính Crew.</td>
+</tr>
+<tr>
+<td><a id="need-04"></a> <strong>NEED 04 — Một Crew theo được toàn vòng đời project</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Human dùng cùng một Crew cho onboarding, kickoff, brainstorm, research, refine, implement, release/migration, incident, review/retro và retirement. Onboarding là UI thiết lập do code điều khiển, không dùng LLM: crew-onboarding nằm trong trang Onboarding của Zed, project-onboarding nằm trong Settings ở phạm vi project. Onboarding chỉ làm các thao tác tất định: kết nối GitHub App (#05), chọn repo, nhận diện loại chủ sở hữu repo (#39) và kiểm quyền. Các công việc còn lại, kể cả kickoff, đi qua hội thoại với Orchestrator. Session Kickoff đầu tiên của project đóng vai trò Initializer thiết lập nền tảng Outer Harness (khảo sát và chuẩn hóa quy trình khởi chạy môi trường/check cơ sở tái lập được #19/#23, nguồn sự thật #39) để các session tiếp theo kế thừa mà không phải dò lại từ đầu. Mỗi session có INPUT, OUTPUT chính, tiêu chí hoàn thành và quyền phù hợp loại việc theo <a href="#session-types">bảng Loại session</a>; khi session đạt Done, hồ sơ kết quả được khóa theo dòng chảy tiến về phía trước (flow-forward #41) và OUTPUT có thể trở thành INPUT của session tiếp theo.</td>
+<td>Crew hỗ trợ các công việc xuyên vòng đời project bằng hợp đồng session nhất quán, lịch sử bàn giao bất biến và nền tảng khởi tạo tái lập được, không chỉ luồng story → PR.</td>
+<td>Phạm vi vòng đời không tự cấp quyền môi trường, buộc mọi loại session dùng cùng pipeline hoặc mở rộng sang nhiều Human/remote.</td>
+</tr>
+<tr>
+<td><a id="need-05"></a> <strong>NEED 05 — Kết nối GitHub App của Crew ngay trong onboarding</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Trong project-onboarding, Crew hướng dẫn Human tạo mới hoặc kết nối một GitHub App có sẵn làm danh tính GitHub riêng của Crew, rồi cài App lên đúng repo của target-project với quyền tối thiểu cho Issues, pull request, nội dung repo và trạng thái check; quyền <code>workflows</code> chỉ xin khi project cần Crew sửa file trong <code>.github/workflows/</code>. Thao tác trên github.com do Human thực hiện theo hướng dẫn của #17; Crew chuẩn bị sẵn những gì tự làm được. Credential của App được lưu trong macOS Keychain. Trước khi báo sẵn sàng, Crew xác minh danh tính App, repo đã cài, quyền đủ dùng, tạo được token truy cập, loại chủ sở hữu repo (tổ chức hay tài khoản cá nhân, #39) và ruleset của nhánh đích: bỏ duyệt cũ khi có commit mới (dismiss stale approvals) và yêu cầu duyệt lần push mới nhất (require approval of the most recent push) cho #14; thiếu thì báo để Human bật. Một App có thể dùng lại cho nhiều project; mỗi project chỉ dùng token giới hạn trong repo của project đó. GitHub App là thông tin xác thực GitHub duy nhất của Crew; Crew không dùng PAT.</td>
+<td>Sau onboarding, Human biết App nào đại diện Crew, đã cài vào repo nào, có quyền gì và còn thiếu gì. PR/Issue do Crew tạo mang danh tính App, nên review Approve của Human trên GitHub hợp lệ và phân biệt được với thao tác của Crew theo #14, #40 và #35.</td>
+<td>Không yêu cầu dán private key, client secret hay token vào hội thoại/log/artifact, và không lưu chúng trong project hoặc repo Crew. Không tự cài App lên repo ngoài lựa chọn của Human, không xin quyền vượt nhu cầu đã nêu, không dùng PAT hay token cá nhân của Human, kể cả khi App thiếu quyền hoặc lỗi. Nhu cầu mà App không đáp ứng được (ví dụ API notifications, Projects thuộc tài khoản cá nhân) được báo thành blocker để Human quyết định. Khi chưa kết nối, việc cần ghi lên GitHub giữ trạng thái chờ Human; session không cần GitHub như brainstorm/research vẫn chạy. Quyền App bị đổi hoặc App bị gỡ cài được phát hiện và báo theo #23/#42; quyền môi trường khác vẫn theo #06.</td>
+</tr>
+<tr>
+<td><a id="need-06"></a> <strong>NEED 06 — Quyền môi trường theo project</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Quyền môi trường được cấp riêng theo project, tách biệt giữa hợp nhất mã nguồn (<code>merge</code> ở #35) với phát hành hoặc kích hoạt thay đổi trên môi trường vận hành (<code>release/rollout</code>). Crew chỉ thực hiện release, migration hoặc xử lý incident khi có quyền phù hợp và đã làm rõ phương án khôi phục/đảo ngược (rollback); phần việc thiếu quyền giữ trạng thái chờ Human.</td>
+<td>Human biết hành động cần quyền gì, project nào đã cho phép, phương án đảo ngược khi chạm môi trường/dữ liệu là gì và blocker còn thiếu là gì.</td>
+<td>Không suy quyền môi trường từ việc PR đã merged, từ mục tiêu công việc, nội dung tài liệu hoặc quyền của project khác.</td>
+</tr>
+<tr>
+<td><a id="need-07"></a> <strong>NEED 07 — Worktree là vùng tự do</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Worker tự chủ chỉnh sửa trong worktree theo phạm vi nhiệm vụ được giao; Crew tôn trọng cơ chế thực thi nội tại (Inner Harness) của ACP provider bên trong worktree đó. Vì sandbox và tool permissions của Zed không áp cho External Agents, ranh giới thực thi gồm hai lớp: (1) gate của Crew (Outer Harness) tại các yêu cầu xin quyền agent gửi qua ACP, trả lời theo chính sách project; (2) sandbox/permission mode gốc của từng provider, do Crew chọn qua ACP (mode, config option, tùy chọn session; #61) và kiểm trước khi spawn. Codex chạy mode <code>workspace-write</code> hoặc <code>agent</code> (mặc định chặn mạng); Claude được bật sandbox qua tùy chọn session (<code>enabled</code>, <code>failIfUnavailable</code>, <code>allowUnsandboxedCommands: false</code>, <code>network.strictAllowlist</code> với allowlist mạng của project, <code>filesystem.denyRead</code> cho danh sách đường dẫn bí mật như <code>~/.ssh</code>, token của GitHub CLI và <code>~/Library/Keychains</code>, <code>denyWrite</code> cho <code>$TMPDIR</code>), cùng luật <code>Read(//…)</code> trong <code>settings.permissions.deny</code> cho cùng danh sách đường dẫn và danh sách tool bị cấm; danh sách đường dẫn bí mật là cấu hình user-scope, project chỉ được thêm. Sandbox chặn lệnh Bash ghi ra ngoài worktree, vào <code>$HOME</code> và <code>$TMPDIR</code>, và đọc các đường dẫn trong danh sách chặn, nhưng không che công cụ Write/Edit/Read, nên gate từ chối yêu cầu đọc hay sửa file ngoài worktree, không bao giờ chọn <code>allow_always</code> cho chúng, và từ chối yêu cầu host mạng (<code>SandboxNetworkAccess</code>) ngoài allowlist của project. <code>$TMPDIR</code> của sandbox Claude luôn là một thư mục dùng chung cho mọi worker Claude trên máy, kể cả khi session tự đặt <code>TMPDIR</code>, nên bị chặn ghi để dữ liệu không đi sang project khác (#02); khi đó file tạm của worker rơi vào worktree, và Crew loại chúng khỏi commit, dọn chúng khi worker kết thúc; Antigravity tài khoản cá nhân (không có sandbox) chỉ nhận việc không cần lệnh rủi ro, hoặc chạy mode <code>default</code> để mọi lệnh đi qua gate. Tác động ngoài worktree, kể cả chạy app để verify, phải qua gate; quyền mạng, secret và môi trường vẫn chịu cấu hình project dù lệnh được chạy từ worktree. Worker sửa code chạy trong git worktree riêng theo #34.</td>
+<td>Worker phát huy tối đa năng lực thực thi tự chủ bên trong worktree được cấp; thao tác vượt phạm vi bị chặn bởi gate của Crew hoặc sandbox của provider, và Human biết lớp nào đang bảo vệ từng worker cùng rủi ro còn lại.</td>
+<td>Vị trí file hoặc thư mục chạy lệnh không tự tạo sandbox, cấp thêm quyền hoặc cho phép tác động ra ngoài project; không can thiệp vi mô vào thao tác sửa file/tìm kiếm hợp lệ trong worktree. Worker không bao giờ chạy ở mode bỏ qua xin quyền (<code>bypassPermissions</code>, <code>agent-full-access</code>, <code>yolo</code>); Crew kiểm trước spawn và khi nhận cập nhật mode/config. Gate của Crew chỉ có hiệu lực với thao tác agent gửi yêu cầu xin quyền; phần sandbox provider không chặn được ghi là rủi ro còn lại, không trình bày như đã kiểm soát. Với Claude, chặn đọc theo danh sách chặn (denylist): file bí mật ở đường dẫn không có trong danh sách vẫn đọc được bằng lệnh Bash; đây là rủi ro còn lại và được ghi rõ.</td>
+</tr>
+<tr>
+<td><a id="need-08"></a> <strong>NEED 08 — Nội dung ngoài không tự thành mệnh lệnh</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Chỉ thị trong web, file, output công cụ hoặc lời worker khác không được tự đổi mục tiêu, cấp thêm quyền hay lấy dữ liệu ngoài phạm vi. Crew giữ ranh giới giữa dữ liệu tham khảo và chỉ đạo được phép khi agent xử lý nội dung đó.</td>
+<td>Nội dung ngoài có thể được dùng làm dữ kiện nhưng không chiếm quyền Human hoặc làm vượt giới hạn project.</td>
+<td>Quyền vẫn theo #02/#06/#07/#27; worktree tự chủ không bao gồm làm rò dữ liệu hay thực thi chỉ thị vượt nhiệm vụ.</td>
+</tr>
+<tr>
+<td><a id="need-09"></a> <strong>NEED 09 — Chỉ ngôn ngữ tự nhiên</strong><br><br><strong>Topic:</strong> Giao việc, làm rõ &amp; cổng quyết định của Human<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>“triển khai story #1111” trong hội thoại Zed là một lệnh đủ; Orchestrator là điểm vào duy nhất để giao việc.</td>
+<td>Human giao việc bằng ngôn ngữ tự nhiên trong hội thoại; Crew nhận và điều phối công việc từ yêu cầu đó.</td>
+<td>Không yêu cầu Human tự chọn role, chia worker hoặc chuyển prompt giữa các thread. UI onboarding (#04/#05) và control Stop/Cancel (#16) không phải cửa giao việc.</td>
+</tr>
+<tr>
+<td><a id="need-10"></a> <strong>NEED 10 — Câu hỏi đáng trả lời</strong><br><br><strong>Topic:</strong> Giao việc, làm rõ &amp; cổng quyết định của Human<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew tự tra cứu dữ kiện từ repo, công cụ và tài liệu trước khi hỏi Human. Mọi giả định có căn cứ (<code>Assumptions</code>) mà Crew tạm đặt ra khi làm rõ hoặc lập kế hoạch phải được tách riêng và nêu rõ để Human duyệt, không âm thầm biến giả định của AI thành yêu cầu đã chốt. Mỗi câu hỏi cần quyết định có bối cảnh, ví dụ và khuyến nghị; các câu độc lập được gom thành một vòng, câu phụ chỉ hỏi khi tiền đề đã rõ. Việc làm rõ đi từ rộng đến hẹp và dừng khi đủ thông tin để tiếp tục.</td>
+<td>Human hiểu vì sao cần trả lời, các lựa chọn có ảnh hưởng gì, Crew đề xuất hướng nào và những giả định nào đang được tạm đặt ra để mình xác nhận hoặc bác bỏ.</td>
+<td>Không hỏi lại điều đã chốt, không bắt Human tra cứu hộ dữ kiện Crew có thể tự xác minh và không tự chốt yêu cầu từ giả định chưa được duyệt; dữ kiện chưa xác minh được phải nêu rõ.</td>
+</tr>
+<tr>
+<td><a id="need-11"></a> <strong>NEED 11 — Làm rõ việc lớn bằng bản đồ quyết định</strong><br><br><strong>Topic:</strong> Giao việc, làm rõ &amp; cổng quyết định của Human<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Với mục tiêu lớn hoặc còn nhiều điều chưa biết, Crew cho Human thấy đích đến, quyết định đã chốt, câu hỏi còn mở, dependency và phần chưa đủ rõ để lập ticket. Các điểm chưa rõ được giải quyết dần trước khi chuyển thành spec và việc implement.</td>
+<td>Human biết quyết định nào cần chốt tiếp và vì sao, thay vì nhận một danh sách ticket giả định mọi thứ đã rõ.</td>
+<td>Bản đồ quyết định dùng để làm rõ việc; không thay đồ thị dependency thực thi hoặc ép lập ticket trước khi đủ thông tin.</td>
+</tr>
+<tr>
+<td><a id="need-12"></a> <strong>NEED 12 — Dùng prototype để chốt câu hỏi thiết kế</strong><br><br><strong>Topic:</strong> Giao việc, làm rõ &amp; cổng quyết định của Human<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Khi hội thoại và tài liệu chưa đủ, Crew tạo prototype dễ chạy để Human kiểm tra một câu hỏi cụ thể về UI, logic hoặc mô hình trạng thái. Ghi lại kết luận, giới hạn và nguồn thử trước khi áp vào sản phẩm.</td>
+<td>Prototype giải quyết được câu hỏi thiết kế đã đặt ra và có bằng chứng để Human quyết định hướng tiếp theo.</td>
+<td>Prototype không tự trở thành code sản phẩm, không thử trong main và không bỏ kiểm chứng/quyền của bước implement.</td>
+</tr>
+<tr>
+<td><a id="need-13"></a> <strong>NEED 13 — Không nút Approve/Re-run</strong><br><br><strong>Topic:</strong> Giao việc, làm rõ &amp; cổng quyết định của Human<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew không cung cấp nút Approve/Re-run để quyết định công việc. Quyết định nằm trong câu trả lời hội thoại với Orchestrator; duyệt PR thực hiện trên GitHub. Control Stop/Cancel (#16) là điều khiển an toàn, không phải phê duyệt.</td>
+<td>Mỗi yêu cầu quyết định đưa Human về đúng hội thoại hoặc GitHub PR; không có luồng duyệt song song trong Crew.</td>
+<td>Các thao tác mở, tìm, lọc, xem chi tiết là điều hướng và Stop/Cancel (#16) là điều khiển an toàn, không phải quyền phê duyệt hay thực thi lại công việc.</td>
+</tr>
+<tr>
+<td><a id="need-14"></a> <strong>NEED 14 — Duyệt gắn với version đã xem</strong><br><br><strong>Topic:</strong> Giao việc, làm rõ &amp; cổng quyết định của Human<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Quyết định trong hội thoại gắn với câu hỏi, phạm vi và phiên bản INPUT/OUTPUT Human đã xem; tiếp tục có hiệu lực trong phạm vi đã cho phép. Với PR, code đổi sau duyệt phải được kiểm chứng và duyệt lại; Crew chỉ merge khi head trùng phiên bản Human đã duyệt trên GitHub; khi repo bật ruleset bỏ duyệt cũ và yêu cầu duyệt lần push mới nhất (#05), GitHub chặn thêm bằng cảm biến tất định.</td>
+<td>Crew truy được quyết định nào áp dụng cho bản nào và chặn merge khi review không còn khớp head hiện tại.</td>
+<td>Quyết định đã có không tự mở rộng quyền sang hành động ngoài phạm vi đó; cũng không bắt Human duyệt lại từng bước còn nằm trong phạm vi đã cho phép.</td>
+</tr>
+<tr>
+<td><a id="need-15"></a> <strong>NEED 15 — Chờ Human · việc độc lập tiếp tục</strong><br><br><strong>Topic:</strong> Giao việc, làm rõ &amp; cổng quyết định của Human<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Khi một việc cần Human xử lý mà chưa được xử lý, phần phụ thuộc giữ trạng thái chờ không có timeout tự động; việc độc lập vẫn được chạy tiếp. Crew không tự đóng session, đánh dấu thất bại, chọn thay hoặc chạy tiếp nhánh bị chặn chỉ vì chờ lâu. Chờ đến khi Human xử lý, đổi yêu cầu hoặc chủ động đóng session; các mục chờ được tổng hợp theo #52.</td>
+<td>Nhánh cần Human vẫn chờ đúng quyết định, trong khi các nhánh độc lập hiển thị và tiếp tục công việc được phép.</td>
+<td>“Human vắng” nghĩa là chưa xử lý việc cần mình; trạng thái bật/tắt máy, mất kết nối và phục hồi runtime thuộc #44.</td>
+</tr>
+<tr>
+<td><a id="need-16"></a> <strong>NEED 16 — Dừng session đang chạy</strong><br><br><strong>Topic:</strong> Giao việc, làm rõ &amp; cổng quyết định của Human<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Human dừng được session hoặc worker bằng hội thoại với Orchestrator, hoặc bằng control Stop/Cancel trên UI của Crew, kể cả khi Orchestrator không phản hồi. Crew phản ánh đúng yêu cầu dừng, phần đã dừng và phần còn tác động; đối soát những gì đã thực hiện trước khi xác nhận trạng thái.</td>
+<td>Human biết công việc nào đã ngừng, kết quả nào còn giữ lại và tác động nào còn cần kiểm tra.</td>
+<td>Dừng không đồng nghĩa Done hoặc rollback; không tự đảo tác động hay xóa thay đổi đã có.</td>
+</tr>
+<tr>
+<td><a id="need-17"></a> <strong>NEED 17 — Bước chỉ Human làm được phải có hướng dẫn thực hiện</strong><br><br><strong>Topic:</strong> Giao việc, làm rõ &amp; cổng quyết định của Human<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Khi vướng quyền truy cập, credential, hạ tầng hoặc cutover mà Crew không thể tự làm, Human nhận đúng các bước cần thực hiện, nơi thao tác, kết quả cần trả và dấu hiệu hoàn tất. Crew khảo sát điều có thể biết trước, nêu điểm cần xác minh và phần khó đảo ngược; tiếp tục đúng chỗ khi đã có kết quả.</td>
+<td>Human làm theo được hướng dẫn và Crew xác nhận kết quả an toàn để tiếp tục phần đang chờ.</td>
+<td>Không bịa thao tác dashboard, bắt Human làm việc Crew có thể tự làm hoặc yêu cầu dán secret vào hội thoại/log/artifact; quyền vẫn theo #06.</td>
+</tr>
+<tr>
+<td><a id="need-18"></a> <strong>NEED 18 — Phân loại và đo cỡ trước khi chạy</strong><br><br><strong>Topic:</strong> Khảo sát hệ thống, đặc tả &amp; chuẩn bị kế hoạch<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew xác định loại session theo <a href="#session-types">bảng Loại session</a>, INPUT, OUTPUT cần đạt và quy mô công việc trước khi chạy. Việc implement nhỏ hoặc bugfix có thể đi thẳng với Story Ready tối thiểu; phần triển khai vẫn có kiểm chứng độc lập, PR và review Human.</td>
+<td>Quy trình và mức đầu tư phù hợp với kết quả được giao; Human thấy đầu ra và tiêu chí hoàn thành của session.</td>
+<td>Không buộc brainstorm, research hoặc refine phải tạo PR. Đường nhanh của implement vẫn tuân thủ #22, #46 và #35.</td>
+</tr>
+<tr>
+<td><a id="need-19"></a> <strong>NEED 19 — Hiểu hệ thống thật trước khi đề xuất</strong><br><br><strong>Topic:</strong> Khảo sát hệ thống, đặc tả &amp; chuẩn bị kế hoạch<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Trước khi chốt giải pháp, Crew khảo sát kiến trúc, code, API, dữ liệu, ranh giới tin cậy, quy ước (Guides) và cách khởi chạy/kiểm tra hệ thống hiện có (Sensors). Trên hệ thống đã có sẵn code, đặc tả và kế hoạch chỉ tập trung mô tả phần hành vi thay đổi (<code>delta spec</code>) đặt trên bối cảnh code thật vừa khảo sát, không viết lại đặc tả hồi tố cho toàn bộ hệ thống cũ. Xác lập quy trình khởi tạo và kiểm tra sức khỏe cơ sở (baseline health check) có thể chạy lặp lại cho các phiên/worktree tiếp theo; báo rõ phần đã xác minh, phần còn thiếu và giới hạn thực tế của project.</td>
+<td>Đề xuất và đặc tả phần thay đổi (<code>delta</code>) bám sát hệ thống thật, có căn cứ về các capability, ràng buộc và cách khởi chạy/verify lặp lại đang tồn tại.</td>
+<td>Không ép dùng một kỹ thuật khảo sát cụ thể như AST, không bắt viết lại tài liệu đặc tả cho toàn bộ hệ thống hiện hữu khi chỉ sửa một phần; điều chưa kiểm chứng không được trình bày như khả năng chắc chắn có sẵn.</td>
+</tr>
+<tr>
+<td><a id="need-20"></a> <strong>NEED 20 — Tham chiếu phải map vào capability thật</strong><br><br><strong>Topic:</strong> Khảo sát hệ thống, đặc tả &amp; chuẩn bị kế hoạch<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Khi dùng sản phẩm hoặc UI khác làm mẫu, Crew đối chiếu từng tính năng với capability backend và phạm vi project. Chỉ rõ phần hỗ trợ được, phần cần bổ sung và phần chưa thể làm để Human quyết định.</td>
+<td>Tham chiếu được chuyển thành giải pháp khả thi cho project thay vì một bản clone không khớp backend.</td>
+<td>Đây là kiểm tra khả thi trước khi implement; không thay cho kiểm chứng tích hợp sau khi có kết quả ở #46.</td>
+</tr>
+<tr>
+<td><a id="need-21"></a> <strong>NEED 21 — Mục tiêu thành kế hoạch có đầu ra kiểm được</strong><br><br><strong>Topic:</strong> Khảo sát hệ thống, đặc tả &amp; chuẩn bị kế hoạch<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew chuyển mục tiêu thành các phần việc có mục tiêu, INPUT, OUTPUT, phạm vi trong và biên âm/phạm vi ngoài (out-of-scope — phần chưa làm ở bước này và thuộc về phần việc nào sau đó), người chịu trách nhiệm, dependency và tiêu chí nghiệm thu quan sát được từ bên ngoài (như Given/When/Then gắn với kết quả kiểm được, không trói vào chi tiết cài đặt nội bộ). Với thay đổi chạm dữ liệu bền vững, xác thực/phân quyền hoặc ranh giới tin cậy, kế hoạch nêu rõ kịch bản lạm dụng (abuse cases) và phương án migration kèm khả năng đảo ngược (rollback). Trước khi tạo việc mới hoặc chuyển sang implement, kiểm tra hành vi đã có, quyết định loại trừ trước đó và đối soát chéo Đặc tả ↔ Kế hoạch ↔ Nhiệm vụ để không sót yêu cầu hay thừa nhiệm vụ ngoài phạm vi. Mỗi ticket đủ yêu cầu, tham chiếu và blocker để worker bắt đầu với context nhiệm vụ riêng; Human xem được kết quả từng ticket và điều chỉnh độ hạt.<br><br>Việc phân rã giữ quan hệ truy vết theo epic hierarchy, ví dụ Idea → Epic → Feature → User Story → Task → Sub-task; mỗi mục có state vòng đời riêng. Với việc implement trên target repo, mỗi phần bàn giao ưu tiên một lát dọc dùng được: một hành vi xuyên các tầng liên quan, có thể sử dụng/demo/verify. Mức phân rã dùng theo quy mô công việc, không đồng nhất một cấp hierarchy với một session hoặc ép tạo đủ mọi cấp cho việc nhỏ.</td>
+<td>Mỗi phần bàn giao trên target repo là một lát dọc dùng được. Worker nhận việc tự đủ dùng với biên phạm vi, tiêu chí nghiệm thu quan sát được và phương án an toàn/rollback rõ ràng; Human truy được quan hệ giữa các cấp công việc và state từng mục. Dependency biểu diễn blocker thật, không phải hỏi lại toàn bộ lịch sử hay tự suy đoán phạm vi để hiểu nhiệm vụ.</td>
+<td>Refactor/migration rộng cần nêu thứ tự chuyển đổi, phương án rollback và mốc kiểm chứng; không hứa mọi ticket độc lập xanh nếu chỉ có thể kiểm ở bước tích hợp.</td>
+</tr>
+<tr>
+<td><a id="need-22"></a> <strong>NEED 22 — Implement không bù</strong><br><br><strong>Topic:</strong> Khảo sát hệ thống, đặc tả &amp; chuẩn bị kế hoạch<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Implement chỉ nhận story đủ điều kiện: có tiêu chí nghiệm thu quan sát được, khóa rõ biên âm/phạm vi ngoài (out-of-scope) và các giả định đã được duyệt. Trước khi viết code, Crew đối soát chỉ đọc (pre-implementation analysis) giữa đặc tả, kế hoạch và danh sách nhiệm vụ để bảo đảm độ phủ hai chiều, thuật ngữ đồng nhất với #39 và không còn điểm mơ hồ hay nhiệm vụ mồ côi. Nếu thiếu yêu cầu, phạm vi hoặc thông tin cần để triển khai, Crew đưa việc về refine thay vì tự lấp chỗ trống trong implement.</td>
+<td>Worker triển khai từ đầu vào đủ rõ, đã qua đối soát nhất quán Đặc tả ↔ Kế hoạch ↔ Nhiệm vụ, và các điểm còn thiếu được xử lý đúng bước.</td>
+<td>Việc nhỏ hoặc bugfix dùng Story Ready tối thiểu theo #18, không bị ép thêm nghi thức không cần thiết nhưng vẫn phải đủ đầu vào và rõ biên phạm vi.</td>
+</tr>
+<tr>
+<td><a id="need-23"></a> <strong>NEED 23 — Biết sẵn sàng đến đâu trước khi chạy</strong><br><br><strong>Topic:</strong> Khảo sát hệ thống, đặc tả &amp; chuẩn bị kế hoạch<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew kiểm tra repo/branch, provider ACP và model/effort đã chọn, công cụ, quyền cùng điều kiện thực thi và trạng thái sức khỏe môi trường cơ sở (baseline environment health) cần cho loại session. Thiếu điều kiện hoặc môi trường có nhiễu hạ tầng (port bận, thiếu tài nguyên, tiến trình treo, state bẩn) phải báo đúng blocker và cách xử lý; không tạo sub-thread với lựa chọn không được hỗ trợ hoặc báo sẵn sàng giả.</td>
+<td>Human biết việc có thể bắt đầu hay còn thiếu gì, môi trường cơ sở có sạch để kiểm chứng đáng tin hay không, và cấu hình chọn trước sub-thread thực sự dùng được.</td>
+<td>Chỉ kiểm build/test/môi trường chạy khi OUTPUT cần chúng; brainstorm không bị chặn bởi build không liên quan. Không tự cài hoặc mở thêm quyền ngoài cấu hình đã cấp.</td>
+</tr>
+<tr>
+<td><a id="need-24"></a> <strong>NEED 24 — Orchestrator là ROLE, không gắn cứng với provider/model</strong><br><br><strong>Topic:</strong> Cấu hình Outer Harness, ROLE &amp; phân bổ provider ACP<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Orchestrator là vai trò điều phối; provider và model là bộ não tính toán thực hiện vai trò đó. Human có thể bắt đầu một session bằng thread Claude ACP, Codex ACP hoặc Antigravity ACP với ROLE Orchestrator. Chính sách ưu tiên dùng Claude ACP cho orchestration để dành capacity hạn chế của Claude cho điều phối; các nhiệm vụ được giao ưu tiên Codex và Antigravity. Đây là ưu tiên phân bổ, không phải ràng buộc độc quyền: cả ba ACP đều có thể đảm nhiệm ROLE Orchestrator; lựa chọn thực tế phải rõ trước khi session bắt đầu.</td>
+<td>Session khởi tạo được từ bất kỳ một trong ba ACP với ROLE Orchestrator; Human thấy ROLE tách biệt với provider/model đang dùng. Cấu hình mặc định ưu tiên Claude điều phối, Codex và Antigravity thực hiện nhiệm vụ được giao.</td>
+<td>Không khóa ROLE Orchestrator vào Claude, không khóa Codex/Antigravity vào ROLE worker và không buộc cả ba ACP cùng điều phối một session. Ưu tiên này không cho phép tự chuyển provider âm thầm hoặc vượt cấu hình/quyền; lựa chọn sub-thread vẫn theo #25/#26/#27.</td>
+</tr>
+<tr>
+<td><a id="need-25"></a> <strong>NEED 25 — Đủ 3 provider ACP</strong><br><br><strong>Topic:</strong> Cấu hình Outer Harness, ROLE &amp; phân bổ provider ACP<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew hỗ trợ Claude, Codex và Antigravity qua ACP. Trước mỗi sub-thread, Orchestrator chọn provider/model/effort theo #26 trong tập được phép của #27 và ghi rõ lựa chọn. Khả năng model/effort và đặc tính Inner Harness của từng ACP agent được xác minh theo integration thực tế, không giả định ba provider có cùng tùy chọn hoặc cùng cơ chế thực thi nội tại. Mỗi provider chỉ được dùng theo đúng điều khoản của gói/tài khoản khi bị Crew điều khiển tự động. Antigravity dùng bản ACP chính thức của Google; số session Antigravity chạy song song có giới hạn mặc định trong cấu hình (#27, #30).</td>
+<td>Nhiệm vụ được giao cho cấu hình được hỗ trợ, tương thích với Inner Harness của từng ACP provider và truy được provider/model/effort đã dùng.</td>
+<td>Hỗ trợ cả ba provider không đồng nghĩa cả ba phải chạy mọi session; không tự chuyển provider âm thầm trong khi chạy hoặc khi hết quota.</td>
+</tr>
+<tr>
+<td><a id="need-26"></a> <strong>NEED 26 — Chọn provider · model · effort trước khi tạo sub-thread</strong><br><br><strong>Topic:</strong> Cấu hình Outer Harness, ROLE &amp; phân bổ provider ACP<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Trước khi tạo sub-thread, Crew chạy cùng một quy trình chọn cho mọi provider và model: (1) Orchestrator xác định nhiệm vụ và lấy ROLE từ định nghĩa; (2) dịch vụ #60 trả danh sách model phù hợp với loại nhiệm vụ, xếp hạng theo chất lượng yêu cầu, độ phức tạp, thời gian, chi phí và mức cách ly của provider (#07), chỉ gồm model có trong snapshot (#56) và trong tập cấu hình được phép; (3) Crew kiểm hạn mức còn lại của từng ứng viên theo thứ tự xếp hạng: ứng viên sắp chạm ngưỡng đã cấu hình (#27) bị bỏ qua, hạn mức không đo được ghi là “không rõ” và xử lý theo chính sách cấu hình, không coi là còn đủ; (4) Crew chọn ứng viên đầu tiên đạt điều kiện, tức là chọn provider, model và effort, rồi spawn worker. Ví dụ: ứng viên đầu là GPT-5.6 Sol trên Codex nhưng tài khoản sắp hết hạn mức thì Crew chuyển xuống ứng viên kế tiếp đạt điều kiện, có thể là một model của provider khác như Gemini 4 Argon trên Antigravity. Lựa chọn được ghi cùng căn cứ, gồm danh sách xếp hạng, hạn mức đã thấy và các ứng viên bị bỏ qua cùng lý do, trước khi sub-thread bắt đầu. Không ứng viên nào đạt điều kiện, hoặc chạm trần session, thì dừng phần việc liên quan và hỏi Human.</td>
+<td>Mỗi sub-thread truy được ROLE, provider/model/effort đã chọn, lý do chọn, điểm đánh giá và hạn mức dùng làm căn cứ, các ứng viên bị bỏ qua cùng lý do và phiên bản cấu hình (Model–Harness configuration).</td>
+<td>Lựa chọn ban đầu, kể cả chọn phương án kế tiếp vì hạn mức, khác với đổi provider giữa chừng; không tự chuyển provider khi sub-thread đang chạy hoặc khi hết quota giữa chừng. Khả năng hỗ trợ được kiểm theo #25 và #23.</td>
+</tr>
+<tr>
+<td><a id="need-27"></a> <strong>NEED 27 — Cấu hình theo tầng: user-scope và project-scope</strong><br><br><strong>Topic:</strong> Cấu hình Outer Harness, ROLE &amp; phân bổ provider ACP<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Playbook chứa kịch bản quy trình và sườn OUTPUT theo loại công việc, khởi tạo từ <a href="#d13-seed">bản đồ nguồn seed đã duyệt</a>: lấy nội dung (prompt, template, tiêu chí), không lấy cơ chế riêng của một harness như hooks hay slash command. Khi runtime, Orchestrator điều chỉnh các bước, nhiệm vụ, tiêu chí và cấu trúc OUTPUT cho chính xác với INPUT, mục tiêu và bối cảnh session, đồng thời lược bỏ các bước trung gian không cần thiết khi năng lực model và cảm biến tất định đã đáp ứng trực tiếp. Crew đóng vai trò Outer Harness (quản lý hợp đồng nhiệm vụ, định hướng Guides, cổng kiểm chứng Sensors và ranh giới quyền) mà không trói buộc vi mô luồng suy luận hay công cụ nội tại (Inner Harness) của từng ACP provider. Mỗi loại cấu hình thuộc đúng một tầng ở <a href="#config-layers">bảng Tầng cấu hình</a>: đăng nhập provider do Zed quản lý toàn cục; playbook, định nghĩa ROLE, profile, tiêu chí chung và tập provider/model/effort được phép là user-scope; bước verification và quyền môi trường là project-scope. Project chỉ được thu hẹp, không nới rộng, cấu hình user-scope về quyền và provider. Session ghi phiên bản playbook nguồn, kế hoạch/OUTPUT đã điều chỉnh và lựa chọn thực tế của từng sub-thread.<br><br>Orchestrator chọn workflow từ playbook để tạo pipeline runtime sau khi phân tích INPUT. Trong quá trình thực thi, trao đổi có thể làm phát sinh nhiệm vụ mới, ví dụ quản lý một ý tưởng; Orchestrator chọn workflow tương ứng từ playbook, chèn nhánh có INPUT/OUTPUT và tiêu chí riêng, rồi cập nhật phiên bản pipeline cùng dependency. Nhánh phát sinh vẫn chịu phạm vi, quyền và giới hạn đã cấp; phần vượt phạm vi phải làm rõ với Human theo #36.</td>
+<td>Human biết mỗi cấu hình đang có hiệu lực đến từ tầng nào, cùng workflow nguồn, pipeline runtime cùng các nhánh phát sinh và cặp cấu hình Model–Harness đã dùng thực tế.</td>
+<td>ROLE không gắn cứng với một provider/model/effort. Không ép quy trình cứng nhắc đè lên Inner Harness của ACP provider gây suy giảm hiệu năng. Không tầng cấu hình nào tắt gate Human hay kiểm chứng; chính sách cấu hình là đầu vào cho lựa chọn #26.</td>
+</tr>
+<tr>
+<td><a id="need-28"></a> <strong>NEED 28 — Nâng cấp Crew không làm mất việc đang chạy</strong><br><br><strong>Topic:</strong> Cấu hình Outer Harness, ROLE &amp; phân bổ provider ACP<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Khi đổi prompt, playbook, model hoặc phiên bản Crew, Human biết session đang dùng bản nào. Việc đang chạy được hoàn tất với bản đã xác định, tiếp tục tương thích hoặc dừng có lý do rõ, không âm thầm đổi hành vi. Adapter ACP của từng provider được ghim phiên bản cho worker; nâng cấp adapter chỉ khi Human đồng ý, và mỗi session ghi <code>agentInfo.version</code> đã dùng.</td>
+<td>Cấu hình và tiến độ của việc hiện tại vẫn truy được khi Crew nâng cấp hoặc thay cấu hình.</td>
+<td>Không tự áp prompt/workflow tối ưu mới vào session hiện tại; phục hồi và chuyển phiên vẫn tuân thủ #27/#44.</td>
+</tr>
+<tr>
+<td><a id="need-29"></a> <strong>NEED 29 — Song song theo dependency thật</strong><br><br><strong>Topic:</strong> Điều phối thực thi, ngữ cảnh &amp; tích hợp nhánh<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew chỉ chạy song song các phần việc có dependency và blocker thực tế cho phép. Phân nhánh theo công việc, không mặc định tạo một nhánh cho mỗi role hoặc tool có sẵn. Khi kết quả thực tế của một nhánh tiền đề làm thay đổi giao diện, hợp đồng hoặc giả định của nhánh phụ thuộc phía sau, Crew đánh dấu nhánh phụ thuộc cần đối chiếu và cập nhật lại kế hoạch theo #42 trước khi khởi chạy.<br><br>Nhánh mới được chèn trong lúc pipeline đang chạy cũng được xét dependency và giới hạn như nhánh có sẵn. Crew chọn song song hoặc tuần tự theo từng trường hợp, theo dõi OUTPUT riêng của nhánh và quan hệ của OUTPUT đó với tiêu chí hoàn thành session.</td>
+<td>Các nhánh độc lập, kể cả nhánh phát sinh, có thể tiến hành đồng thời; nhánh phụ có OUTPUT truy được riêng. Việc còn blocker hoặc có tiền đề vừa thay đổi hợp đồng không được khởi chạy mù như đã sẵn sàng.</td>
+<td>Số agent phụ thuộc nhu cầu công việc và giới hạn tài nguyên, không phụ thuộc số role đã định nghĩa.</td>
+</tr>
+<tr>
+<td><a id="need-30"></a> <strong>NEED 30 — Chạy vừa sức máy và giới hạn đã đặt</strong><br><br><strong>Topic:</strong> Điều phối thực thi, ngữ cảnh &amp; tích hợp nhánh<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew xếp hàng và giới hạn worker, công cụ, thời gian và tài nguyên cho cả session/cây nhiệm vụ, không để fan-out vượt trần rồi mới báo. UI phân biệt số đo, ước tính và dữ liệu provider không cung cấp. Nếu không đo được chi phí/quota, nêu rõ giới hạn thực thi trần đó; chỉ dùng giới hạn thay thế đã được cấu hình hoặc Human cho phép, chưa có thì chờ quyết định. Dữ liệu thiếu không được coi là 0. Trần chi phí đặt theo khả năng của provider: Claude nhận trần cứng <code>maxBudgetUsd</code> và <code>maxTurns</code> cho từng session; Codex và Antigravity dùng số liệu <code>usage_update</code> cùng giới hạn ở tầng Crew.</td>
+<td>Human thấy mức sử dụng và giới hạn có căn cứ; các nhánh chạy trong sức máy và phạm vi đã đặt.</td>
+<td>Giới hạn thời gian thực thi không tự làm hết hạn việc chờ Human theo #15; không tự đổi provider, mua thêm tài nguyên hoặc thay trần đã đặt.</td>
+</tr>
+<tr>
+<td><a id="need-31"></a> <strong>NEED 31 — Không phải mang context bằng tay</strong><br><br><strong>Topic:</strong> Điều phối thực thi, ngữ cảnh &amp; tích hợp nhánh<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew tự chuyển đúng yêu cầu, quyết định, ràng buộc và việc chưa xong qua các bước, kể cả khi context dài hoặc đổi worker. Coi cửa sổ ngữ cảnh là ngân sách hữu hạn: rẽ nhánh ngữ cảnh riêng (context forking) cho sub-thread để tránh suy giảm sự chú ý (context rot), giữ mạch quyết định khi bước sau cần lý do gốc, còn nhiệm vụ implement độc lập nhận context đủ sạch và tự chứa. Khi nén/chuyển phiên hoặc ẩn log/output cũ (context compaction/folding), giữ thông tin cần cho bước tiếp theo cùng con trỏ về nguồn gốc và chỉ nạp dữ liệu liên quan. Crew ghi nhận compaction của từng worker: provider nào không báo compaction qua ACP thì dấu hiệu là <code>usage_update.used</code> tụt mạnh; ví dụ Antigravity compaction quanh 256 nghìn token dù adapter báo cửa sổ khoảng 1 triệu token, nên ngân sách context của worker Antigravity tính theo ngưỡng compaction thực tế, không theo cửa sổ được báo.</td>
+<td>Worker tiếp theo hiểu mục tiêu, lý do và việc còn lại với ngữ cảnh tập trung, không bị ngập bởi log/lịch sử thừa mà Human cũng không phải mang context bằng tay.</td>
+<td>Không bắt ngưỡng token cố định hoặc cấm compaction nội tại của từng ACP runtime; không khôi phục kho kinh nghiệm tự chấm điểm. Đổi provider/harness vẫn chịu #25/#26/#27.</td>
+</tr>
+<tr>
+<td><a id="need-32"></a> <strong>NEED 32 — Bàn giao có hợp đồng, bên nhận kiểm được</strong><br><br><strong>Topic:</strong> Điều phối thực thi, ngữ cảnh &amp; tích hợp nhánh<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Worker nhận nhiệm vụ có hợp đồng rõ và trả kết quả có cấu trúc: đã làm gì, OUTPUT ở đâu, bằng chứng, giới hạn và blocker. Bàn giao giữ thông tin mới cần cho người nhận, tham chiếu spec/quyết định/kết quả đúng phiên bản và phân biệt nguồn chính với tóm tắt. Trước khi chấp nhận bàn giao, các điều kiện có thể kiểm tra tất định (định dạng hợp đồng, tồn tại artifact/liên kết nguồn, kết quả check cơ học) được xác minh tự động; bên nhận trả lại kết quả thiếu/sai ngay tại chỗ thay vì truyền tiếp như đã đạt.</td>
+<td>Bên nhận tải được nguồn đúng bản, các lỗi thiếu hụt hợp đồng cơ học bị chặn tự động ngay lúc bàn giao, hiểu rõ đầu ra nào cho phép chuyển bước và phần nào còn thiếu.</td>
+<td>Không buộc một định dạng JSON/XML hay thư viện cụ thể; không yêu cầu lộ suy luận nội bộ. “Đã nhận” hoặc “đã viết” không đồng nghĩa nghiệm thu.</td>
+</tr>
+<tr>
+<td><a id="need-33"></a> <strong>NEED 33 — Công cụ đúng việc, lỗi đủ hiểu</strong><br><br><strong>Topic:</strong> Điều phối thực thi, ngữ cảnh &amp; tích hợp nhánh<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Mỗi worker tìm và dùng được công cụ phù hợp trong phạm vi được cấp. Công cụ do Crew cung cấp được thiết kế theo nguyên lý Agent-Computer Interface (ACI): kiểm tra đầu vào trước khi thực thi (pre-dispatch validation), cắt gọn kết quả hoặc log quá dài kèm chỉ dẫn tra cứu phần chi tiết để không làm tràn ngữ cảnh, và trả phản hồi lỗi tức thì (như lỗi cú pháp/linter/schema) để worker sửa ngay tại chỗ. Kết quả hoặc lỗi công cụ nói rõ điều đã xảy ra, giới hạn dữ liệu và bước xử lý tiếp; Human không phải chọn công cụ hộ.</td>
+<td>Worker nhận phản hồi công cụ cô đọng, sửa được lỗi cơ học ngay tại thao tác và dùng được kết quả để tiếp tục hoặc báo blocker có thể xử lý.</td>
+<td>Không bắt số lượng tool, cơ chế tìm kiếm hay môi trường notebook cụ thể; không bọc thêm công cụ cầu kỳ làm cản trở các công cụ nguyên thủy hiệu quả sẵn có của ACP provider; không tự đổi bộ công cụ hoặc cấp quyền ngoài cấu hình.</td>
+</tr>
+<tr>
+<td><a id="need-34"></a> <strong>NEED 34 — Không giẫm việc, không làm mất thay đổi</strong><br><br><strong>Topic:</strong> Điều phối thực thi, ngữ cảnh &amp; tích hợp nhánh<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew phát hiện các worker chạm cùng file hoặc interface, xử lý xung đột trước khi gộp và kiểm tra lại kết quả tích hợp. Không ghi đè thay đổi của Human hoặc worker khác một cách im lặng. Mỗi worker sửa code có một git worktree riêng, mở thành workspace riêng; không để hai worker, hoặc worker và Human, cùng sửa một worktree, vì các provider ghi file theo cách khác nhau (Antigravity qua buffer của Zed, Claude và Codex ghi thẳng xuống đĩa).</td>
+<td>Các nhánh được ghép thành kết quả hoạt động đúng mà không làm mất thay đổi hợp lệ đã có.</td>
+<td>Không áp đặt một thuật toán khóa cụ thể hoặc rollback tự động xóa công việc; từng nhánh chạy tốt chưa đủ chứng minh kết quả tích hợp đúng.</td>
+</tr>
+<tr>
+<td><a id="need-35"></a> <strong>NEED 35 — Integration branch + PR cho công việc implement</strong><br><br><strong>Topic:</strong> Điều phối thực thi, ngữ cảnh &amp; tích hợp nhánh<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Với implement theo story, worktrees gộp vào integration branch của story rồi đi qua một PR đang được theo dõi vào main; việc nhỏ hoặc bugfix vẫn có PR. Yêu cầu sửa trên PR quay về vòng sửa trong phạm vi → kiểm chứng → review đúng head theo #14. PR bị đóng trước merge khiến Crew báo và chờ Human xử lý: Human có thể tạo PR mới cho cùng session hoặc đóng session. Crew không tự tạo PR thay thế hay tự đóng session; nếu có PR mới thì giữ lịch sử PR cũ.</td>
+<td>Kết quả implement đi qua kiểm chứng, review và merge; Human thấy PR hiện tại và quan hệ với các PR trước của session.</td>
+<td>Brainstorm, research và refine không bị buộc tạo PR. Một session không đồng nhất với một story/PR; Human đóng session chưa merged là kết thúc chưa đạt OUTPUT, không phải Done.</td>
+</tr>
+<tr>
+<td><a id="need-36"></a> <strong>NEED 36 — Đổi yêu cầu giữa chừng có kiểm soát</strong><br><br><strong>Topic:</strong> Điều phối thực thi, ngữ cảnh &amp; tích hợp nhánh<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Human bổ sung yêu cầu hoặc đổi hướng trong cùng hội thoại. Crew chỉ ra ảnh hưởng, cập nhật nguồn đặc tả và kế hoạch theo phiên bản (delta) trước rồi dẫn xuất lại bản tóm tắt quyết định cho Human (#39/#51), đồng thời giữ/dừng phần việc tương ứng, không để worker tiếp tục theo yêu cầu đã hết hiệu lực. Nếu thay đổi phát sinh sau khi session/story đã Done thì mở thành story/session mới theo nguyên tắc tiến về phía trước (flow-forward) ở #41. Yêu cầu mới được áp vào worker đang chạy theo khả năng của provider: Claude và Codex qua steering giữa lượt; Antigravity dừng lượt (cancel) rồi gửi prompt mới; cách đã dùng được ghi lại.</td>
+<td>Human và worker biết yêu cầu mới áp dụng ở đâu, kết quả nào còn dùng được, phần nào phải làm lại và khi nào cần tách sang session/story mới.</td>
+<td>Thay đổi INPUT vẫn giữ luật hết hiệu lực ở #42 và lịch sử bất biến của việc đã Done theo #41; không âm thầm mở rộng phạm vi.</td>
+</tr>
+<tr>
+<td><a id="need-37"></a> <strong>NEED 37 — Thử 3 giải pháp không thành → chờ Human</strong><br><br><strong>Topic:</strong> Điều phối thực thi, ngữ cảnh &amp; tích hợp nhánh<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Sau khi thử 3 giải pháp mà vẫn không xử lý được cùng một vấn đề, Crew dừng việc xử lý vấn đề đó và chờ Human. Báo cáo nêu từng giải pháp đã thử, kết quả kiểm tra và blocker theo format #10. Crew không tự thử giải pháp thứ tư khi chưa có chỉ đạo của Human; trạng thái chờ không tự hết hạn.</td>
+<td>Human nhận đủ bằng chứng của 3 giải pháp không thành để quyết định bước tiếp theo; nhánh bị chặn không tiếp tục thử thêm.</td>
+<td>Đếm giải pháp đã thử nhưng không giải quyết được vấn đề, không đếm số lần lặp một hành động hoặc gọi công cụ, và không đếm nhầm lỗi do nhiễu hạ tầng/môi trường cục bộ (#46, #38, #48). Việc độc lập tiếp tục theo #15.</td>
+</tr>
+<tr>
+<td><a id="need-38"></a> <strong>NEED 38 — Lỗi cục bộ không kéo hỏng cả session</strong><br><br><strong>Topic:</strong> Điều phối thực thi, ngữ cảnh &amp; tích hợp nhánh<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew phân biệt lỗi tạm thời/nhiễu hạ tầng (timeout mạng, nghẽn RAM/CPU, tiến trình treo), lỗi công cụ và thiếu quyền/đầu vào để khôi phục môi trường, thử lại có giới hạn hoặc đổi cách làm trong phạm vi cho phép. Giữ kết quả nhánh tốt; sau 3 giải pháp không xử lý được vấn đề thì dừng việc đó và chờ Human theo #37, không kéo hỏng các nhánh độc lập.</td>
+<td>Lỗi cục bộ và nhiễu hạ tầng được khoanh đúng phạm vi, kết quả hợp lệ còn dùng được và Human chỉ xử lý phần Crew không thể tự giải quyết.</td>
+<td>Đổi cách làm không có nghĩa đổi provider hoặc nâng quyền; phục hồi tác động vẫn theo #44 và việc chờ Human không tự timeout.</td>
+</tr>
+<tr>
+<td><a id="need-39"></a> <strong>NEED 39 — Nguồn sự thật chung</strong><br><br><strong>Topic:</strong> Nguồn sự thật, lịch sử &amp; kiểm chứng chất lượng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Issues giữ spec/ticket; glossary giữ nghĩa thuật ngữ; ADR giữ lý do và đánh đổi của quyết định cần lưu; cùng với quy ước dự án (như AGENTS.md/CLAUDE.md), chúng đóng vai trò định hướng trước hành động (Feed-forward Guides) cho toàn bộ Crew. Khi một quyết định kiến trúc (ADR) bị thay thế bởi quyết định mới, bản cũ giữ nguyên lịch sử, chuyển trạng thái sang đã bị thay thế (<code>superseded</code>) và trỏ sang ADR mới thay vì bị xóa hay sửa đè. Crew chủ động làm rõ thuật ngữ mơ hồ hoặc mâu thuẫn với code bằng tình huống cụ thể. Đặc tả kỹ thuật và danh sách nhiệm vụ đầy đủ ràng buộc cho worker là nguồn gốc; tài liệu quyết định trình Human (#51) và bản đọc HTML dẫn xuất một chiều từ nguồn đó. Mỗi OUTPUT thực tế có nơi giữ bản gốc, phiên bản và liên kết từ session; không có nhiều bản cùng nhận là nguồn chính.<br><br>Các artifact được quản lý theo SDLC, ví dụ nhóm tài liệu product gồm product-brief, PRD, SRS và nhóm công việc theo hierarchy Idea → Epic → Feature → User Story → Task → Sub-task. Crew theo dõi nguồn chính, phiên bản, state vòng đời và quan hệ dẫn xuất/phụ thuộc của từng loại; danh mục và bộ state đầy đủ cần được làm rõ khi đặc tả workflow, không suy từ các ví dụ này thành danh sách đã chốt. Cách biểu diễn hierarchy trên GitHub theo loại chủ sở hữu repo nhận diện ở onboarding (#05): repo của tổ chức dùng issue types cùng sub-issues; repo của tài khoản cá nhân không có issue types nên dùng label cùng sub-issues.</td>
+<td>Human và worker truy được đúng nghĩa, yêu cầu, artifact/state và quan hệ hierarchy, chuỗi hiệu lực của quyết định kiến trúc (<code>active</code>/<code>superseded</code>) và phiên bản OUTPUT đang dùng như hệ thống Guides thống nhất của Outer Harness.</td>
+<td>Nơi lưu cụ thể của OUTPUT ngoài spec/ticket được xác định trong thiết kế. Không tạo ADR cho mọi trao đổi, không xóa/sửa đè ADR cũ khi đổi quyết định và không chép thông tin đã có thành một nguồn sự thật cạnh tranh.</td>
+</tr>
+<tr>
+<td><a id="need-40"></a> <strong>NEED 40 — Crew là bên ghi tự động duy nhất lên Issues</strong><br><br><strong>Topic:</strong> Nguồn sự thật, lịch sử &amp; kiểm chứng chất lượng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew là bên ghi tự động duy nhất lên Issues của quy trình: spec/ticket nằm ở Issues, run store giữ trạng thái thực thi. Human vẫn được sửa issue bằng tay; Crew phát hiện và xử lý lệch theo #42.</td>
+<td>Spec/ticket có nguồn chính rõ và các cập nhật tự động không cạnh tranh với nhiều bên ghi độc lập.</td>
+<td>Quy tắc chỉ giới hạn bên ghi tự động, không cấm Human chỉnh sửa hoặc biến run store thành nguồn spec thứ hai.</td>
+</tr>
+<tr>
+<td><a id="need-41"></a> <strong>NEED 41 — Lịch sử thật</strong><br><br><strong>Topic:</strong> Nguồn sự thật, lịch sử &amp; kiểm chứng chất lượng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew giữ đúng lịch sử công việc và quyết định theo nguyên tắc bất biến tiến về phía trước (flow-forward). Khi một story hoặc session đã Done, hồ sơ đặc tả và bằng chứng nghiệm thu của nó được khóa làm lịch sử của lần bàn giao đó; ý tưởng mới hoặc thay đổi phát sinh về sau được mở thành story/session mới và tạo phiên bản spec mới tham chiếu bản cũ, không sửa đè hay viết lại ý nghĩa của việc đã hoàn tất.</td>
+<td>Human truy được yêu cầu, phạm vi và bằng chứng nghiệm thu nguyên vẹn của từng phiên bản đã giao, cùng quan hệ tiếp nối giữa việc cũ và việc mới.</td>
+<td>Bản kết quả hiện tại có thể thay thế bản cũ để sử dụng tiếp nhưng không xóa hoặc sửa ngược hồ sơ lịch sử đã Done.</td>
+</tr>
+<tr>
+<td><a id="need-42"></a> <strong>NEED 42 — Phát hiện lệch và hết hiệu lực</strong><br><br><strong>Topic:</strong> Nguồn sự thật, lịch sử &amp; kiểm chứng chất lượng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew phát hiện khi Human sửa issue trên web, báo phần lệch trước bước tiếp theo và không ghi đè im lặng. Mỗi OUTPUT và kế hoạch ghi phụ thuộc thượng nguồn; khi INPUT thay đổi hoặc kết quả triển khai thực tế của một bước/story tiền đề làm thay đổi cấu trúc, hợp đồng hay giả định mà các bước/story phụ thuộc phía sau đang dựa vào, các OUTPUT và kế hoạch liên quan được tự động đánh dấu hết hiệu lực hoặc cần đối chiếu lại trước khi chạy tiếp.</td>
+<td>Human thấy nội dung hoặc tiền đề nào đã đổi, kết quả hay kế hoạch phụ thuộc nào bị ảnh hưởng và bước nào cần xem lại.</td>
+<td>Giữ lịch sử của phiên bản cũ; phát hiện lệch không đồng nghĩa tự chọn cách giải quyết mâu thuẫn hoặc tự sửa yêu cầu Human.</td>
+</tr>
+<tr>
+<td><a id="need-43"></a> <strong>NEED 43 — Trạng thái từ run store</strong><br><br><strong>Topic:</strong> Nguồn sự thật, lịch sử &amp; kiểm chứng chất lượng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Trạng thái session và nhiệm vụ lấy từ fact có cấu trúc trong run store với hợp đồng mặc định chưa đạt (default-FAIL contract: tiêu chí chỉ chuyển sang đạt khi gắn kèm bằng chứng kiểm chứng hợp lệ), không suy từ lời chat tự báo hay danh sách Markdown do agent tự đánh dấu. Thất bại, hủy hoặc chưa chắc kết quả vẫn giữ dữ kiện đã biết, giới hạn và bước tiếp theo. Run store không phụ thuộc vào việc nhận đủ mọi session update từ provider: trên đường ACP v1, update không nhận diện được bị bỏ mà không báo, nên Crew đối soát trạng thái với nguồn kiểm được (git, GitHub, kết quả lệnh) và ghi log các update bị bỏ.<br><br>State vòng đời của tài liệu và các mục hierarchy tham chiếu nguồn chính tương ứng theo #39; run store giữ fact thực thi gắn với đúng artifact/phiên bản và các điều kiện chuyển state của workflow. Không đồng nhất state session, state tài liệu và state từng cấp công việc; một Task hoàn tất không tự chuyển toàn bộ hierarchy hoặc session sang Done.</td>
+<td>Panel, sidebar, tab tổng quan và status bar thể hiện cùng trạng thái có căn cứ từ run store, phân biệt state của từng đối tượng, chặn tình trạng agent tự tuyên bố hoàn thành sớm (premature stopping) hoặc vô tình sửa mất tiêu chí.</td>
+<td>Lời agent nói “xong” hoặc tự tick hoàn thành trong văn bản không đủ chuyển Done; dữ liệu cũ hoặc thiếu không được trình bày như trạng thái đang được xác nhận.</td>
+</tr>
+<tr>
+<td><a id="need-44"></a> <strong>NEED 44 — Phát lại fact, không phát lại effect</strong><br><br><strong>Topic:</strong> Nguồn sự thật, lịch sử &amp; kiểm chứng chất lượng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Sau crash, dừng hoặc gián đoạn, Crew khôi phục dữ kiện và đối soát tác động đã xảy ra trước khi tiếp tục đúng công việc. Không phát lại mù các tác động bên ngoài chỉ vì phát lại lịch sử session.</td>
+<td>Crew phân biệt được việc đã thực hiện, chưa thực hiện và chưa rõ kết quả; phục hồi giữ kết quả hợp lệ mà không tạo tác động trùng.</td>
+<td>Khôi phục fact không đồng nghĩa chạy lại tool call, tạo lại PR, ghi issue hoặc thực hiện lại hành động môi trường.</td>
+</tr>
+<tr>
+<td><a id="need-45"></a> <strong>NEED 45 — Done = OUTPUT đạt kết quả yêu cầu</strong><br><br><strong>Topic:</strong> Nguồn sự thật, lịch sử &amp; kiểm chứng chất lượng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Mỗi session có một INPUT và một OUTPUT chính; nhánh phát sinh trong pipeline có OUTPUT nhánh riêng, ảnh hưởng tới Done của session theo dependency và tiêu chí đã khai báo (#27/#29). Session chỉ Done khi OUTPUT chính đạt kết quả yêu cầu đã xác định cho INPUT đó, theo tiêu chí của loại session ở <a href="#session-types">bảng Loại session</a>. Brainstorm bàn giao ý tưởng, research bàn giao kết luận có căn cứ, refine bàn giao story đủ điều kiện. Với implement, OUTPUT phải là thay đổi đã merged; PR mở hoặc CI xanh chưa đủ.</td>
+<td>Kết quả bàn giao và bằng chứng chứng minh các tiêu chí hoàn thành của đúng loại session.</td>
+<td>Session dừng, thất bại, bị hủy hoặc được Human đóng khi chưa đạt OUTPUT không được báo Done; sinh đủ tài liệu của template cũng chưa chứng minh đã đạt kết quả.</td>
+</tr>
+<tr>
+<td><a id="need-46"></a> <strong>NEED 46 — Kiểm chứng độc lập</strong><br><br><strong>Topic:</strong> Nguồn sự thật, lịch sử &amp; kiểm chứng chất lượng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Kiểm chứng độc lập dựa trên yêu cầu và tiêu chí của session thực tế sau khi Orchestrator cụ thể hóa playbook. Trước khi chuyển sang người kiểm độc lập hoặc trình Human, các cảm biến tất định (compiler, type-checker, linter, schema/link check, test suite) phải chạy trước để bắt lỗi cơ học ngay tại chỗ. Ý tưởng được đối chiếu với mục tiêu/ràng buộc; research kiểm nguồn, kết luận và mức chắc chắn; spec kiểm tính đầy đủ/nhất quán. Với implement, người kiểm khác tác giả (Fresh-Context Evaluator) kiểm cả code lẫn test trên luồng thật, đối chiếu hội tụ hai chiều với đặc tả/kế hoạch để bắt cả phần thiếu (<code>missing</code>/<code>partial</code>), phần mâu thuẫn (<code>contradicts</code>) lẫn code thừa/tính năng suy đoán không được yêu cầu (<code>unrequested</code>) hoặc lấn sang phạm vi ngoài, đồng thời phát hiện hành vi sửa/xóa test để vượt cổng (reward hacking); thay đổi giao diện phải render và tương tác app thật. Khi kiểm tra thất bại, phân biệt lỗi logic của sản phẩm với nhiễu hạ tầng/môi trường cục bộ (timeout, port bận, thiếu tài nguyên, state bẩn). Báo cáo tách phần đáp ứng spec và tuân thủ chuẩn repo trên cùng phiên bản đã kiểm.</td>
+<td>Lỗi cơ học được chặn bằng kiểm tra tất định trước khi tốn lượt kiểm chứng ngữ nghĩa; mỗi kết luận độc lập có bằng chứng và giới hạn, chặn được cả thiếu sót lẫn code thừa không được yêu cầu (<code>unrequested</code>), tách rõ lỗi code với nhiễu hạ tầng và không lấy một trục đạt để che trục chưa đạt.</td>
+<td>Độ sâu theo quy mô #18; không dùng lời nhắc trong prompt thay cho kiểm tra tất định có thể chạy tự động, không biến mọi session thành code/test/PR và không bắt buộc một số lượng agent hay framework kiểm chứng cụ thể.</td>
+</tr>
+<tr>
+<td><a id="need-47"></a> <strong>NEED 47 — Kiểm thử có khả năng bắt lỗi hành vi</strong><br><br><strong>Topic:</strong> Nguồn sự thật, lịch sử &amp; kiểm chứng chất lượng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Các kiểm thử được giữ lại xuất phát từ yêu cầu hoặc kết quả độc lập, quan sát hành vi qua interface phù hợp và có khả năng bắt lỗi tương ứng. Refactor giữ nguyên hành vi không buộc sửa test chỉ vì chi tiết bên trong thay đổi.</td>
+<td>Test thất bại khi hành vi cần bảo vệ bị sai và vẫn hữu ích khi cấu trúc triển khai thay đổi.</td>
+<td>Không coi test sao chép logic triển khai hoặc chỉ chứng minh code tự nhất quán là bằng chứng độc lập; không áp một framework hay quy trình TDD cho mọi việc.</td>
+</tr>
+<tr>
+<td><a id="need-48"></a> <strong>NEED 48 — Chẩn đoán đúng bug trước khi kết luận cách sửa</strong><br><br><strong>Topic:</strong> Nguồn sự thật, lịch sử &amp; kiểm chứng chất lượng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew dựng và chạy cách tái hiện đúng triệu chứng Human báo, tách biệt lỗi hành vi thật của code với nhiễu hạ tầng/môi trường cục bộ, thu hẹp trường hợp lỗi rồi kiểm tra giả thuyết bằng bằng chứng trước khi kết luận cách sửa. Sau sửa, chạy lại tình huống gốc. Nếu chưa tái hiện được, báo rõ giới hạn và dữ liệu còn thiếu.</td>
+<td>Kết luận nguyên nhân và hiệu quả sửa gắn với triệu chứng ban đầu trên môi trường đã loại trừ nhiễu, có cách kiểm lại.</td>
+<td>Không sửa theo phỏng đoán rồi coi kiểm tra khác với tình huống gốc là đủ; số giải pháp không thành vẫn chịu #37.</td>
+</tr>
+<tr>
+<td><a id="need-49"></a> <strong>NEED 49 — Kết quả truy được tới yêu cầu và bằng chứng</strong><br><br><strong>Topic:</strong> Nguồn sự thật, lịch sử &amp; kiểm chứng chất lượng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Từ mỗi session, Human truy được INPUT, OUTPUT chính, spec/quyết định, nhiệm vụ và bằng chứng đúng phiên bản. Khi có liên quan, liên kết thêm story, thay đổi, check và PR. Bằng chứng ghi INPUT cùng phiên bản code và cặp cấu hình Model–Harness (provider/model/effort, phiên bản adapter ACP và phiên bản playbook/cấu hình Crew) đã kiểm, kèm phần chưa chứng minh. Research nêu câu hỏi, phạm vi, kết luận, nguồn của nhận định quan trọng và điểm chưa chắc; ưu tiên nguồn sở hữu thông tin, tách dữ kiện với suy luận. OUTPUT thiếu bằng chứng hoặc hết hiệu lực được thể hiện rõ.</td>
+<td>Human kiểm được lý do tin kết quả và cấu hình Model–Harness đã tạo/kiểm kết quả đó mà không phải đọc toàn bộ transcript; cả session không có story vẫn truy vết được.</td>
+<td>Không bắt mọi session có PR, không tạo thêm nguồn spec/research cạnh tranh với #39 hoặc coi lời agent tự báo là bằng chứng.</td>
+</tr>
+<tr>
+<td><a id="need-50"></a> <strong>NEED 50 — Nhìn thấy cả team làm việc</strong><br><br><strong>Topic:</strong> Quan sát, tài liệu quyết định &amp; cải tiến liên tục<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Human quan sát được ai đang làm gì, nhiệm vụ nào, bao lâu, tuổi công việc đang dở hoặc thời gian một mục đã bị ngâm/chặn (<code>work item age</code>) và các lần bàn giao qua pipeline, đồ thị live và run log. UI cho mở sâu theo nhu cầu, hiện trạng thái cùng lần cập nhật gần nhất, dấu hiệu mất kết nối và dấu hiệu thiếu update. Chỉ hiện phần trăm/số lượng khi có cơ sở đo; nếu chưa đo được thì hiện bước đang làm, thời gian đã trôi qua và blocker. Trạng thái có chữ/icon cùng màu và chi tiết mở được bằng bàn phím.</td>
+<td>Human hiểu tiến độ, nhận diện sớm điểm nghẽn qua thời gian ngâm/chặn (<code>work item age</code>) và biết điểm cần chú ý từ dữ liệu thực thi mà không phải đọc toàn bộ hội thoại của worker.</td>
+<td>Đây là UI quan sát, không tạo cửa giao việc trực tiếp cho worker; không dùng phần trăm giả hoặc bắt hover để đọc thông tin thiết yếu.</td>
+</tr>
+<tr>
+<td><a id="need-51"></a> <strong>NEED 51 — Tài liệu quyết định vừa đủ</strong><br><br><strong>Topic:</strong> Quan sát, tài liệu quyết định &amp; cải tiến liên tục<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Tài liệu quyết định cho Human được chắt lọc một chiều từ nguồn sự thật kỹ thuật đầy đủ ở #39, chỉ trình bày điều quyết định đó cần: hành vi thay đổi, tiêu chí nghiệm thu quan sát được, phạm vi ngoài (out-of-scope), các giả định (<code>Assumptions</code>) cần xác nhận, bằng chứng, phạm vi tác động và phương án migration/đảo ngược (rollback) khi chạm dữ liệu hoặc vận hành. Dùng ví dụ hoặc hình nhỏ nhất đủ hiểu, có trước/sau khi phù hợp; HTML dẫn tới phần chi tiết cần kiểm tra.</td>
+<td>Human biết điều gì đổi, điều gì không làm ở bước này, giả định nào cần duyệt, căn cứ tin kết quả và ảnh hưởng cùng khả năng đảo ngược của lựa chọn mà không phải đọc toàn bộ tài liệu kỹ thuật dành cho worker.</td>
+<td>Không áp giới hạn nội dung này cho UI quan sát #50 hoặc tài liệu kỹ thuật/trao đổi AI↔AI; khi yêu cầu thay đổi phải cập nhật nguồn gốc ở #39 trước rồi mới dẫn xuất lại bản đọc của Human, không duy trì hai tài liệu trùng lặp cùng nhận là nguồn chính; không bắt mọi thay đổi đều có sơ đồ hay screenshot.</td>
+</tr>
+<tr>
+<td><a id="need-52"></a> <strong>NEED 52 — Biết ngay việc đang cần Human</strong><br><br><strong>Topic:</strong> Quan sát, tài liệu quyết định &amp; cải tiến liên tục<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Khi quay lại Crew, Human thấy các câu hỏi, giả định chờ duyệt, quyền còn thiếu, vấn đề chờ xử lý và PR đang chờ mình, cùng thời gian mục đó đã chờ (<code>work item age</code>) và ảnh hưởng của từng mục tới các nhánh phụ thuộc. Mở một mục đưa tới đúng hội thoại hoặc GitHub; mục đã xử lý, hết hiệu lực hoặc thuộc session đã đóng không tiếp tục xuất hiện như đang chờ.</td>
+<td>Human tìm đủ việc cần mình, biết mục nào đang ngâm lâu gây nghẽn dòng công việc mà không đọc lại toàn bộ transcript; các nhánh độc lập vẫn có trạng thái riêng.</td>
+<td>Đây là tổng hợp và điều hướng, không tạo nút Approve/Re-run hoặc chuyển quyền review PR khỏi GitHub. Chờ Human không có timeout tự động theo #15.</td>
+</tr>
+<tr>
+<td><a id="need-53"></a> <strong>NEED 53 — Tìm và quay lại đúng session / OUTPUT</strong><br><br><strong>Topic:</strong> Quan sát, tài liệu quyết định &amp; cải tiến liên tục<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Human tìm và mở lại session theo project, mục tiêu hoặc trạng thái; thấy INPUT, OUTPUT đúng phiên bản và việc còn chờ. Mở lịch sử chỉ để xem, không tự chạy lại công việc hay phát lại tác động. Lưu trữ session kết thúc giúp gọn danh sách và khác với xóa dữ liệu hoặc hủy việc.</td>
+<td>Human tìm được session đã kết thúc, mở đúng kết quả và dùng làm tham chiếu cho yêu cầu tiếp theo mà không khởi chạy lại tác động cũ.</td>
+<td>Không suy ra phải chạy nhiều session đồng thời, đồng bộ cloud hoặc hỗ trợ nhiều Human; việc tiếp tục thực thi phải qua Orchestrator.</td>
+</tr>
+<tr>
+<td><a id="need-54"></a> <strong>NEED 54 — Cải tiến bằng kết quả đã kiểm chứng</strong><br><br><strong>Topic:</strong> Quan sát, tài liệu quyết định &amp; cải tiến liên tục<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew tổng hợp lỗi lặp lại và bài học theo project từ bằng chứng phiên làm việc để Human review. Đề xuất cải tiến nhắm vào Outer Harness (môi trường, Guides và Sensors) thay vì chỉ viết thêm prompt dài: khôi phục check có sẵn, chuyển quy tắc nhắc nhở trong prompt thành cảm biến kiểm tra tất định (deterministic sensors: linter, type/schema check, test) cho lỗi cơ học, làm rõ chuẩn cho phán đoán, và lược bỏ (subtraction) các bước/ràng buộc trung gian đã thừa khi model hoặc công cụ đủ khả năng xử lý trực tiếp. Trước khi áp dụng, thay đổi hành vi được đánh giá theo từng cặp cấu hình Model–Harness trên tình huống đại diện về chất lượng, công sức Human và chi phí.</td>
+<td>Cải tiến có lý do, bằng chứng và kết quả đánh giá theo cặp Model–Harness, giúp chặn lỗi bằng cấu trúc tất định và giảm quy trình thừa thay vì phình to hướng dẫn.</td>
+<td>Không tự chấm điểm để tiến hóa, gom dữ liệu private thành kinh nghiệm dùng chung hoặc tự sửa/phát hành quy tắc; Human quyết định các đề xuất thay đổi.</td>
+</tr>
+<tr>
+<td><a id="need-55"></a> <strong>NEED 55 — Worker được nạp ROLE đầy đủ như Orchestrator · danh mục ROLE theo scrum team</strong><br><br><strong>Topic:</strong> Cấu hình Outer Harness, ROLE &amp; phân bổ provider ACP<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Mỗi worker sub-thread được nạp đầy đủ định nghĩa ROLE trước khi nhận nhiệm vụ — tập trách nhiệm, chuẩn đầu ra, quy ước bàn giao và system/request prompt của role đó — qua kênh system prompt mà provider hỗ trợ: Claude dùng ACP <code>systemPrompt</code> mode <code>append</code> với nội dung là mảng text block (crate <code>agent-client-protocol</code> 3.4.0 của fork đã hỗ trợ; dự phòng <code>_meta.systemPrompt</code>); Antigravity dùng <code>_meta.antigravity.systemPrompt.append</code> với giá trị là chuỗi; Codex dùng <code>_meta.jetbrains.air.customInstructions</code>; khi kênh của provider không còn dùng được thì báo blocker, không nạp ROLE bằng file hay đường ngoài ACP (#61). Provider không lưu ROLE cùng hội thoại, nên Crew gửi lại ROLE ở mọi lần tạo, load và resume session, ngay từ lần đầu; trong cùng một session, ROLE vẫn còn sau compaction của provider (đã kiểm với Claude và Antigravity). Kênh đã dùng được ghi vào bản ghi spawn; kênh không chính thức có test chặn khi adapter thay đổi. Không phải thread rỗng hay prompt tự do. Danh mục ROLE lấy theo mô hình scrum team của project (vai trò chuyên môn SDLC: Business Analyst, Product Manager, Backlog Analyst, UX Researcher/Designer, UI Designer, Software Engineer, Software/Solution Architect, Tech Lead, Project/Delivery Manager, Release Manager, Platform/DevOps Engineer, SRE, QA/Test Engineer, Security Engineer…), khởi tạo từ <a href="#d13-seed">bản đồ nguồn seed đã duyệt</a>, riêng Release Manager, Platform/DevOps Engineer, Delivery Manager và Business Analyst được viết mới; mỗi ROLE map tới profile thực thi và tập provider/model/effort được phép trong cấu hình. Worker là nguồn lực thực thi; ROLE là trách nhiệm chuyên môn được gán cho nhiệm vụ.</td>
+<td>Worker khởi động với đúng ROLE đã nạp kèm phiên bản định nghĩa và kênh nạp trong bản ghi spawn; Human thấy được worker đang mang ROLE nào từ danh mục scrum team và định nghĩa đã dùng.</td>
+<td>ROLE không gắn cứng provider/model (#24) và không đổi accountability — Human giữ vai trò Product Owner. Nạp ROLE/profile không đồng nghĩa tool trong profile được tự động cho phép; quyền vẫn theo #06. Bản ghi lựa chọn và gói bàn giao vẫn theo #26/#32.</td>
+</tr>
+<tr>
+<td><a id="need-56"></a> <strong>NEED 56 — Trạng thái đăng nhập provider &amp; snapshot danh mục model</strong><br><br><strong>Topic:</strong> Cấu hình Outer Harness, ROLE &amp; phân bổ provider ACP<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Mỗi lần Zed khởi động, Crew xác nhận trạng thái đăng nhập của từng provider theo cơ chế riêng của provider đó. Cơ chế mặc định là healthcheck ping-pong: gửi một prompt tối thiểu trong session thăm dò được dùng lại của provider; nhận được trả lời là đã đăng nhập, lỗi <code>-32000</code> là chưa đăng nhập. Codex có thể dùng thông báo <code>_auth/status_update</code> gửi ngay sau initialize (fork bổ sung handler mà Zed hiện bỏ qua), vì thông báo này báo đúng. Claude bắt buộc dùng healthcheck, vì thông báo <code>_auth/status_update</code> của Claude báo sai “Not logged in” khi đăng nhập đến từ token trong môi trường (<code>CLAUDE_CODE_OAUTH_TOKEN</code>). Antigravity báo lỗi <code>-32000</code> ngay khi tạo session nếu chưa đăng nhập, và healthcheck xác nhận phần còn lại. Healthcheck tốn hạn mức (prompt đầu tiên của một session Antigravity tốn khoảng 12,7 nghìn token chỉ dẫn có sẵn), nên luôn chạy trong session thăm dò dùng lại, không mở session mới cho mỗi lần kiểm. Danh mục model và capability của từng provider lấy từ session config options và giữ thành snapshot có cache, ghi thời điểm và nguồn. Snapshot được làm mới khi tạo session thật; chỉ mở session thăm dò khi snapshot quá ngưỡng tuổi do Human cấu hình (session thăm dò của Antigravity được lưu, hiện trong danh sách session và trong thread import của Zed, không xóa được qua ACP; đọc danh sách model chỉ cần <code>session/new</code>, không cần prompt). Danh mục model không được hardcode vì provider định kỳ thêm/đổi/rút model; bước chọn cấu hình (#26), readiness (#23) và dịch vụ chấm điểm model (#60) dùng snapshot mới nhất. Model biến mất hoặc xuất hiện được phát hiện; cấu hình/playbook đang tham chiếu model đã rút được báo lệch theo #42 để Human xử lý. Crew không quản lý lại việc đăng nhập (Zed xử lý toàn cục, <a href="#config-layers">bảng Tầng cấu hình</a>); các lỗi phía Zed ảnh hưởng đăng nhập provider, ví dụ Codex chuyển tiếp nhầm tên biến API key và không có ô nhập key, Antigravity bỏ qua <code>NO_BROWSER</code>, được sửa trong tầng Zed của fork; khi provider chưa đăng nhập, Crew chỉ dẫn Human tới luồng đăng nhập của Zed theo #17.</td>
+<td>Trạng thái đăng nhập phản ánh healthcheck gần nhất của từng provider; bảng model/capability phản ánh snapshot gần nhất kèm tuổi của snapshot; lựa chọn worker không vỡ vì model cũ không còn hoặc bỏ sót model mới; readiness và Settings hiển thị cùng snapshot.</td>
+<td>Sync không tự đổi lựa chọn đã khóa của sub-thread đang chạy (SpawnSelectionRecord bất biến), không tự bật provider chưa đăng nhập và không tự sửa cấu hình tham chiếu model cũ. Sync thất bại giữ snapshot trước kèm nhãn cũ (stale) thay vì giả định danh sách rỗng.</td>
+</tr>
+<tr>
+<td><a id="need-57"></a> <strong>NEED 57 — UI của Crew bắt buộc tuân thủ Zed UI</strong><br><br><strong>Topic:</strong> Quan sát, tài liệu quyết định &amp; cải tiến liên tục<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Khi triển khai, mọi bề mặt giao diện của Crew phải dùng trực tiếp nguyên mẫu và component có sẵn của Zed — dock/panel, workspace item &amp; tab, sidebar, status bar, Command Palette, Settings Editor — cùng màu ngữ nghĩa, font, icon, density và hành vi focus/keyboard của GPUI. Không dựng bộ design system, wireframe hay bố cục riêng ngoài những gì Zed đã cung cấp; không vẽ thiết kế trước rồi ép Zed theo.</td>
+<td>Mọi màn hình Crew trông và vận hành như phần còn lại của Zed; hỗ trợ theme sáng/tối và cỡ chữ; action điều hướng đăng ký vào Command Palette; quan sát tách khỏi quyết định (bản đọc không có nút Approve/Re-run theo #13).</td>
+<td>Không thêm shortcut hay bố cục bắt buộc lấn lựa chọn của Human; không suy diễn capability UI — sự tồn tại của một thành phần tương tự trong Zed không chứng minh Crew đã dùng được nó, phải kiểm chứng khi triển khai.</td>
+</tr>
+<tr>
+<td><a id="need-58"></a> <strong>NEED 58 — The Crew repository stays private</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>The Zed AI Crew repository stays private.</td>
+<td>The Crew repository has private visibility.</td>
+<td>This requirement concerns the Crew repository itself. Target repository privacy and data isolation remain in <a href="#need-02">NEED 02</a>.</td>
+</tr>
+<tr>
+<td><a id="need-59"></a> <strong>NEED 59 — Fork giữ được theo upstream Zed</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew là bản fork của Zed và phải tiếp tục nhận thay đổi từ upstream. Code Crew đặt trong crate riêng, chỉ chạm core Zed qua các điểm nối tối thiểu được liệt kê; việc đồng bộ upstream diễn ra theo nhịp định kỳ, có bộ test chặn khi upstream làm hỏng điểm nối hoặc hành vi Crew.</td>
+<td>Cập nhật upstream không đòi viết lại Crew; Human biết lần đồng bộ upstream gần nhất, điểm nối nào bị ảnh hưởng và test nào đang chặn.</td>
+<td>Không sửa rải rác vào crate core khi có thể đặt code trong crate Crew; không đưa bản đồng bộ upstream vào main khi test chặn chưa xanh (#03).</td>
+</tr>
+<tr>
+<td><a id="need-60"></a> <strong>NEED 60 — Dịch vụ danh mục và chấm điểm model theo loại nhiệm vụ</strong><br><br><strong>Topic:</strong> Cấu hình Outer Harness, ROLE &amp; phân bổ provider ACP<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Một dịch vụ con của Crew quét danh mục model khả dụng của các provider (snapshot #56), kết hợp dữ liệu benchmark công khai với kết quả đánh giá của chính Crew trên các tình huống đại diện (#54) để chấm điểm từng cặp provider/model/effort theo loại nhiệm vụ, kèm chi phí, tốc độ và mức cách ly (#07). Mỗi điểm ghi nguồn, thời điểm, phiên bản benchmark và mức tin cậy; benchmark đo model kèm harness được ưu tiên hơn benchmark đo model đơn lẻ. Dịch vụ theo dõi hạn mức còn lại của từng tài khoản provider từ những gì provider đưa ra qua ACP (#61): Codex qua lệnh <code>/status</code> (phần trăm còn lại theo cửa sổ; giờ reset theo múi giờ và locale của process adapter, không có năm, chỉ đọc ở mức best effort), Antigravity qua lệnh <code>/usage</code> (hai nhóm model, mỗi nhóm có cửa sổ tuần và 5 giờ, phần trăm còn lại cùng giờ reset UTC), Claude qua <code>_meta</code> của usage update. Mỗi giá trị ghi rõ là đo được, ước tính hay không có; định dạng được khóa bằng contract test theo phiên bản adapter (#28). #26 dùng điểm và hạn mức này khi chọn cấu hình.</td>
+<td>Orchestrator nhận danh sách lựa chọn được xếp hạng theo loại nhiệm vụ cùng căn cứ và hạn mức; Human xem được vì sao một model được chọn và nguồn điểm nằm ở đâu.</td>
+<td>Model chưa có điểm hoặc thiếu dữ liệu ghi là “chưa đánh giá”, không coi là 0 hay tốt nhất. Điểm không tự đổi tập model được phép (#27) hay đổi provider của sub-thread đang chạy. Không gộp điểm khác phiên bản benchmark hoặc khác harness; điểm do vendor tự báo được đánh dấu và giảm trọng số; không tự chọn model theo con số không truy được nguồn. Dịch vụ không gửi dữ liệu private của project ra nguồn benchmark bên ngoài (#02). Dữ liệu cá nhân trong output hạn mức, ví dụ email tài khoản trong <code>/status</code> của Codex, được che trước khi lưu (#02). Hạn mức của một model lấy theo nhóm hạn mức mà provider báo có chứa model đó; không xác định được model thuộc nhóm nào thì hạn mức của nó là “không rõ”.</td>
+</tr>
+<tr>
+<td><a id="need-61"></a> <strong>NEED 61 — Crew chỉ điều khiển provider qua ACP</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
+<td>Crew điều khiển các provider (Claude, Codex, Antigravity) hoàn toàn qua ACP: tạo session, gửi prompt, chọn mode/config option/tùy chọn session, trả lời yêu cầu xin quyền, cancel, steering, và đọc những gì provider báo lại (update, usage, trạng thái đăng nhập). Crew không đụng xuống tầng dưới của provider: không đọc hay sửa file cấu hình, credential, thư mục home (<code>~/.claude</code>, <code>~/.codex</code>, <code>~/.gemini</code>), hooks, skills hay process nội bộ của provider trên máy, và không gọi thẳng app-server hoặc API riêng của provider.</td>
+<td>Mọi tác động của Crew lên provider đi qua một bề mặt duy nhất là ACP và truy được trong log ACP; thiết lập provider trên máy chỉ do Human thay đổi bằng công cụ của provider.</td>
+<td>Cài đặt và ghim phiên bản adapter qua cơ chế agent server của Zed (#28) thuộc tầng Zed, không phải can thiệp vào provider (Human xác nhận 2026-10-25). Khả năng nào provider không đưa ra qua ACP thì Crew ghi là không có hoặc báo blocker, không lấy bằng đường khác.</td>
+</tr>
+</tbody></table></div>
+<a id="ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them"></a>
+<h2>Phụ lục C. Ranh giới nền tảng Zed có sẵn và phần Crew cần xây thêm</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Item</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Context</td>
+<td>“Crew session”, run store, quyết định routing và các bề mặt UI của Crew thuộc thiết kế cần xây thêm; sự tồn tại của các thành phần UI tương tự trong Zed không chứng minh Crew đã có sẵn capability đó.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Agent Panel ở dock trái/phải</strong>: tái dùng mẫu composer, chọn context, điều hướng bàn phím và thông báo; lưu ý nhiều tính năng của external agent phụ thuộc vào khả năng thực tế của từng ACP integration.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Threads Sidebar &amp; Parallel Agents</strong>: tái dùng cách gom theo project, bố cục Classic/Agentic, lịch sử và quản lý worktree; không sao chép mù hành vi tự dọn worktree của thread thường sang một Crew session có nhiều phụ thuộc khi chưa đối soát.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Workspace Item, Diff View và Markdown Preview</strong>: làm cơ sở để mở tab tổng quan session, xem diff và đọc tài liệu trong vùng trung tâm.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Subagent Read-only Thread View</strong>: mẫu subagent không có composer, mở full view và trả kết quả về parent là cơ sở cho UI quan sát worker; Crew bổ sung hợp đồng nhiệm vụ và bản ghi lựa chọn cấu hình.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Settings Editor &amp; ACP Configuration</strong>: tái dùng điều hướng và control chuẩn, chỉ hiển thị các tùy chọn thực sự được provider hỗ trợ và ghi rõ mỗi tùy chọn thuộc tầng nào ở <a href="#config-layers">bảng Tầng cấu hình</a>.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Theme Colors, UI Components, Appearance &amp; Status Bar</strong>: làm nền tảng để Crew hòa nhập hoàn toàn vào ngôn ngữ thiết kế của Zed, không dựng bộ UI tách biệt.</td>
+</tr>
+<tr>
+<td>Kiểm chứng v2.8</td>
+<td>Các dòng dưới đây được kiểm trên Zed commit <code>347f171</code> (2026-10-24). Đây là dữ kiện nền tảng, không phải NEED; chi tiết và nguồn ở tài liệu đánh giá v2.8.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Sandbox chỉ áp cho Zed Agent native; External Agent dùng sandbox riêng của provider</strong>: sandbox OS và tool permissions của Zed không áp cho External Agents (<code>docs/src/ai/sandboxing.md</code>). Mức cách ly khác nhau theo provider: Codex có mode kèm sandbox, ba mode đầu chặn mạng; Claude nhận <code>sandbox</code>/<code>disallowedTools</code>/<code>permissionMode</code> qua <code>_meta.claudeCode.options</code> do client gửi; Antigravity tài khoản cá nhân không có sandbox, lệnh chạy trong harness Zed không thấy. Mode nguy hiểm: <code>bypassPermissions</code>, <code>agent-full-access</code>, <code>yolo</code>. Điểm chặn chung là handler <code>request_permission</code> của client, chỉ hiệu lực khi agent ở mode có xin quyền. Ảnh hưởng <a href="#need-07">NEED 07</a>.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Giao việc liên provider phải tự xây</strong>: subagent ACP trong Zed là subagent do chính agent cha tạo và báo lên (<code>crates/acp_thread/src/subagents.rs</code>), có cờ cancel. <code>spawn_agent</code> của Zed Agent chỉ tạo subagent native; <code>create_thread</code> nằm sau feature flag và không trả kết quả, không cho điều khiển thread đã tạo (<code>crates/agent/src/tools/create_thread_tool.rs</code>). Zed chuyển <code>mcp_servers</code> khi tạo session ACP, là đường khả thi để Crew cung cấp công cụ giao việc/nhận bàn giao/dừng worker (suy luận, cần spike).</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Zed chưa gửi system prompt, nhưng adapter có kênh</strong>: yêu cầu tạo session ACP v1 (đường đang chạy thật) của Zed chỉ gồm <code>cwd</code>, <code>additional_directories</code>, <code>mcp_servers</code> (<code>crates/agent_servers/src/acp/v1.rs</code>). Adapter Claude nhận ACP <code>systemPrompt</code> (append/override) và <code>_meta.systemPrompt</code>; Antigravity khai báo <code>_meta.antigravity.systemPrompt.append</code>; Codex chỉ nhận qua <code>_meta.jetbrains.air.customInstructions</code>. Fork Crew phải tự gửi. Ảnh hưởng <a href="#need-55">NEED 55</a>.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Model của External Agent không được liệt kê trước</strong>: Zed chỉ biết model/effort sau khi tạo session, qua session config options (<code>crates/agent_ui/src/agent_panel.rs</code>). Trạng thái đăng nhập: Claude và Codex gửi <code>_auth/status_update</code> ngay sau initialize nhưng Zed hiện bỏ thông báo này; spike cho thấy thông báo của Claude báo sai khi đăng nhập qua token môi trường; Crew xác nhận bằng healthcheck theo NEED 56; Antigravity chỉ báo qua lỗi <code>-32000</code> khi tạo session. Ảnh hưởng <a href="#need-56">NEED 56</a>.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Provider Google</strong>: <code>antigravity-acp</code> trong registry ACP do Google LLC phát hành, binary tải từ <code>dl.google.com</code>; server nhận diện client Zed. Không có close/fork session, không steering; state dùng chung <code>~/.gemini</code> với Antigravity CLI/Desktop. Ảnh hưởng <a href="#need-24">NEED 24</a>/<a href="#need-25">25</a>.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Hạn mức tài khoản provider</strong>: Codex app-server có <code>account/rateLimits/read</code> (phần trăm đã dùng và thời điểm reset theo từng cửa sổ) nhưng adapter chỉ đưa ra qua lệnh <code>/status</code> dạng văn bản; Claude gửi <code>rate_limit_info</code> trong <code>usage_update._meta</code> khi có sự kiện rate limit trong session và có lệnh <code>/usage</code> (cửa sổ 5 giờ / 7 ngày); Antigravity trả hạn mức qua lệnh <code>/usage</code> (spike 2026-10-25). Dịch vụ ở <a href="#need-60">NEED 60</a> chỉ lấy hạn mức từ những gì provider đưa ra qua ACP (<code>usage_update</code>, <code>_meta</code>, kết quả lệnh như <code>/status</code>), không gọi thẳng app-server hay API riêng của provider (<a href="#need-61">NEED 61</a>). Ảnh hưởng <a href="#need-26">NEED 26</a>.</td>
+</tr>
+<tr>
+<td>Kết quả spike</td>
+<td>Quan sát ngày 2026-10-25 trên máy macOS của Human, fork <code>20ea81ef29</code>, bằng một client ACP thử nghiệm đặt ngoài repo; adapter <code>claude-agent-acp@0.95.0</code>, <code>codex-acp@2.2.2</code>, <code>antigravity-acp</code> 1.4.3; crate <code>agent-client-protocol</code> 3.4.0.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Kênh ROLE</strong>: Claude nhận ACP <code>systemPrompt</code> mode <code>append</code> với <code>content</code> là mảng text block, ưu tiên hơn <code>_meta.systemPrompt</code>; ROLE còn sau <code>/compact</code>. Antigravity nhận <code>_meta.antigravity.systemPrompt.append</code> dạng chuỗi trên new, load và resume, bỏ qua trường ACP <code>systemPrompt</code>. Không provider nào lưu ROLE cùng hội thoại: load hay resume không kèm ROLE thì mất ROLE. Ảnh hưởng <a href="#need-55">NEED 55</a>.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Sandbox của Claude</strong>: với <code>{enabled: true}</code>, lệnh Bash ghi ra ngoài worktree hoặc vào <code>$HOME</code> bị EPERM; lệnh trong sandbox chạy không cần xin quyền. Mạng: mỗi host mới đến dưới dạng yêu cầu xin quyền <code>SandboxNetworkAccess</code>, chỉ bị chặn khi bị từ chối hoặc khi bật <code>strictAllowlist</code>. Khi không cấu hình thêm, lệnh Bash trong sandbox đọc được <code>~/.ssh</code>, token của GitHub CLI và mục keychain (qua lệnh <code>security</code>); <code>filesystem.denyRead</code> hoặc <code>credentials.files</code> chặn được các thao tác đó, kể cả keychain khi chặn <code>~/Library/Keychains</code>. Tool Read không bị hai cấu hình đó chặn, chỉ qua yêu cầu xin quyền, hoặc luật <code>Read(//…)</code> trong <code>settings.permissions.deny</code>. <code>$TMPDIR</code> luôn bị ép về một thư mục dùng chung cho mọi worker Claude trên máy (<code>/tmp/claude-501</code>); <code>denyWrite</code> chặn được, khi đó file tạm rơi vào worktree. Khi <code>allowUnsandboxedCommands</code> để mặc định, model có thể xin chạy ngoài sandbox. Ảnh hưởng <a href="#need-07">NEED 07</a>.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Compaction</strong>: ROLE còn sau compaction ở cả Claude và Antigravity. Với Antigravity, đã kiểm bằng mã vai trò chỉ có trong ROLE: sau compaction model vẫn trả đúng mã, checkpoint chỉ giữ câu hỏi của user, prompt gửi model vẫn mang nguyên ROLE trong khối <code>&lt;user_system_instructions&gt;</code>. Antigravity compaction quanh 256 nghìn token, thấp hơn nhiều so với cửa sổ khoảng 1 triệu token mà adapter báo. ACP không có thông báo khi compaction; dấu hiệu duy nhất là <code>usage_update.used</code> tụt mạnh. Ảnh hưởng <a href="#need-31">NEED 31</a>, <a href="#need-55">NEED 55</a>.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Antigravity, tài khoản Google AI Ultra</strong>: model <code>gemini-4-argon</code>, <code>gemini-3.8-flash</code>, <code>claude-opus-5-5</code>, <code>claude-sonnet-5-5</code>, <code>gpt-oss-120b-medium</code>; <code>thinking_level</code> low/medium/high. Prompt đầu tiên của mỗi session tốn khoảng 12,7 nghìn token chỉ dẫn có sẵn. 4 prompt song song chạy được, adapter không đặt giới hạn. Session thăm dò được lưu dưới <code>~/.gemini/antigravity-acp/conversations/</code> và hiện trong <code>session/list</code>; <code>session/delete</code> không tồn tại. Ảnh hưởng <a href="#need-25">NEED 25</a>, <a href="#need-30">30</a>, <a href="#need-56">56</a>.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Văn bản hạn mức</strong>: <code>/status</code> của Codex do code của adapter sinh, giống hệt nhau qua 4 phiên bản adapter; dòng có dạng <code>**&lt;tên&gt; &lt;cửa sổ&gt;:** N% left (resets &lt;giờ&gt;)</code>, giờ theo múi giờ và locale của process, không có năm; output có email tài khoản. <code>/usage</code> của Antigravity là Markdown cố định với giờ reset UTC tiếng Anh. Ảnh hưởng <a href="#need-60">NEED 60</a>.</td>
+</tr>
+<tr>
+<td>Item</td>
+<td><strong>Trạng thái đăng nhập</strong>: adapter Claude dò bằng <code>claude auth status</code>, nên báo “Not logged in” khi đăng nhập đến từ <code>CLAUDE_CODE_OAUTH_TOKEN</code> dù prompt vẫn chạy; khi thật sự chưa đăng nhập, <code>session/new</code> vẫn thành công và prompt đầu tiên mới lỗi <code>-32000</code>. Codex báo đúng ngay sau initialize. Ảnh hưởng <a href="#need-56">NEED 56</a>.</td>
+</tr>
+</tbody></table></div>
+<a id="phu-luc-e"></a>
+<h2>Phụ lục D. Lịch sử phiên bản</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Field</th>
+<th>Content</th>
+</tr></thead><tbody>
+<tr>
+<td>Approval and history</td>
+<td>Trạng thái: 58 NEED đã được Human đồng ý. Trạng thái duyệt không đồng nghĩa tính năng đã được triển khai. Các phần làm rõ đã được tích hợp vào nội dung từng NEED. Bản 2.2 bổ sung ví dụ tầm nhìn do Human cung cấp về pipeline runtime, nhánh phát sinh và artifact/state theo SDLC; danh mục artifact và bộ state đầy đủ chưa được chốt. Bản 2.3 bỏ tham chiếu tới phương án UI riêng đã lỗi thời; UI của Crew theo <a href="#need-57">NEED 57</a>. Bản 2.4 đổi <a href="#need-02">NEED 02</a>: repo Crew chuyển sang private như target-project. Bản 2.5 đổi <a href="#need-04">NEED 04</a> và <a href="#need-05">NEED 05</a> theo quyết định của Human ngày 2026-10-24: onboarding là UI thiết lập do code điều khiển, không qua hội thoại với LLM.</td>
+</tr>
+<tr>
+<td>Applicability</td>
+<td>Version 2.6 classifies every NEED under exactly one applicability scope. The Human-approved split preserves NEED 02 for target repository privacy and data boundaries and moves Crew repository privacy to NEED 58; existing NEED identifiers remain unchanged.</td>
+</tr>
+<tr>
+<td>Presentation</td>
+<td>Version 2.7 presents every section as tables and moves all raw NEEDs to the final two tables: Crew repository (4 NEEDs) and Target repository (54 NEEDs). Requirement content, applicability and identifiers are preserved.</td>
+</tr>
+<tr>
+<td>Review v2.8</td>
+<td>Bản 2.8 (Claude đánh giá, 2026-10-25) bổ sung dữ kiện đã kiểm chứng vào <a href="#ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them">Ranh giới nền tảng</a> (Zed upstream <code>347f171</code>, gói adapter <code>claude-agent-acp@0.95.0</code>, <code>codex-acp@2.2.2</code>, registry ACP, và baseline provider của Human ở fork <code>20ea81ef29</code>) cùng mục Quyết định chờ Human D1–D13. Lần cập nhật sau điều tra provider đã rút lại nhận định sai trước đó rằng Antigravity ACP do cộng đồng viết: đây là bản chính thức của Google. Nội dung mọi NEED đã duyệt giữ nguyên; NEED bị ảnh hưởng được gắn nhãn “v2.8: chờ Human xem lại”.</td>
+</tr>
+<tr>
+<td>Review v2.9</td>
+<td>Bản 2.9 (2026-10-25) áp dụng quyết định của Human cho D1–D11 vào nội dung NEED, thêm <a href="#session-types">bảng Loại session</a>, NEED 59 (fork theo upstream) và NEED 60 (dịch vụ danh mục và chấm điểm model). Câu chữ của các NEED được sửa do Claude soạn theo đúng khuyến nghị Human đã đồng ý; status mỗi NEED ghi quyết định nguồn. D12 bị Human bác nhưng còn mâu thuẫn với NEED 03, chờ xác nhận. D13 có bản đồ nguồn seed playbook/ROLE từ nghiên cứu 13 repo, chờ Human duyệt. D14–D20 là phát hiện từ điều tra provider, chờ Human quyết định.</td>
+</tr>
+<tr>
+<td>Review v2.10</td>
+<td>Bản 2.10 (2026-10-25) áp dụng D12 và D13. D12: lát dọc dùng được áp cho target repo (<a href="#need-21">NEED 21</a>); riêng dự án Crew phát triển liên tục, Human manual test khi xong hết (<a href="#need-03">NEED 03</a>). D13: playbook và danh mục ROLE khởi tạo từ bản đồ nguồn seed đã duyệt (<a href="#need-27">NEED 27</a>, <a href="#need-55">NEED 55</a>).</td>
+</tr>
+<tr>
+<td>Review v2.11</td>
+<td>Bản 2.11 (2026-10-25) áp dụng D14–D20. D16 được Human quyết định theo tầng thay vì cô lập toàn bộ: đăng nhập ACP do Zed quản lý toàn cục, SDLC playbook là user-scope, bước verification là project-scope; thêm <a href="#config-layers">bảng Tầng cấu hình</a> và đổi NEED 27 từ “bản chuẩn + override theo project” sang cấu hình theo tầng. Không còn quyết định nào chờ Human trong bảng D; còn chờ: tiêu chí Done đề xuất ở <a href="#session-types">bảng Loại session</a> và câu chữ NEED 60. Bản 2.12: Human đồng ý quy tắc project-scope chỉ được thu hẹp, không nới rộng, cấu hình user-scope về quyền và provider.</td>
+</tr>
+<tr>
+<td>Review v2.13</td>
+<td>Bản 2.13 (2026-10-25): Human đồng ý câu chữ <a href="#need-60">NEED 60</a> và tiêu chí Done của mọi loại session ở <a href="#session-types">bảng Loại session</a>.</td>
+</tr>
+<tr>
+<td>Review v2.14</td>
+<td>Bản 2.14 (2026-10-25): Human đặt bất biến <a href="#need-61">NEED 61</a> — Crew chỉ điều khiển provider qua ACP, không đụng xuống tầng dưới, không chỉnh provider trên máy. Theo đó: bỏ phương án nạp ROLE Codex qua <code>AGENTS.md</code> (<a href="#need-55">NEED 55</a>); hạn mức chỉ lấy qua ACP (<a href="#need-60">NEED 60</a>); sandbox provider chỉ chọn qua ACP (<a href="#need-07">NEED 07</a>). Human đồng ý phần còn lại của <a href="#config-layers">bảng Tầng cấu hình</a>; không còn mục nào chờ Human quyết định.</td>
+</tr>
+<tr>
+<td>Review v3.0</td>
+<td>Bản 3.0 (2026-10-25): theo yêu cầu của Human, tổ chức lại brief theo 12 thành phần của một product brief. NEED, quyết định D1–D20, dữ kiện nền tảng và các ví dụ tầm nhìn giữ nguyên văn từ bản 2.14; thêm các mục tổng hợp và các mục đề xuất (xem <a href="#trang-thai-noi-dung">Trạng thái nội dung</a>). Không NEED nào bị sửa.</td>
+</tr>
+<tr>
+<td>Review v3.1</td>
+<td>Bản 3.1 (2026-10-25): Human đồng ý mọi mục soạn mới ở bản 3.0 (1.4, 3.2–3.4, 4.4, 7, 9–12). Câu hỏi mở ở mục 7 vẫn chờ trả lời: Q1–Q5 bằng spike của dev team, Q6 khi đặc tả workflow, Q7–Q9 do Human.</td>
+</tr>
+<tr>
+<td>Review v3.2</td>
+<td>Bản 3.2 (2026-10-25): đưa kết quả spike Q1–Q5 vào NEED 07, 55, 56, 60, mục 6.2, 7, 12 và Phụ lục C; thêm D21 (chờ Human). Danh sách NEED ở Phụ lục B xếp lại theo số và bỏ cách chia Crew repository / Target repository có từ bản 2.6, vì cách chia đó sai (Human).</td>
+</tr>
+<tr>
+<td>Review v3.3</td>
+<td>Bản 3.3 (2026-10-25): quyết định cuối cùng (xác nhận đăng nhập theo từng provider, mặc định healthcheck ping-pong) đưa vào NEED 56. Theo yêu cầu của Human, thông tin đã chốt nằm thẳng trong nội dung: bỏ phụ lục Quyết định của Human, bỏ các câu hỏi đã trả lời khỏi mục 7, bỏ nhãn lịch sử trong status của NEED; bản đồ nguồn seed chuyển vào mục 5.3.1. Lịch sử phiên bản thành Phụ lục D.</td>
+</tr>
+<tr>
+<td>Review v3.4</td>
+<td>Bản 3.4 (2026-10-25): theo Human, Sol → Argon chỉ là ví dụ. NEED 26 mô tả quy trình chọn chung: lấy danh sách model phù hợp từ dịch vụ NEED 60, kiểm hạn mức từng ứng viên, chọn provider/model đầu tiên đạt điều kiện, spawn worker. NEED 60 có quy tắc chung gắn model với nhóm hạn mức; bỏ câu hỏi riêng về nhóm hạn mức của Argon.</td>
+</tr>
+<tr>
+<td>Review v3.5</td>
+<td>Bản 3.5 (2026-10-25): đưa kết quả spike về ROLE sau compaction của Antigravity và về chặn đọc đường dẫn bí mật, <code>$TMPDIR</code> của Claude vào NEED 07, 31, 55, rủi ro R12 và Phụ lục C; bỏ hai câu hỏi đã trả lời khỏi mục 7. Chặn ghi <code>$TMPDIR</code> suy ra từ NEED 02 vì thư mục này dùng chung cho mọi worker Claude trên máy.</td>
+</tr>
+</tbody></table></div>
+  </main>
+</body>
+</html>
