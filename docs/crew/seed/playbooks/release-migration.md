@@ -35,7 +35,7 @@ Code changes reach this playbook already merged through `implement`. Without the
 | 2 | Release readiness | release-manager | docs | change set → readiness report, release notes, checks on the exact artifact | Checks pass on the artifact to be released | — |
 | 3 | Migration plan, when data changes | platform-engineer | implement | schema or data change → expand-contract plan, backup and restore check, dry run | Dry-run result recorded; reversibility stated | — |
 | 4 | Rollout plan | release-manager | docs | readiness and migration plan → stages, checks per stage, stop conditions, rollback per stage with proof it works | Rollback proof present | Approves the plan |
-| 5 | Execute stage by stage | release-manager, platform-engineer | implement | approved plan → executed stages, each action recorded | Stop conditions honoured; within permission | Approves each gated stage |
+| 5 | Execute stage by stage | platform-engineer runs each stage; release-manager checks it against the plan | implement · review | approved plan → executed stages, each action recorded | Stop conditions honoured; within permission | Approves each gated stage |
 | 6 | Post-deployment verification | sre | test | → check results compared with the baseline | All checks pass | — |
 | 7 | Confirm rollback | release-manager | review | → evidence that the rollback mechanism still works after the rollout | Evidence present | — |
 
