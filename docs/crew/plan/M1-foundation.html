@@ -481,6 +481,7 @@ CREW_CONTRACT=1 cargo test -p crew_acp --test contract claude_options_ -- --igno
 </tbody></table></div>
 <p><strong>Thiết kế</strong></p>
 <ul>
+<li><strong>S6 đã kiểm (25/10/2026):</strong> đăng ký kiểu <code>AuthStatusUpdate(serde_json::Value)</code> với <code>#[derive(JsonRpcNotification)]</code>, <code>#[notification(method = "_auth/status_update")]</code> và <code>#[serde(transparent)]</code> cạnh các handler <code>on_receive_notification</code> hiện có. Không truyền trực tiếp <code>ExtNotification</code> vì kiểu này không triển khai trait cần thiết trong ACP 3.4.0. Handler chỉ đọc và đưa payload vào hàng đợi, không chờ RPC khác. Xem <a href="../spikes/S6.html">S6</a>.</li>
 <li>Thuật toán theo spec 6.5:<ul><li>Codex tin thông báo <code>_auth/status_update</code>.</li><li>Claude bắt buộc healthcheck ping-pong.</li><li>Antigravity: lỗi <code>-32000</code> khi tạo session nghĩa là chưa đăng nhập; còn lại thì healthcheck.</li></ul></li>
 <li>Session thăm dò:<ul><li>Nằm trong thư mục <code>crew/probe/</code> dưới thư mục dữ liệu của Zed (crate <code>paths</code>).</li><li>Bản ghi <code>kind = probe</code>. Luôn resume bản ghi cũ; chỉ tạo mới khi không resume được.</li><li>Có ROLE thăm dò: “chỉ trả lời <code>pong</code>, không dùng công cụ”.</li><li>Mọi yêu cầu xin quyền bị từ chối và mọi elicitation bị decline. PolicyGate đầy đủ có ở T2.2; ở task này dùng bộ trả lời “từ chối tất cả” cho session thăm dò.</li></ul></li>
 <li>Thời hạn chờ lấy từ cấu hình.</li>
@@ -569,6 +570,7 @@ CREW_CONTRACT=1 cargo test -p crew_acp --test contract claude_options_ -- --igno
 </ul>
 <p><strong>Kiểm chứng:</strong> <code>cargo test -p acp_thread</code>, <code>cargo test -p crew_acp dropped_updates</code></p>
 <hr>
+<p><strong>Hợp đồng fork đã kiểm ở T0.2:</strong> <code>TokenUsageUpdated</code> trên fork không có payload, khác upstream. T1.10 giữ nguyên event này và các API v1, thêm event chi tiết usage riêng mang <code>used</code>, <code>size</code>, <code>_meta</code>. Phép chuyển v1 sang v2 đã chuyển tiếp <code>update.meta</code>; cần giữ nguyên và lưu metadata trong <code>update_usage</code>. Tra dòng hiện tại trong <a href="../hook-points.html">bản đồ điểm nối</a>.</p>
 <h3>T1.11 · Spike S12: hạn mức của Claude</h3>
 <div class="table-wrap"><table>
 <thead><tr>
@@ -595,6 +597,7 @@ CREW_CONTRACT=1 cargo test -p crew_acp --test contract claude_options_ -- --igno
 <p><strong>Các bước:</strong> dùng harness T0.9 gửi <code>/usage</code> trong session thăm dò, và ghi <code>_meta</code> của usage update sau một prompt ngắn. Che email và id tài khoản trước khi lưu.</p>
 <p><strong>Tiêu chí xong:</strong> fixture cho cả hai nguồn; báo cáo nêu các cửa sổ (5 giờ, 7 ngày), đơn vị và định dạng giờ reset.</p>
 <hr>
+<p>S12 ghi <code>_meta</code> cấp trên từ traffic ACP. Khi kiểm đường tích hợp sau T1.10, đọc event chi tiết usage mới; event <code>TokenUsageUpdated</code> cũ không mang metadata hạn mức.</p>
 <h3>T1.12 · Đọc hạn mức</h3>
 <div class="table-wrap"><table>
 <thead><tr>

@@ -283,3 +283,28 @@ cargo test -p crew_acp
 - [ ] T0.1–T0.9 đạt theo Định nghĩa Xong chung.
 - [ ] `docs/crew/hook-points.md` không còn dòng `đổi API` chưa xử lý.
 - [ ] Báo cáo S6 và S7 đã merge, và các task bị ảnh hưởng đã cập nhật.
+
+
+## Execution record — 2026-10-25
+
+Implementation branch: `m0/prep-and-spikes`, based on `11caaae9f7`. This records evidence, not acceptance of unmet completion gates.
+
+| Task | Evidence |
+| --- | --- |
+| T0.1 | Brief v3.5, spec v2.2, plans and [S1–S5 report](../spikes/S1-S5.md) exist. Explicit fork visibility check returned PUBLIC; NEED 58 remains blocked pending Human's decision. |
+| T0.2 | [Hook map](../hook-points.md) covers H1–H11, existing APIs and B.1. Independent reviewer reopened five rows. H4 fork drift is reflected in spec and T1.10/T1.11; ACP remains deliberately pinned to 3.4.0. |
+| T0.3 | [Agent instructions](../AGENTS.md) plus one four-line tail section in `.rules`. Independent reviewer answered contract command and core scope using only AGENTS. |
+| T0.4 | Six crate skeletons passed `cargo check`; normal dependency trees contain no Crew dependency from agent_ui, agent_servers or acp_thread, nor crew from crew_acp. |
+| T0.5 | Default-off flag, synchronous post-palette startup integration and guarded NewSession action implemented. GPUI test passed for staff default off and settings on→off transitions. Real-app evidence captured on the dev build with an isolated data dir: flag off hides every `crew` action in the Command Palette; `"crew": "on"` surfaces "crew: new session", which prompts "Crew sessions are not supported yet"; switching the setting to `"off"` while running hides the action again. |
+| T0.6 | NEED 61 scanner passed three tests, including forbidden provider access and allowed ACP registry identifiers. Negative test was observed failing before implementation. |
+| T0.7 | [S6](../spikes/S6.md): fake-agent notification/steering roundtrip passed on separate spike branch; T1.8/T5.6 updated. |
+| T0.8 | [S7](../spikes/S7.md): actual app/McpServer framing and all three pinned providers passed crew_ping; exactly three prompts. T2.1 updated. |
+| T0.9 | Default harness run passed one fixture test and ignored three live tests. Explicit live initialize passed all three adapters, including Claude systemPrompt capability; sanitized fixtures recorded. Zero prompts for initialize. |
+
+The changed-crate test command passed 13 tests, with three real-adapter tests ignored:
+
+```sh
+cargo test -p crew_ui -p feature_flags -p crew -p crew_acp -p crew_mcp -p crew_github -p crew_models
+```
+
+Full-workspace formatting (`cargo fmt --all -- --check`) and real-app UI evidence now pass. Workspace lint and GitHub PR review/merge remain pending. No implementation or spike branch has been pushed or merged. Spike source remains isolated on `spike/S6-acp-ext` (`2fdbd33f34`) and `spike/S7-mcp-bridge` (`ec6efc014d`); only reports belong in the product branch.

@@ -408,6 +408,7 @@
 </tbody></table></div>
 <p><strong>Thiết kế</strong></p>
 <ul>
+<li><strong>S6 đã kiểm (25/10/2026):</strong> gọi <code>connection.send_request(UntypedMessage::new("_session/steering", payload)?).block_task().await</code>; kết quả là <code>serde_json::Value</code>. Giữ dấu gạch dưới đầu method. <code>ExtRequest</code> không tự triển khai <code>JsonRpcRequest</code> trong ACP 3.4.0. Spike kiểm đường truyền bằng agent giả; task này còn phải xác nhận payload và hành vi khi prompt đang chạy trên từng adapter ghim. Xem <a href="../spikes/S6.html">S6</a>.</li>
 <li>Tin nhắn đổi yêu cầu tạo phiên bản INPUT mới (T2.6). Artifact và task dẫn xuất từ bản cũ thành <code>stale</code>.</li>
 <li>Báo worker đang chạy:<ul><li>Claude, Codex: gửi <code>_session/steering</code>, theo API ở báo cáo S6. Cả hai adapter đều khai method này <span class="tag tag-verified">[Đã kiểm]</span>.</li><li>Antigravity: không có steering; cancel lượt rồi gửi lại prompt có yêu cầu mới.</li></ul></li>
 <li>Orchestrator trình Human phần bị ảnh hưởng trước khi chạy tiếp.</li>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S7 · Cầu nối MCP stdio — Zed AI Crew</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-brand"><a href="../index.html">Zed AI Crew</a><span class="brand-tag">Spike S7</span></div>
+    <nav class="site-nav"><a href="../plan/M0-prep-and-spikes.html">M0</a><a href="../plan/M2-orchestrator.html">M2</a><a href="../tech-spec.html">Tech Spec</a></nav>
+  </header>
+  <main class="page-container">
+    <div class="doc-toolbar"><span>Kiểm chứng ngày 25/10/2026 · T0.8 → T2.1</span><a class="raw-link" href="S7.md">Báo cáo kỹ thuật tiếng Anh</a></div>
+    <h1>S7 · Cầu nối MCP stdio</h1>
+    <p><strong>Đạt.</strong> Cầu nối sao chép byte giữa stdio và Unix socket chạy được với <code>McpServer</code> thật. Cả ba provider ở đúng bản ghim đều khởi động app Zed qua đường dẫn tuyệt đối, gọi <code>crew_ping</code> và nhận <code>crew_pong</code>. Antigravity 1.4.3 nhận MCP stdio.</p>
+    <p>Đã gửi đúng <strong>3 prompt ngắn</strong>, mỗi provider một prompt, không thử lại. Cả ba kết thúc bằng <code>end_turn</code>; máy chủ thật ghi nhận đúng 3 lần gọi tool. Các lượt kiểm tra initialize riêng không gửi prompt model.</p>
+    <h2>Kết quả theo provider</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Provider</th><th>Tên tool trong ACP</th><th>Kết quả</th><th>Xin quyền trong lượt thử</th></tr></thead>
+      <tbody>
+        <tr><td>Claude 0.95.0</td><td><code>mcp__crew__crew_ping</code></td><td>Tool hoàn tất; output và lời đáp cuối có <code>crew_pong</code></td><td>Có; chọn <code>allow-once</code>, kind <code>allow_once</code></td></tr>
+        <tr><td>Codex 2.2.2</td><td><code>mcp.crew.crew_ping</code></td><td>Tool hoàn tất; output và lời đáp cuối có <code>crew_pong</code></td><td>Không có yêu cầu ACP; Guardian Review tự chấp nhận lời gọi ít rủi ro đã được yêu cầu rõ ràng</td></tr>
+        <tr><td>Antigravity 1.4.3</td><td><code>crew_crew_ping</code></td><td>Tool hoàn tất; máy chủ xác nhận thực thi và lời đáp cuối có <code>crew_pong</code></td><td>Có; chọn <code>allow</code>, kind <code>allow_once</code></td></tr>
+      </tbody>
+    </table></div>
+    <p>Claude phát thêm sự kiện <code>ToolSearch</code> để tìm tool. Codex phát sự kiện kiểm tra nội bộ Guardian Review. Output hiển thị của Antigravity chỉ ghi <code>Crew ping call</code>, nên kết quả được đối chiếu thêm với máy chủ thật và lời đáp cuối.</p>
+    <h2>Các lựa chọn quyền đã thấy</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Provider</th><th>optionId</th><th>kind</th><th>Nhãn</th><th>Đã chọn</th></tr></thead>
+      <tbody>
+        <tr><td>Claude</td><td><code>allow-once</code></td><td><code>allow_once</code></td><td>Yes</td><td>Có</td></tr>
+        <tr><td>Claude</td><td><code>allow-with-updates</code></td><td><code>allow_always</code></td><td>Yes, and don't ask again for Crew Ping commands</td><td>Không</td></tr>
+        <tr><td>Claude</td><td><code>reject</code></td><td><code>reject_once</code></td><td>No</td><td>Không</td></tr>
+        <tr><td>Antigravity</td><td><code>allow_always</code></td><td><code>allow_always</code></td><td>Allow Always</td><td>Không</td></tr>
+        <tr><td>Antigravity</td><td><code>allow</code></td><td><code>allow_once</code></td><td>Allow</td><td>Có</td></tr>
+        <tr><td>Antigravity</td><td><code>deny</code></td><td><code>reject_once</code></td><td>Deny</td><td>Không</td></tr>
+      </tbody>
+    </table></div>
+    <p>Antigravity đưa <code>allow_always</code> lên đầu. Cần chọn theo kind; không chọn theo vị trí hoặc dùng chung optionId giữa provider. Lượt thử chỉ chọn <code>allow_once</code>, không lưu quyền lâu dài.</p>
+    <p>Codex không xin quyền ACP trong lượt thử này. Mã adapter 2.2.2 vẫn có các lựa chọn MCP <code>allow_once</code>, <code>allow_session</code>, <code>allow_always</code> và <code>cancel</code>; hai lựa chọn lưu quyền đều có kind <code>allow_always</code> và xuất hiện tùy metadata của yêu cầu. Đây là kết quả đọc mã, chưa phải quyền đã quan sát trực tiếp trong lượt thử.</p>
+    <h2>Bằng chứng kiểm chứng</h2>
+    <p>Build app Zed trên macOS arm64 đạt. Kiểm tra qua <code>McpServer::new</code>, socket thật và app thật đạt: initialize, thông báo initialized, danh sách tool, gọi tool, lỗi method không hỗ trợ, JSON bị chia nhỏ qua nhiều lần ghi và EOF của stdin. Cầu nối thoát mã 0. Kiểm tra cú pháp runner, định dạng Rust và diff cũng đạt.</p>
+    <p>Mã thử nằm riêng trên nhánh <code>spike/S7-mcp-bridge</code>, commit <code>ec6efc014d</code>, không merge vào sản phẩm. Báo cáo Markdown có lệnh tái hiện, kết quả build và giới hạn kiểm chứng; không kèm traffic ACP thô, môi trường đăng nhập hay thông tin tài khoản.</p>
+    <h2>Điều T2.1 cần giữ</h2>
+    <ul>
+      <li>Socket dùng JSON theo dòng, mỗi thông điệp kết thúc bằng newline. Cầu nối chỉ sao chép byte; stdout dành cho giao thức, lỗi đi qua stderr.</li>
+      <li>Chạy <code>--crew-mcp-bridge &lt;socket&gt;</code> bằng đường dẫn app từ <code>std::env::current_exe()</code>. CLI <code>zed</code> trên PATH không phải app này.</li>
+      <li>Chỉ tham khảo cách xử lý flag sớm của askpass. Hàm askpass hiện tại đợi stdin đóng và thêm byte NUL, không phù hợp cho MCP nhiều yêu cầu.</li>
+      <li>Host phải đăng ký handler <code>initialize</code>, quảng bá capability tools và giữ <code>McpServer</code> suốt vòng đời session. Listener chỉ có sẵn <code>tools/list</code> và <code>tools/call</code>; cần quyết định thêm các method chuẩn như <code>ping</code>.</li>
+      <li>Không suy luận thiếu hỗ trợ stdio từ việc <code>mcpCapabilities</code> không có boolean stdio. Cả ba provider đã nhận cấu hình stdio trong lượt thử thật.</li>
+    </ul>
+    <p>S7 không còn chặn T2.1 về transport. Phân quyền sản phẩm, hủy tác vụ, sự cố tiến trình, bảo vệ socket, thông điệp lớn và các method MCP khác vẫn thuộc phạm vi triển khai, kiểm thử tiếp theo.</p>
+  </main>
+</body>
+</html>

@@ -175,6 +175,7 @@
 | Bàn giao | Phiên bản INPUT mới; lan truyền `stale`; steering hoặc cancel rồi gửi lại |
 
 **Thiết kế**
+- **S6 verified (2026-10-25):** send `connection.send_request(UntypedMessage::new("_session/steering", payload)?).block_task().await`; the response is `serde_json::Value`. Keep the leading underscore. `ExtRequest` alone does not implement `JsonRpcRequest` in ACP 3.4.0. S6 validates transport routing with a fake agent; confirm each pinned adapter's exact payload and behavior during an active prompt in this task. See [S6](../spikes/S6.md).
 - Tin nhắn đổi yêu cầu tạo phiên bản INPUT mới (T2.6). Artifact và task dẫn xuất từ bản cũ thành `stale`.
 - Báo worker đang chạy:
   - Claude, Codex: gửi `_session/steering`, theo API ở báo cáo S6. Cả hai adapter đều khai method này **[Đã kiểm]**.
