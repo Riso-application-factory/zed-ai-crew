@@ -62,7 +62,7 @@ Kiểm liên kết bằng một script ngắn: liệt kê `](#…)` và `<a id="
 | Mục | Nội dung |
 | --- | -------- |
 | Mục tiêu | Xác nhận H1–H11 và các API “có sẵn” ở spec 3.2 còn đúng trên `main` hiện tại của fork, và ghi vị trí theo fork |
-| Căn cứ | NEED 59; spec 3.2, Phụ lục B.1 |
+| Căn cứ | NEED 59; spec 3.2, Phụ lục B.1; báo cáo `docs/crew/design-check.md` (bảng số dòng spec → fork và các khẳng định đã kiểm) |
 | Được sửa | `docs/crew/hook-points.md` (mới). Không sửa code |
 | Bàn giao | Bảng: ID, symbol, đường dẫn và dòng trên fork, dòng trên upstream `347f171`, trạng thái (`khớp`, `dời dòng`, `đổi API`) |
 
