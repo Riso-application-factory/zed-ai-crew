@@ -35,11 +35,12 @@
 | --- | -------- |
 | Mục tiêu | Lưu mọi fact của Crew vào SQLite theo spec mục 4 |
 | Căn cứ | NEED 02, 41, 43; spec 4.1–4.4 |
-| Được sửa | `crates/crew/src/store.rs` (và module con nếu cần); `crates/crew/Cargo.toml` (thêm `db`, `sqlez`) |
-| Bàn giao | Domain `CrewDb`, schema v1, API ghi event và projection |
+| Được sửa | `crates/crew/src/store.rs` (và module con nếu cần); `crates/crew/Cargo.toml` (thêm `db`, `sqlez`, `paths`) |
+| Bàn giao | Domain `CrewDb`, schema v1, API ghi event và projection, kiểm store bền |
 
 **Thiết kế**
-- `db::static_connection!(CrewDb, [])`, theo mẫu `ThreadMetadataDb` (`crates/agent_ui/src/thread_metadata_store.rs:1469`) **[Đã kiểm]**. Kết nối này dùng database chung của app Zed (`AppDatabase::global`) **[Đã kiểm]**, nên dữ liệu Crew nằm trong thư mục dữ liệu của Zed, không nằm trong repo nào (NEED 02).
+- File SQLite riêng của Crew, mở bằng `db::open_db::<CrewDb>` (`crates/db/src/db.rs:174`), theo mẫu `GlobalKeyValueStore` (`crates/db/src/kvp.rs:243-250`) **[Đã kiểm]**. Không dùng `db::static_connection!`: macro này trỏ vào database chung của app Zed (`AppDatabase::global`, `db.rs:266-268`) **[Đã kiểm]**, trái spec 4.1. File nằm trong thư mục dữ liệu của Zed (crate `paths`), không nằm trong repo nào (NEED 02).
+- **Store phải bền.** Khi có `ZED_STATELESS`, hoặc mở file thất bại, `open_db` âm thầm dùng database trong bộ nhớ (`db.rs:178-180, 197-202`) **[Đã kiểm]**. Lúc khởi động Crew kiểm store nằm trên file; không thì chặn mọi hành vi Crew và báo Human kèm lý do, vì dữ liệu sẽ mất khi tắt app.
 - `impl Domain for CrewDb` với `NAME = "crew"` và `MIGRATIONS`. Migration chỉ thêm mới: sqlez mặc định không cho sửa migration đã chạy (`should_allow_migration_change` trả `false`) **[Đã kiểm]**.
 - Schema v1 gồm mọi bảng ở spec 4.2.
 - Trigger SQLite chặn `UPDATE` và `DELETE` trên `crew_events`, và chặn sửa các cột kết quả của session đã `done` (NEED 41).
@@ -52,8 +53,10 @@
 - Cho session đã `done`, khi cố sửa `outcome`, thì bị từ chối (NEED 41).
 - Cho hai project, khi truy vấn theo `project_id` của project A, thì không thấy bản ghi của B (NEED 02).
 - Cho projection bị xóa, khi dựng lại từ `crew_events`, thì kết quả trùng với projection trước đó.
+- Cho store đã mở, khi tìm bảng `crew_events`, thì bảng nằm trong file riêng của Crew, không trong database chung của Zed.
+- Cho `ZED_STATELESS=1` hoặc thư mục database không ghi được, khi Crew khởi động, thì Crew bị chặn kèm lý do và không tạo session nào.
 
-**Kiểm chứng:** `cargo test -p crew store` (dùng `CrewDb::open_test_db`).
+**Kiểm chứng:** `cargo test -p crew store` (dùng `db::open_test_db::<CrewDb>`).
 
 ---
 
@@ -63,13 +66,15 @@
 | --- | -------- |
 | Mục tiêu | Đọc cấu hình user-scope và project-scope riêng biệt, gộp theo quy tắc chỉ thu hẹp |
 | Căn cứ | NEED 02, 27; spec 5.1–5.3; brief 5.6.2 |
-| Được sửa | `crates/settings_content/src/project.rs` (thêm một trường), `crates/settings_content/src/crew.rs` (mới, kiểu nội dung), `crates/crew/src/config.rs` |
-| Bàn giao | `CrewSettingsContent`, hàm gộp, snapshot cấu hình kèm hash |
+| Được sửa | `crates/settings_content/src/project.rs` (thêm một trường, thêm `crew` vào `flattened_deserialize!`), `crates/settings_content/src/crew.rs` (mới, kiểu nội dung), `crates/crew/src/config.rs` |
+| Bàn giao | `CrewSettingsContent`, hàm gộp, snapshot cấu hình kèm hash, phát hiện Restricted Mode |
 
 **Thiết kế**
 - Thêm `pub crew: Option<CrewSettingsContent>` vào `ProjectSettingsContent`.
   - `SettingsContent` flatten `ProjectSettingsContent` (`settings_content.rs:175-176`), nên khóa `crew` hợp lệ trong `settings.json` của user.
   - `.zed/settings.json` được parse thành `ProjectSettingsContent` (`crates/settings/src/settings_store.rs:1110`), nên khóa này cũng hợp lệ ở project **[Đã kiểm]**.
+  - Thêm `crew` vào danh sách trường của `flattened_deserialize!(ProjectSettingsContent { … })` (`crates/settings_content/src/project.rs:90-96`) **[Đã kiểm]**.
+- **Restricted Mode:** với worktree chưa được tin, Zed giữ lại `.zed/settings.json` thay vì áp dụng (`crates/project/src/project_settings.rs:1357-1384`, kiểm qua `TrustedWorktrees`) **[Đã kiểm]**, nên `local_settings()` rỗng. Crew phát hiện trường hợp này và chặn, kèm chỉ dẫn tin worktree theo luồng của Zed; không chạy với cấu hình thiếu phần project.
 - **Không dùng giá trị đã gộp của Zed** (`Settings::get`): Zed cho project ghi đè user, ngược với quy tắc chỉ thu hẹp. Crew đọc riêng hai nguồn:
   - user: `SettingsStore::raw_user_settings()` (`settings_store.rs:506`);
   - project: `SettingsStore::local_settings(root_id)` (`:1198`), chỉ cho worktree gốc của checkout chính **[Đã kiểm]**. Hàm này trả cả file `.zed/settings.json` nằm trong thư mục con, kèm đường dẫn tương đối **[Đã kiểm]**; Crew chỉ lấy file ở gốc worktree (đường dẫn rỗng).
@@ -84,6 +89,8 @@
 - Cho file project chứa `pinned_adapters` (khóa của user), khi gộp, thì khóa bị bỏ qua, kèm cảnh báo.
 - Cho workspace của worker có `.zed/settings.json` khác checkout chính, khi Crew đọc cấu hình, thì dùng checkout chính.
 - Cho cùng nội dung cấu hình, khi tính hash hai lần, thì cho cùng giá trị.
+- Cho `.zed/settings.json` có khóa `crew`, khi parse thành `ProjectSettingsContent`, thì nhận được giá trị của khóa.
+- Cho worktree chưa được tin có `.zed/settings.json` chứa khóa `crew`, khi Crew đọc cấu hình, thì bị chặn kèm chỉ dẫn, không gộp như project không có cấu hình.
 
 **Kiểm chứng:** `cargo test -p crew config` và `cargo test -p settings_content`.
 
@@ -104,11 +111,13 @@
   - Reconciler git (nhánh, commit) có ngay ở task này. Reconciler GitHub thêm ở T4.6.
   - Tìm thấy kết quả thì ghi `done`. Không tìm thấy thì ghi `unknown` và báo. Không bao giờ tự thực hiện lại.
 - Task đang `running` khi Zed tắt chuyển `interrupted`.
+- Store không bền (T1.1) thì Recovery dừng và báo, không đối soát gì.
 
 **Tiêu chí nghiệm thu**
 - Cho effect tạo commit bị ngắt giữa `intent` và kết quả, khi khởi động lại và commit có trong repo, thì effect thành `done`.
 - Cho trường hợp như trên nhưng commit không có, khi khởi động lại, thì effect thành `unknown`, có báo, và không có commit mới nào được tạo.
 - Cho task `running` lúc tắt, khi khởi động lại, thì task là `interrupted`.
+- Cho store đang chạy trong bộ nhớ, khi khởi động, thì Recovery dừng có báo và không effect nào đổi trạng thái.
 
 **Kiểm chứng:** `cargo test -p crew recovery` (repo git tạm, tiêm crash bằng cách drop giữa hai bước).
 
@@ -127,13 +136,15 @@
 - `SessionOptions` khai trong `agent_servers`, gần `AcpConnection`, vì core không phụ thuộc crate Crew.
 - Đặt `.system_prompt(...)` chỉ khi agent đã khai `sessionCapabilities.systemPrompt`. Option có `system_prompt` mà agent không khai capability thì trả lỗi, không bỏ qua im lặng.
 - Gắn `_meta` của caller vào request.
-- `McpServerSelection::Explicit` thay cho `mcp_servers_for_project` (`v1.rs:9651`) **[Đã kiểm]**.
+- `McpServerSelection::Explicit` thay cho `mcp_servers_for_project` (`v1.rs:9134`) **[Đã kiểm]**.
+- Bản `*_with_options` không áp mode và config option mặc định từ settings `agent_servers.<agent id>` (`AcpConnectionDefaults`, `v1.rs:94-168`). Bản hiện có áp chúng sau new, load, resume mà không phát event (`v1.rs:1310-1345`) **[Đã kiểm]**; session Crew chỉ nhận mode và config option do Crew đặt (T1.7, T2.2).
 - `new_session`, `load_session`, `resume_session` hiện có giữ nguyên hành vi. Trait `AgentConnection` không đổi.
 
-**Tiêu chí nghiệm thu** (dùng `FakeAcpAgentServer` từ module `test_support` của `agent_servers`, bật feature `test-support`, `v1.rs:1762-1776` **[Đã kiểm]**)
+**Tiêu chí nghiệm thu** (dùng `FakeAcpAgentServer` từ module `test_support` của `agent_servers`, bật feature `test-support`, `v1.rs:1708, 1767` **[Đã kiểm]**)
 - Cho agent có capability `systemPrompt`, khi gọi bản `*_with_options` cho new, load và resume, thì request agent nhận có `systemPrompt`, `_meta` và đúng danh sách MCP của caller.
 - Cho agent không có capability, khi option có `system_prompt`, thì gọi hàm trả lỗi và không gửi request.
 - Cho `new_session` cũ, khi gọi, thì request vẫn mang MCP của project như trước.
+- Cho settings có `agent_servers.<agent id>` với `default_mode`, khi gọi bản `*_with_options`, thì agent không nhận yêu cầu đổi mode nào; gọi `new_session` cũ thì vẫn áp như trước.
 
 **Kiểm chứng:** `cargo test -p agent_servers`
 
@@ -151,11 +162,13 @@
 **Thiết kế**
 - **Npx:** dùng spec chính xác `@agentclientprotocol/claude-agent-acp@0.95.0` và `@agentclientprotocol/codex-acp@2.2.2` (registry) **[Đã kiểm]**. Không đi qua `bounded_npm_package_spec`, vì hàm này đổi `pkg@X` thành `pkg@0.0.0 - X`, nên npm có thể dùng bản cũ hơn trong cache (`agent_server_store.rs:1456-1468`) **[Đã kiểm]**.
 - **Binary Antigravity 1.4.3:** URL và sha256 của bản ghim lưu trong `crew_acp` vì registry chỉ giữ bản mới nhất. Bản darwin-aarch64 là `https://dl.google.com/agy-extensions/releases/macos/agy-acp-server-1.4.3-darwin-arm64.zip`, sha256 `c57db0a9b8b712daa9c3c17cdb990a61842ea569f279e8bd79d7aa85a303b20b`, lệnh `./agy_acp_server.par` **[Đã kiểm, registry]**.
-- **Thư mục cài riêng** cho agent id của Crew. Hàm `remove_stale_versioned_archive_cache_dirs` (`:1055`, gọi ở `:1309`) xóa mọi bản khác bản đang chạy trong cùng thư mục **[Đã kiểm]**. Dùng chung thư mục với agent gốc thì hai bên sẽ xóa bản của nhau. Kiểm `dir` được tính từ đâu trước khi sửa.
-- Env như agent gốc của Zed, gồm các biến dùng chung và biến riêng theo agent ở `custom.rs`.
+- **Thư mục cài riêng** cho agent id của Crew. Hàm `remove_stale_versioned_archive_cache_dirs` (`:1055`, gọi ở `:1309`) xóa mọi bản khác bản đang chạy trong cùng thư mục **[Đã kiểm]**. Dùng chung thư mục với agent gốc thì hai bên sẽ xóa bản của nhau. Agent registry cài vào thư mục theo agent id (`:403-405`) **[Đã kiểm]**; entry của Crew cũng đặt thư mục theo agent id Crew.
+- **Đăng ký trong store.** Connection store chỉ giữ agent id custom có trong `external_agents` của store (`crates/agent_ui/src/agent_connection_store.rs:277`), và `reregister_agents` xóa sạch rồi dựng lại danh sách này từ settings và registry (`agent_server_store.rs:348`) **[Đã kiểm]**. Vì vậy agent id của Crew được thêm vào ngay trong mỗi lần dựng lại, để có mặt trước `AgentPanel::load` (`crates/zed/src/zed.rs:864`) và sau mỗi lần settings hay registry đổi.
+- Env dùng chung như agent gốc của Zed. Các nhánh env theo agent id gốc ở `custom.rs` không áp cho id Crew; T1.7 chép những nhánh cần thiết.
 
 **Tiêu chí nghiệm thu**
 - Cho agent id Crew của Claude, khi Zed dựng lệnh chạy, thì lệnh dùng `@agentclientprotocol/claude-agent-acp@0.95.0` đúng nguyên văn.
+- Cho settings `agent_servers` đổi làm store dựng lại danh sách, khi tra `external_agents`, thì ba agent id Crew vẫn có.
 - Cho bản Antigravity của Zed vừa cập nhật lên bản mới hơn, khi chạy agent gốc rồi chạy agent id của Crew, thì thư mục bản 1.4.3 vẫn còn và lệnh của Crew trỏ vào đó.
 - Cho file tải về có sha256 sai, khi cài, thì cài thất bại kèm lỗi.
 
@@ -175,9 +188,11 @@
 **Thiết kế**
 - Hàm thuần sinh `SessionOptions` cho từng loại session: worker, Orchestrator, thăm dò. Kèm mode, mode bị cấm, mức cách ly, cách xác nhận đăng nhập, nguồn hạn mức, tín hiệu compaction, ngưỡng context thực tế, hỗ trợ steering.
 - Payload đúng spec 6.2:
-  - Claude: `systemPrompt` mode `append` với `content` là mảng text block; `_meta.claudeCode.options` gồm `sandbox` và `settings` (luôn là object).
+  - Claude: `systemPrompt` mode `append` với `content` là mảng text block; `_meta.claudeCode.options` gồm `sandbox`, `settings` (luôn là object), `disallowedTools: ["AskUserQuestion"]` và `settingSources: ["project"]`. Hai option sau có ở mọi session Crew trên Claude (worker, Orchestrator, thăm dò).
   - Antigravity: `_meta.antigravity.systemPrompt.append` là chuỗi.
   - Codex: `_meta.jetbrains.air.customInstructions` là chuỗi.
+- **`AskUserQuestion`:** Zed khai form elicitation, nên adapter Claude giữ tool này (`acp-agent.js:8586`) và câu hỏi của agent đi đường elicitation, không qua gate (T2.2). Adapter gộp `disallowedTools` của client vào danh sách của nó (`:8730`) **[Đã kiểm]**.
+- **`settingSources`:** adapter mặc định đọc `["user", "project", "local"]` (`acp-agent.js:8668`), và option của client ghi đè được giá trị này (`:8688`) **[Đã kiểm]**. Chỉ dùng `project`: bỏ settings user của Human và `.claude/settings.local.json` còn sót trong worktree, vì hai nguồn này đổi được quyền của session; giữ `CLAUDE.md`, `.claude/settings.json` của repo và cách đăng nhập như cũ **[Suy luận]**, contract test bên dưới xác nhận.
 - Tự kiểm kiểu giá trị ROLE trước khi gửi, vì adapter Antigravity và Codex bỏ qua kiểu sai mà không báo lỗi **[Spike]** **[Đã kiểm]**.
 - Đường dẫn `$TMPDIR` thật của sandbox Claude lưu theo phiên bản adapter. Ban đầu là `/tmp/claude-501` **[Spike]**; T3.6 đo lại bằng contract test.
 
@@ -185,12 +200,15 @@
 - Cho một ROLE mẫu, khi sinh payload cho từng provider, thì JSON trùng snapshot trong test.
 - Cho mọi tổ hợp option, khi sinh payload Claude, thì `settings` luôn là object, không bao giờ là chuỗi (NEED 61, spec 6.2).
 - Cho ROLE rỗng hoặc sai kiểu, khi sinh payload, thì trả lỗi.
+- Cho mọi loại session Claude, khi sinh payload, thì `disallowedTools` có `AskUserQuestion` và `settingSources` đúng bằng `["project"]`.
 - **Contract:** cho ROLE yêu cầu marker, khi tạo session mới, load và resume trong process mới, thì marker có ở cả ba trường hợp với Claude và Antigravity. Với Codex chỉ kiểm session mới; phần resume là S11 (T2.10). Chi phí khoảng 8 prompt ngắn.
+- **Contract:** cho worker Claude với `settingSources: ["project"]` trên repo thử có `CLAUDE.md` chứa marker, khi hỏi marker, thì agent trả đúng, và session vẫn chạy bằng gói đã đăng nhập như trước. Cho session Claude, khi prompt yêu cầu agent hỏi người dùng trước khi làm, thì không có `elicitation/create` nào. Chi phí khoảng 2 prompt.
 
 **Kiểm chứng**
 ```sh
 cargo test -p crew_acp profile
 CREW_CONTRACT=1 cargo test -p crew_acp --test contract role_ -- --ignored --test-threads=1
+CREW_CONTRACT=1 cargo test -p crew_acp --test contract claude_options_ -- --ignored --test-threads=1
 ```
 
 ---
@@ -201,25 +219,36 @@ CREW_CONTRACT=1 cargo test -p crew_acp --test contract role_ -- --ignored --test
 | --- | -------- |
 | Mục tiêu | Mọi đường Zed mở hoặc load lại thread của agent id Crew đều đi qua `CrewConnection`, và mỗi lần load/resume gửi đủ option |
 | Căn cứ | NEED 55; spec 3.3, 6.2 (Load và resume), 14.1 (Bất biến) |
-| Được sửa | `crates/agent_servers` (module registry mới); `crates/agent_ui/src/agent_ui.rs` (`Agent::server()`, `:579-592`); `crates/crew_acp/src/connection.rs`; `crates/crew` (hiện thực trait bản ghi) |
+| Được sửa | `crates/agent_servers` (module registry mới); `crates/agent_ui/src/agent_ui.rs` (`Agent::server()`, `:578-591`); `crates/crew_acp/src/connection.rs`; `crates/crew` (hiện thực trait bản ghi) |
 | Bàn giao | Registry factory; `CrewAgentServer`; `CrewConnection`; bảng `crew_acp_sessions` được dùng |
 
 **Thiết kế**
 - Registry trong `agent_servers`: `register_agent_server_factory(agent_id, factory)` và hàm tra cứu.
-  - `Agent::server()` tra registry trước khi tạo `CustomAgentServer`. Đây là nơi duy nhất gọi `CustomAgentServer::new` (`agent_ui.rs:587`). Agent Panel, thread import và archive view đều đi qua hàm này (`agent_panel.rs:4665`, `thread_import.rs:704`, `threads_archive_view.rs:832`) **[Đã kiểm]**.
+  - `Agent::server()` tra registry trước khi tạo `CustomAgentServer`. Đây là nơi duy nhất gọi `CustomAgentServer::new` (`agent_ui.rs:586`). Agent Panel, thread import và archive view đều đi qua hàm này (`agent_panel.rs:4665`, `thread_import.rs:704`, `threads_archive_view.rs:832`) **[Đã kiểm]**.
+  - Factory đăng ký trong `crew_ui::init` (T0.5), trước khi `AgentPanel::load` khôi phục thread. Connection store giữ server đầu tiên được cache cho mỗi agent id (`agent_connection_store.rs:149-151`) **[Đã kiểm]**, nên đăng ký muộn thì factory không bao giờ được dùng.
   - Ẩn agent id của Crew khỏi bộ chọn agent và trang cấu hình agent.
-- `CrewConnection` giữ `Rc<AcpConnection>`, lấy qua `into_any()` (`connection.rs:309`) **[Đã kiểm]**, theo mẫu `FakeAcpAgentConnection` trong `v1.rs` **[Đã kiểm]**.
+- `CrewAgentServer` tạo `AcpConnection` bên trong bằng chính agent id Crew. `AcpThread` giữ connection này (`v1.rs:919-923`) và agent id lưu của thread lấy từ nó (`crates/agent_ui/src/thread_metadata_store.rs:1305`) **[Đã kiểm]**; tạo bằng id gốc thì mở lại thread sẽ đi tới agent gốc.
+  - Chép các nhánh env mà Zed chỉ áp cho id gốc: xóa `ANTHROPIC_API_KEY` như với `claude-acp` (`custom.rs:236-237`), chuyển tiếp key của Codex (`:239-245`) **[Đã kiểm]**. Thiếu nhánh Claude thì adapter có thể đăng nhập bằng API key trong env thay cho gói đã đăng nhập (NEED 25).
+  - Id Crew không nhận `agent_servers.<id>` từ settings: `observe_settings` áp mode và config mặc định theo id sau new, load, resume mà không phát event (`v1.rs:156-168, 1310-1345`) **[Đã kiểm]**. `CrewConnection` chỉ gọi bản `*_with_options` của H2, vốn không áp các mặc định này (T1.4). ModeGuard (T2.2) vẫn đọc lại trạng thái sau đó.
+- `CrewConnection` giữ `Rc<AcpConnection>`, lấy qua `into_any()` (`connection.rs:304`) **[Đã kiểm]**, theo mẫu `FakeAcpAgentConnection` trong `v1.rs` **[Đã kiểm]**.
   - `load_session`, `resume_session`: dựng `SessionOptions` từ `crew_acp_sessions.options_json`, gửi giống hệt từng byte trong cùng process. Adapter Claude so fingerprint và dựng lại session khi option khác (`acp-agent.js:489-510, 8379-8420`) **[Đã kiểm]**.
-  - Session id không có trong bản ghi: từ chối.
+  - Session id không có trong bản ghi: từ chối. Ngoại lệ là session con mà adapter báo trong `_meta.subagent_session_info` của một session Crew đã biết: Zed load session con trên cùng connection và bỏ qua lỗi load (`conversation_view.rs:1590-1620, 2438`) **[Đã kiểm]**, nên từ chối sẽ làm view của session con lỗi mà không báo. Crew ghi session con vào `crew_acp_sessions` (kind `child`) và cho load ở chế độ chỉ xem.
   - Sau khi Zed khởi động lại: thay đường dẫn socket MCP, giữ nguyên phần còn lại.
   - `new_session` từ UI (session Orchestrator) nối ở T2.3. Ở task này `CrewConnection` có API nội bộ `create_session(kind, options)`.
+  - Lời gọi theo thread (prompt, cancel, mode, config option, close) đi thẳng tới connection bên trong mà `AcpThread` giữ (`v1.rs:919-923`) **[Đã kiểm]**. `CrewConnection` chỉ thấy new, load, resume, authenticate, danh sách session và định tuyến elicitation, nên logic Crew không đặt ở các method theo thread.
+  - Trait `AgentConnection` có 26 method có hiện thực mặc định (`connection.rs:95-304`) **[Đã kiểm]**. Wrapper quên chuyển tiếp một method vẫn biên dịch, nên có test kiểm từng method.
 - `crew_acp` khai trait truy cập bản ghi session; `crew` hiện thực trait trên run store và đăng ký lúc khởi tạo (tổng quan mục 3).
 
 **Tiêu chí nghiệm thu**
 - Cho agent id đã đăng ký trong registry, khi gọi `Agent::server()`, thì nhận server của factory; với agent id khác thì nhận `CustomAgentServer` như cũ.
 - Cho session Crew đã tạo, khi load hai lần trong cùng process, thì hai request agent nhận giống hệt từng byte ở phần `systemPrompt`, `_meta` và `mcpServers`.
-- Cho session id không có trong `crew_acp_sessions`, khi load qua agent id Crew, thì bị từ chối.
-- Cho từng đường Zed tự load lại thread, khi chạy với agent id Crew, thì agent giả nhận request load có đủ ROLE, `_meta` và MCP. Các đường cần phủ: mở thread có session id (`conversation_view.rs:1407-1435`), kết nối lại (`:1245-1252`), thread rảnh bị giải phóng rồi mở lại (`agent_panel.rs:4300-4325`) **[Đã kiểm]**.
+- Cho session id không có trong `crew_acp_sessions` và không phải session con của session Crew, khi load qua agent id Crew, thì bị từ chối.
+- Cho session con mà adapter báo trong một session Crew, khi Zed load nó, thì load thành công, có bản ghi kind `child`, và view chỉ xem.
+- Cho thread Crew đã lưu, khi đọc metadata, thì agent id là id Crew.
+- Cho env có `ANTHROPIC_API_KEY`, khi `CrewAgentServer` dựng lệnh cho `crew-claude-acp`, thì biến này rỗng như với `claude-acp`.
+- Cho settings có `agent_servers.crew-claude-acp` với `default_mode`, khi tạo session Crew, thì mode không đổi theo settings.
+- Cho từng method có hiện thực mặc định của `AgentConnection`, khi gọi trên `CrewConnection`, thì kết quả trùng với gọi trên connection bên trong.
+- Cho từng đường Zed tự load lại thread, khi chạy với agent id Crew, thì agent giả nhận request load có đủ ROLE, `_meta` và MCP. Các đường cần phủ: khôi phục lúc khởi động (`AgentPanel::load`, `zed.rs:864`), mở thread có session id (`conversation_view.rs:1360-1371`), kết nối lại (`:1211-1268`), thread rảnh bị giải phóng rồi mở lại (`agent_panel.rs:4300-4325`), session con (`conversation_view.rs:2438`) **[Đã kiểm]**.
 
 **Kiểm chứng:** `cargo test -p crew_acp connection`, `cargo test -p agent_ui`
 
@@ -243,7 +272,7 @@ CREW_CONTRACT=1 cargo test -p crew_acp --test contract role_ -- --ignored --test
   - Nằm trong thư mục `crew/probe/` dưới thư mục dữ liệu của Zed (crate `paths`).
   - Bản ghi `kind = probe`. Luôn resume bản ghi cũ; chỉ tạo mới khi không resume được.
   - Có ROLE thăm dò: “chỉ trả lời `pong`, không dùng công cụ”.
-  - Mọi yêu cầu xin quyền bị từ chối. PolicyGate đầy đủ có ở T2.2; ở task này dùng bộ trả lời “từ chối tất cả” cho session thăm dò.
+  - Mọi yêu cầu xin quyền bị từ chối và mọi elicitation bị decline. PolicyGate đầy đủ có ở T2.2; ở task này dùng bộ trả lời “từ chối tất cả” cho session thăm dò.
 - Thời hạn chờ lấy từ cấu hình.
 - `not_logged_in` chỉ dẫn tới luồng đăng nhập của Zed, không tự đăng nhập (NEED 17, 56).
 
@@ -290,17 +319,19 @@ CREW_CONTRACT=1 cargo test -p crew_acp --test contract role_ -- --ignored --test
 | --- | -------- |
 | Mục tiêu | Crew nhận được `used`, `size` và `_meta` của từng usage update, và biết khi Zed bỏ qua một update |
 | Căn cứ | NEED 31, 43, 60; spec 3.2 (H4) |
-| Được sửa | Chỉ `crates/acp_thread/src/acp_thread.rs`: `update_usage` (`:5892`) và nhánh `_ => {}` của `handle_session_update` (`:4902`) |
-| Bàn giao | Event usage mang `used`, `size`, `_meta`; event `AcpThreadEvent::UpdateDropped { kind }` |
+| Được sửa | H4a: chỉ `update_usage` trong `crates/acp_thread/src/acp_thread.rs` (`:5366`). H4b: `crates/crew_acp/src/dropped_updates.rs`, đọc luồng debug của `AcpConnection`; chỉ khi luồng này không đủ mới thêm handler ở tầng SDK trong `crates/agent_servers/src/acp/v1.rs` |
+| Bàn giao | Event usage mang `used`, `size`, `_meta`; sự kiện `update_dropped { kind }` của Crew |
 
-Hiện `update_usage` chỉ giữ `cost.meta`, và update lạ bị bỏ mà không log **[Đã kiểm]**. Giữ diff nhỏ nhất có thể, vì `acp_thread.rs` đổi thường xuyên ở upstream.
+Hiện `update_usage` chỉ giữ `cost.meta` **[Đã kiểm]**. Giữ diff nhỏ nhất có thể, vì `acp_thread.rs` đổi thường xuyên ở upstream.
+
+H4b không đặt ở nhánh `_ => {}` của `handle_session_update` (`acp_thread.rs:4526`): update có loại lạ bị SDK từ chối ngay lúc parse (`agent-client-protocol-3.4.0 src/jsonrpc/handlers.rs:272-279`; enum `SessionUpdate` không có biến thể dự phòng) **[Đã kiểm]**, nên nhánh đó chỉ thấy loại đã biết. Crew đọc `AcpConnection::subscribe_debug_messages()` (`v1.rs:488-495`) và ghi update có loại lạ hoặc loại Zed không xử lý. Đây là công cụ gỡ lỗi, định dạng có thể đổi, nên test của task này chạy lại mỗi lần đồng bộ upstream (T1.14). Chỉ ghi loại update, không ghi payload.
 
 **Tiêu chí nghiệm thu**
 - Cho usage update có `_meta["_claude/rateLimit"]` ở cấp trên, khi thread xử lý, thì event phát ra mang nguyên `_meta`.
 - Cho chuỗi usage update, khi xử lý, thì mỗi update phát một event với `used` và `size` của chính nó.
-- Cho một loại update thread không xử lý, khi nhận, thì phát `UpdateDropped` và state của thread không đổi.
+- Cho agent giả gửi một session update có loại lạ, khi Crew nhận, thì có `update_dropped` kèm loại, không có payload, và state của thread không đổi.
 
-**Kiểm chứng:** `cargo test -p acp_thread`
+**Kiểm chứng:** `cargo test -p acp_thread`, `cargo test -p crew_acp dropped_updates`
 
 ---
 
@@ -361,7 +392,7 @@ Hiện `update_usage` chỉ giữ `cost.meta`, và update lạ bị bỏ mà kh�
 **Các bước**
 1. `custom.rs:243-244` đang chuyển tiếp `OPEN_AI_API_KEY` **[Đã kiểm]**, nhưng adapter chỉ đọc `CODEX_API_KEY` và `OPENAI_API_KEY` **[Baseline]**. Đổi thành `OPENAI_API_KEY`.
 2. Ô nhập API key cho phương thức `api-key` của Codex:
-   - Key lưu trong Keychain qua `CredentialsProvider`.
+   - Key luôn lưu trong Keychain, kể cả trên kênh phát hành `dev`. Không dùng `zed_credentials_provider::global(cx)`: trên kênh `dev` hàm này trả `DevelopmentCredentialsProvider`, lưu credential vào file JSON thường `development_credentials` trong thư mục config, trừ khi có `ZED_DEVELOPMENT_USE_KEYCHAIN` (`crates/zed_credentials_provider/src/zed_credentials_provider.rs:46-62, 116`), và `crates/zed/RELEASE_CHANNEL` của fork là `dev` **[Đã kiểm]**. Gọi API credentials của GPUI (`cx.write_credentials`), như `KeychainCredentialsProvider` làm (`:69`). Không ghi được vào Keychain thì từ chối lưu và báo Human.
    - Gửi trong `_meta["api-key"]` của request `authenticate`; adapter đọc key từ đây **[Baseline]**.
    - Hiện Zed gửi `authenticate` chỉ với method id, không có `_meta` **[Baseline]**; T0.2 ghi vị trí trên fork.
    - Key không bao giờ xuất hiện trong log.
@@ -370,6 +401,7 @@ Hiện `update_usage` chỉ giữ `cost.meta`, và update lạ bị bỏ mà kh�
 **Tiêu chí nghiệm thu**
 - Cho env có `OPENAI_API_KEY`, khi Zed dựng env cho `codex-acp`, thì env có `OPENAI_API_KEY`.
 - Cho key đã nhập, khi authenticate bằng `api-key`, thì agent giả nhận `_meta["api-key"]` có key; log không chứa key.
+- Cho kênh phát hành `dev` và không có `ZED_DEVELOPMENT_USE_KEYCHAIN`, khi lưu key, thì key nằm trong credential store của nền tảng (Keychain) và file `development_credentials` không chứa key.
 - Cho stderr của adapter có URL đăng nhập, khi đang authenticate, thì UI hiện URL đó.
 
 **Kiểm chứng:** `cargo test -p agent_servers -p agent_ui`; chạy app và chụp ô nhập key.
@@ -387,9 +419,9 @@ Hiện `update_usage` chỉ giữ `cost.meta`, và update lạ bị bỏ mà kh�
 
 **Quy trình**
 1. Lấy upstream về nhánh `sync/<ngày>`.
-2. Gộp và ghi lại xung đột ở H1–H11 và ở mục Crew cuối `.rules`.
-3. Chạy lại checklist của T0.2 và cập nhật `docs/crew/hook-points.md`.
-4. Chạy toàn bộ test của crate Crew và các crate có điểm nối, cộng test bất biến CrewConnection (T1.7).
+2. Gộp và ghi lại xung đột ở H1–H12 và ở mục Crew cuối `.rules`.
+3. Chạy lại checklist của T0.2 và cập nhật `docs/crew/hook-points.md`. Kiểm riêng upstream đã chuyển sang `AcpV2Connection` chưa: lớp này có trong `crates/agent_servers/src/acp/v2.rs:119` nhưng chưa được dùng, `acp::connect` vẫn trả bản v1 (`v1.rs:320-340`) **[Đã kiểm]**. Nếu đã chuyển thì H2, H3 và `Rc<AcpConnection>` trong `CrewConnection` hỏng; dừng và báo tech lead trước khi gộp.
+4. Chạy toàn bộ test của crate Crew và các crate có điểm nối, cộng test bất biến và test chuyển tiếp method của CrewConnection (T1.7) và test update bị bỏ (T1.10).
 5. Merge vào `main` theo quy trình chung. Đồng bộ làm đổi crate `agent-client-protocol` thì chạy cả contract test.
 
 **Tiêu chí nghiệm thu:** cho một lần chạy thử, khi xong, thì có báo cáo gồm số xung đột, điểm nối bị ảnh hưởng và kết quả test.

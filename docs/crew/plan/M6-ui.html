@@ -162,26 +162,35 @@
 </tr></thead><tbody>
 <tr>
 <td>Mục tiêu</td>
-<td>Human xem được hội thoại của worker nhưng không gõ vào được</td>
+<td>Human xem được hội thoại của worker nhưng không gõ vào được và không trả lời được yêu cầu xin quyền của worker</td>
 </tr>
 <tr>
 <td>Căn cứ</td>
-<td>NEED 50; spec 3.2 (H5b), 3.3 (Session worker)</td>
+<td>NEED 50; spec 3.2 (H5b), 3.3 (Session worker), 10.1</td>
 </tr>
 <tr>
 <td>Được sửa</td>
-<td><code>crates/agent_ui/src/conversation_view/thread_view.rs</code> (nhánh subagent không composer, <code>is_subagent</code> ở <code>:1529</code> <span class="tag tag-verified">[Đã kiểm]</span>); predicate “session worker của Crew” trong registry của <code>agent_servers</code></td>
+<td><code>crates/agent_ui/src/conversation_view/thread_view.rs</code> và <code>crates/agent_ui/src/conversation_view.rs</code> (H5b: cờ chỉ đọc cho thread hoặc view; không hiện option <code>allow_always</code> cho session Crew); predicate “session Crew” và “session worker của Crew” trong registry của <code>agent_servers</code></td>
 </tr>
 <tr>
 <td>Bàn giao</td>
-<td>View chỉ đọc cho thread worker</td>
+<td>View chỉ đọc cho thread worker, hiện từ workspace của Orchestrator</td>
 </tr>
 </tbody></table></div>
-<p><strong>Thiết kế:</strong> tái dùng nhánh render subagent không có composer. Thread worker mở lại sau khi Zed khởi động lại vẫn đi qua CrewConnection (T1.7), nhưng Crew không gửi prompt giao việc mới (spec 14.1 bước 3).</p>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li><strong>H5b là cờ chỉ đọc thật</strong>, không tái dùng nhánh subagent. <code>is_subagent</code> là <code>parent_session_id.is_some()</code> (<code>thread_view.rs:1268-1269</code>), chỉ được đặt trong <code>AcpThread::new</code> (<code>acp_thread.rs:3686</code>), <code>AcpConnection</code> truyền <code>None</code> và không có setter; giả một parent id thì sidebar không lưu thread (<code>conversation_view.rs:1850</code>) <span class="tag tag-verified">[Đã kiểm]</span>.</li>
+<li>View chỉ đọc không có composer. Worker có <code>Project</code> không cửa sổ (T3.4), nên thread worker hiện trong workspace của Orchestrator.</li>
+<li>Session Crew không bao giờ hiện option <code>allow_always</code> trong UI. Phím tắt “allow always” của view gốc trả lời yêu cầu đang chờ đầu tiên của mọi session trong conversation (<code>conversation_view.rs:463-486</code>, <code>thread_view.rs:3012-3017</code>) <span class="tag tag-verified">[Đã kiểm]</span>; với session Crew, phím tắt này không làm gì. Gate trả lời yêu cầu của worker trước khi view hiện chúng (T3.5).</li>
+<li>Thread worker mở lại sau khi Zed khởi động lại vẫn đi qua CrewConnection (T1.7), nhưng Crew không gửi prompt giao việc mới (spec 14.1 bước 3).</li>
+</ul>
 <p><strong>Tiêu chí nghiệm thu</strong></p>
 <ul>
 <li>Cho thread worker, khi mở, thì không có ô nhập và không gửi được tin nhắn.</li>
 <li>Cho thread thường của Human, khi mở, thì vẫn có ô nhập như cũ.</li>
+<li>Cho thread worker, khi Zed khởi động lại, thì thread vẫn có trong sidebar và vẫn chỉ đọc.</li>
+<li>Cho session Crew có yêu cầu xin quyền đang chờ, khi Human bấm phím tắt “allow always”, thì không option nào được chọn.</li>
+<li>Cho yêu cầu xin quyền của session Crew có option <code>allow_always</code>, khi view hiện yêu cầu, thì không có nút cho option đó.</li>
 </ul>
 <p><strong>Kiểm chứng:</strong> <code>cargo test -p agent_ui</code>; chạy app, chụp thread worker.</p>
 <hr>
@@ -338,13 +347,14 @@
 </tr>
 <tr>
 <td>Được sửa</td>
-<td><code>crates/onboarding</code> (trang crew-onboarding); <code>crates/crew_ui</code></td>
+<td><code>crates/onboarding</code> (H6); <code>crates/crew_ui</code></td>
 </tr>
 <tr>
 <td>Bàn giao</td>
 <td>Trang onboarding</td>
 </tr>
 </tbody></table></div>
+<p>Onboarding của Zed chỉ có một trang và không có registry trang (<code>crates/onboarding/src/onboarding.rs:299-301</code>) <span class="tag tag-verified">[Đã kiểm]</span>. H6 hoặc thêm một mục Crew vào trang đó, hoặc mở một item Crew riêng từ đó; cách đã chọn ghi vào <code>docs/crew/hook-points.md</code>.</p>
 <p><strong>Các bước trên trang</strong></p>
 <ol>
 <li>Trạng thái đăng nhập từng provider; chưa đăng nhập thì chỉ dẫn tới luồng của Zed.</li>

@@ -7,7 +7,7 @@
 | Cần có trước | M2, M3, M4 |
 | Spike | — |
 | Nguồn nội dung | Bản đồ seed ở brief 5.3.1. Nguyên tắc: lấy nội dung, không lấy cơ chế. Hook, slash command và tool riêng của Claude Code không chạy trên Codex hay Antigravity, nên Crew dựng lại các cổng kiểm thành sensor tất định của mình |
-| Bản nháp | `docs/crew/seed/` (2026-10-25): 16 ROLE và 10 playbook viết sẵn từ bản đồ seed, kèm danh sách khoảng trống của spec. T5.2, T5.3 và T5.5 lấy làm điểm xuất phát, chuyển vào `crates/crew/assets/` rồi kiểm chứng theo tiêu chí của từng task |
+| Bản nháp | [`docs/crew/seed/`](../seed/index.html) (2026-10-25): 16 ROLE và 10 playbook viết sẵn từ bản đồ seed, kèm danh sách khoảng trống của spec. T5.2, T5.3 và T5.5 lấy làm điểm xuất phát, chuyển vào `crates/crew/assets/` rồi kiểm chứng theo tiêu chí của từng task |
 
 ## Danh sách task
 
@@ -159,7 +159,7 @@
 **Tiêu chí nghiệm thu**
 - Cho story có tiêu chí không có task nào phủ, khi đối soát, thì có lệch và task implement vẫn `pending`.
 - Cho đối soát đạt, khi kiểm, thì task implement chuyển `ready`.
-- Cho worker đối soát, khi chạy, thì gate từ chối mọi yêu cầu sửa file của nó.
+- Cho worker đối soát, khi chạy, thì gate từ chối mọi yêu cầu sửa file của nó, và H12 từ chối mọi `fs/write_text_file` của nó (T3.5).
 
 **Kiểm chứng:** `cargo test -p crew pipeline`
 

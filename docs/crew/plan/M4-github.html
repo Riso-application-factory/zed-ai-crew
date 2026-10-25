@@ -178,13 +178,16 @@
 </tbody></table></div>
 <p><strong>Thiết kế</strong></p>
 <ul>
-<li>Human chọn file <code>.pem</code> bằng hộp chọn file. Crew đọc file và ghi thẳng vào Keychain qua <code>CredentialsProvider</code> (<code>crates/credentials_provider/src/credentials_provider.rs:14-58</code>) <span class="tag tag-verified">[Đã kiểm]</span>. Key không đi qua hội thoại, log hay run store (NEED 05, 17).</li>
+<li>Human chọn file <code>.pem</code> bằng hộp chọn file. Crew đọc file và ghi thẳng vào Keychain qua một <code>CredentialsProvider</code> (<code>crates/credentials_provider/src/credentials_provider.rs:11-34</code>) <span class="tag tag-verified">[Đã kiểm]</span>. Key không đi qua hội thoại, log hay run store (NEED 05, 17).</li>
+<li><strong>Luôn là Keychain, bất kể kênh phát hành.</strong> Không dùng <code>zed_credentials_provider::global(cx)</code>: trên kênh <code>dev</code> hàm này trả <code>DevelopmentCredentialsProvider</code>, lưu credential vào file JSON thường <code>development_credentials</code> trong thư mục config, trừ khi có <code>ZED_DEVELOPMENT_USE_KEYCHAIN</code> (<code>crates/zed_credentials_provider/src/zed_credentials_provider.rs:46-62, 116</code>), và <code>crates/zed/RELEASE_CHANNEL</code> của fork là <code>dev</code> <span class="tag tag-verified">[Đã kiểm]</span>. Provider của Crew gọi API credentials của GPUI (<code>cx.write_credentials</code>), như <code>KeychainCredentialsProvider</code> làm (<code>:69</code>). Không ghi được vào Keychain thì từ chối lưu và báo Human.</li>
 <li>Kiểm sẵn sàng:<ul><li>danh tính App;</li><li>App đã cài vào repo;</li><li>quyền đủ;</li><li>tạo thử được token;</li><li>loại chủ sở hữu repo (tổ chức hay cá nhân), dùng cho hierarchy ở T4.4;</li><li>ruleset có “dismiss stale approvals” và “require approval of most recent push”.</li></ul></li>
 <li>Lấy danh tính bot của App để T3.9 dùng làm author của commit.</li>
 </ul>
 <p><strong>Tiêu chí nghiệm thu</strong></p>
 <ul>
 <li>Cho file <code>.pem</code> hợp lệ, khi nhập, thì Keychain có key, còn run store và log không có.</li>
+<li>Cho kênh phát hành <code>dev</code> và không có <code>ZED_DEVELOPMENT_USE_KEYCHAIN</code>, khi nhập key, thì key nằm trong credential store của nền tảng (Keychain) và file <code>development_credentials</code> không chứa key.</li>
+<li>Cho Keychain trả lỗi khi ghi, khi nhập key, thì Crew từ chối lưu, báo Human, và key không nằm trong file nào.</li>
 <li>Cho App chưa cài vào repo, khi kiểm sẵn sàng, thì báo đúng bước thiếu, kèm hướng dẫn của Human.</li>
 <li>Cho ruleset thiếu “require approval of most recent push”, khi kiểm, thì báo thiếu và chưa coi là sẵn sàng.</li>
 <li>Cho repo của tổ chức hoặc cá nhân, khi kiểm, thì loại chủ sở hữu được ghi đúng.</li>
@@ -216,7 +219,7 @@
 </tbody></table></div>
 <p><strong>Thiết kế</strong></p>
 <ul>
-<li>Dùng crate <code>git</code> và askpass của Zed. Git truyền socket askpass qua <code>ZED_ASKPASS_SOCKET</code> (<code>crates/git/src/repository.rs:4091</code>) <span class="tag tag-verified">[Đã kiểm]</span>. Với lệnh push của Crew, delegate askpass trả <code>x-access-token</code> và token installation.</li>
+<li>Dùng crate <code>git</code> và askpass của Zed. Git truyền socket askpass qua <code>ZED_ASKPASS_SOCKET</code> (<code>crates/git/src/repository.rs:4082</code>) <span class="tag tag-verified">[Đã kiểm]</span>. Với lệnh push của Crew, delegate askpass trả <code>x-access-token</code> và token installation.</li>
 <li>Chạy git với <code>-c credential.helper=</code> để bỏ qua credential helper của user. Như vậy git không lấy credential của Human, và không lưu token vào Keychain <span class="tag tag-inferred">[Suy luận: kiểm bằng test]</span>.</li>
 <li>Push là một effect (T1.3): ghi <code>intent</code> trước khi push.</li>
 </ul>
