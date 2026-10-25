@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M4 · GitHub — Zed AI Crew</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-brand">
+      <a href="../index.html">Zed AI Crew</a>
+      <span class="brand-tag">Docs · Full Width</span>
+    </div>
+    <nav class="site-nav">
+      <a href="../index.html">Trang chủ</a>
+      <a href="../brief.html">Product Brief</a>
+      <a href="../tech-spec.html">Tech Spec</a>
+      <a href="../open-question.html">Open Questions</a>
+      <a href="../spike-list.html">Spike List</a>
+      <span class="nav-sep"></span>
+      <a href="../plan/00-overview.html">Kế hoạch</a>
+      <a href="../plan/M0-prep-and-spikes.html">M0</a>
+      <a href="../plan/M1-foundation.html">M1</a>
+      <a href="../plan/M2-orchestrator.html">M2</a>
+      <a href="../plan/M3-execution.html">M3</a>
+      <a href="../plan/M4-github.html" class="active">M4</a>
+      <a href="../plan/M5-playbook.html">M5</a>
+      <a href="../plan/M6-ui.html">M6</a>
+      <a href="../plan/M7-model-and-retro.html">M7</a>
+    </nav>
+  </header>
+  <main class="page-container">
+    <div class="doc-toolbar">
+      <span>Tài liệu: <code>docs/crew/plan/M4-github.md</code> · Giao diện HTML Full-Width</span>
+      <a class="raw-link" href="M4-github.md">Xem bản Markdown (M4-github.md)</a>
+    </div>
+<h1>M4 · GitHub</h1>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Crew kết nối GitHub bằng GitHub App riêng: token theo đúng một repo, Issues làm nguồn sự thật, Crew là bên ghi tự động duy nhất, PR từ nhánh tích hợp, duyệt gắn với version đã xem, merge theo <code>sha</code></td>
+</tr>
+<tr>
+<td>Spec</td>
+<td>Mục 18 bước 4; 12; 14.1 bước 2</td>
+</tr>
+<tr>
+<td>Cần có trước</td>
+<td>M3 (nhánh tích hợp ở T3.14, commit ở T3.9)</td>
+</tr>
+<tr>
+<td>Spike</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Việc của Human</td>
+<td>Tạo GitHub App trên github.com, cài vào repo thử, tải file <code>.pem</code> (T4.1). Crew không làm thay được</td>
+</tr>
+</tbody></table></div>
+<h2>Danh sách task</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Task</th>
+<th>Tên</th>
+<th>Phụ thuộc</th>
+<th>NEED</th>
+</tr></thead><tbody>
+<tr>
+<td>T4.1</td>
+<td>Hướng dẫn tạo App, client REST, JWT và token installation</td>
+<td>M3</td>
+<td>05, 17</td>
+</tr>
+<tr>
+<td>T4.2</td>
+<td>Nhập private key và kiểm tra sẵn sàng</td>
+<td>T4.1</td>
+<td>05, 39</td>
+</tr>
+<tr>
+<td>T4.3</td>
+<td>Push qua askpass bằng token installation</td>
+<td>T4.1</td>
+<td>05</td>
+</tr>
+<tr>
+<td>T4.4</td>
+<td>Issues làm nguồn sự thật</td>
+<td>T4.1</td>
+<td>39, 40, 41, 42</td>
+</tr>
+<tr>
+<td>T4.5</td>
+<td>PR, duyệt theo version, merge theo <code>sha</code></td>
+<td>T4.3, T3.14</td>
+<td>14, 35</td>
+</tr>
+<tr>
+<td>T4.6</td>
+<td>Đối soát effect GitHub</td>
+<td>T4.4, T4.5, T1.3</td>
+<td>44</td>
+</tr>
+<tr>
+<td>T4.7</td>
+<td>Artifact dạng file qua PR</td>
+<td>T4.5</td>
+<td>51</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h3>T4.1 · Hướng dẫn tạo App, client REST, JWT và token installation</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Human tạo được App theo hướng dẫn; Crew lấy được token installation tối thiểu cho đúng một repo</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 05, 17; spec 12 (JWT, Token installation)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_github/src/{client,auth}.rs</code>; <code>docs/crew/github-app.md</code> (mới)</td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Hướng dẫn cho Human; client REST; token installation có cache</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li><strong>Hướng dẫn</strong> theo mẫu bước của Human (T2.7): quyền tối thiểu (contents, issues, pull requests, checks; <code>workflows</code> chỉ khi cần), cách cài vào repo thử, cách tải <code>.pem</code>, và Crew sẽ kiểm gì sau đó (T4.2).</li>
+<li><strong>Client REST</strong> tự viết trên <code>http_client</code> của Zed, không dùng <code>octocrab</code>. <code>octocrab</code> dựa vào tokio <span class="tag tag-memory">[Nhớ]</span>; quyết định đã duyệt ở spec 12.</li>
+<li><strong>JWT RS256</strong> bằng <code>jsonwebtoken</code>. Workspace khai <code>jsonwebtoken = { version = "10.0", default-features = false }</code> và hiện chưa crate nào dùng <span class="tag tag-verified">[Đã kiểm]</span>. Bản 10 cần bật một backend crypto để ký RS256 <span class="tag tag-memory">[Nhớ]</span>; chọn feature trong <code>crew_github/Cargo.toml</code> và ghi lý do.</li>
+<li><strong>Token installation</strong> xin cho đúng một repo (<code>repositories: [&lt;tên&gt;]</code>) với quyền tối thiểu. Cache tới gần lúc hết hạn; token hết hạn sau khoảng 1 giờ <span class="tag tag-memory">[Nhớ]</span>. Không bao giờ log token hay header <code>Authorization</code>.</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong> (HTTP giả: <code>http_client::FakeHttpClient::create</code>, như <code>crates/context_server/src/oauth.rs:1960</code> <span class="tag tag-verified">[Đã kiểm]</span>)</p>
+<ul>
+<li>Cho App id và private key giả, khi tạo JWT, thì header là RS256 và payload có <code>iss</code>, <code>iat</code>, <code>exp</code> hợp lệ.</li>
+<li>Cho yêu cầu token, khi gửi, thì body chỉ xin đúng một repo và đúng các quyền đã khai.</li>
+<li>Cho token còn hạn, khi gọi lại, thì dùng cache, không xin token mới.</li>
+<li>Cho log của client, khi chạy test, thì không chứa token hay header <code>Authorization</code>.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_github</code></p>
+<hr>
+<h3>T4.2 · Nhập private key và kiểm tra sẵn sàng</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Private key đi thẳng vào Keychain; Crew kiểm App đã sẵn sàng trước khi dùng</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 05, 39; spec 12 (Private key của App, Kiểm tra onboarding); brief 4.3 (Onboarding)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_github/src/onboarding.rs</code>; action tối thiểu trong <code>crates/crew_ui</code>. Trang onboarding hoàn chỉnh ở T6.7</td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Nhập key; bộ kiểm sẵn sàng; danh tính bot của App cho commit (T3.9)</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>Human chọn file <code>.pem</code> bằng hộp chọn file. Crew đọc file và ghi thẳng vào Keychain qua <code>CredentialsProvider</code> (<code>crates/credentials_provider/src/credentials_provider.rs:14-58</code>) <span class="tag tag-verified">[Đã kiểm]</span>. Key không đi qua hội thoại, log hay run store (NEED 05, 17).</li>
+<li>Kiểm sẵn sàng:<ul><li>danh tính App;</li><li>App đã cài vào repo;</li><li>quyền đủ;</li><li>tạo thử được token;</li><li>loại chủ sở hữu repo (tổ chức hay cá nhân), dùng cho hierarchy ở T4.4;</li><li>ruleset có “dismiss stale approvals” và “require approval of most recent push”.</li></ul></li>
+<li>Lấy danh tính bot của App để T3.9 dùng làm author của commit.</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho file <code>.pem</code> hợp lệ, khi nhập, thì Keychain có key, còn run store và log không có.</li>
+<li>Cho App chưa cài vào repo, khi kiểm sẵn sàng, thì báo đúng bước thiếu, kèm hướng dẫn của Human.</li>
+<li>Cho ruleset thiếu “require approval of most recent push”, khi kiểm, thì báo thiếu và chưa coi là sẵn sàng.</li>
+<li>Cho repo của tổ chức hoặc cá nhân, khi kiểm, thì loại chủ sở hữu được ghi đúng.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_github onboarding</code> (Keychain giả); chạy app, chụp bước nhập key.</p>
+<hr>
+<h3>T4.3 · Push qua askpass bằng token installation</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Crew push bằng danh tính App, không bao giờ bằng credential của Human</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 05; spec 12 (Push)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_github/src/push.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Push nhánh tích hợp</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>Dùng crate <code>git</code> và askpass của Zed. Git truyền socket askpass qua <code>ZED_ASKPASS_SOCKET</code> (<code>crates/git/src/repository.rs:4091</code>) <span class="tag tag-verified">[Đã kiểm]</span>. Với lệnh push của Crew, delegate askpass trả <code>x-access-token</code> và token installation.</li>
+<li>Chạy git với <code>-c credential.helper=</code> để bỏ qua credential helper của user. Như vậy git không lấy credential của Human, và không lưu token vào Keychain <span class="tag tag-inferred">[Suy luận: kiểm bằng test]</span>.</li>
+<li>Push là một effect (T1.3): ghi <code>intent</code> trước khi push.</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong> (repo bare cục bộ, askpass giả)</p>
+<ul>
+<li>Cho push của Crew, khi git hỏi credential, thì nhận đúng token installation.</li>
+<li>Cho user có credential helper lưu sẵn credential khác, khi Crew push, thì git không dùng credential đó.</li>
+<li>Cho log và output của git, khi push xong, thì không chứa token.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_github push</code></p>
+<hr>
+<h3>T4.4 · Issues làm nguồn sự thật</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Spec và ticket nằm trong Issues; Crew là bên ghi tự động duy nhất; sửa tay của Human được phát hiện và tôn trọng</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 39, 40, 41, 42; spec 12 (Issues, Phát hiện lệch)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_github/src/issues.rs</code>, <code>crates/crew/src/artifacts.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Tạo, cập nhật issue và sub-issue; marker và hash; phát hiện lệch</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li><strong>Hierarchy theo loại chủ sở hữu (T4.2):</strong> repo của tổ chức dùng issue types cùng sub-issues; repo cá nhân dùng label cùng sub-issues.</li>
+<li><strong>Marker</strong> <code>&lt;!-- crew:artifact:&lt;id&gt; v&lt;n&gt; --&gt;</code> cùng hash nội dung trong mỗi issue Crew tạo.</li>
+<li><strong>Phát hiện lệch:</strong> poll bằng conditional request (ETag) <span class="tag tag-memory">[Nhớ]</span>. Hash khác bản Crew đã ghi nghĩa là Human đã sửa: báo, không ghi đè; artifact phụ thuộc thành <code>stale</code> (NEED 42).</li>
+<li><strong>Lịch sử:</strong> không sửa phá hủy; mỗi thay đổi là một phiên bản mới, giữ liên kết tới bản cũ (NEED 41).</li>
+<li>Mỗi lần ghi là một effect có khóa idempotency (T1.3).</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong> (GitHub giả)</p>
+<ul>
+<li>Cho repo cá nhân, khi tạo story có task con, thì dùng label và sub-issue; với repo của tổ chức thì dùng issue type và sub-issue.</li>
+<li>Cho issue Human đã sửa, khi Crew định cập nhật, thì Crew không ghi đè, có báo lệch, và artifact phụ thuộc thành <code>stale</code>.</li>
+<li>Cho ETag không đổi, khi poll, thì không tải lại nội dung.</li>
+<li>Cho hai lần ghi cùng khóa idempotency, khi thực hiện, thì chỉ có một issue.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_github issues</code></p>
+<hr>
+<h3>T4.5 · PR, duyệt theo version, merge theo <code>sha</code></h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Thay đổi implement đi qua PR từ nhánh tích hợp; chỉ merge đúng bản Human đã duyệt</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 14, 35; spec 12 (PR và merge)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_github/src/pulls.rs</code>; công cụ <code>crew_github_*</code> trong <code>crates/crew/src/tools/</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Tạo PR, đọc review, merge theo <code>sha</code>, xử lý PR bị đóng</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>PR từ nhánh tích hợp (T3.14), bằng danh tính App.</li>
+<li>Review <code>APPROVED</code> của Human chỉ có hiệu lực khi <code>commit_id</code> của review trùng head hiện tại.</li>
+<li>Merge gửi kèm <code>sha</code> = head đã được duyệt <span class="tag tag-memory">[Nhớ]</span>. Head đổi sau khi duyệt thì không merge và hỏi lại Human.</li>
+<li>PR bị đóng không merge thì báo, chờ Human.</li>
+<li>Sự kiện “PR merged” kèm <code>merge_commit_sha</code> được ghi lại cho DoneEvaluator (T5.4).</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong> (GitHub giả)</p>
+<ul>
+<li>Cho review <code>APPROVED</code> trên commit cũ và head đã đổi, khi Orchestrator gọi merge, thì bị từ chối kèm lý do.</li>
+<li>Cho review <code>APPROVED</code> trên head hiện tại, khi merge, thì request merge có <code>sha</code> đúng head đó.</li>
+<li>Cho PR bị đóng, khi poll, thì có báo và task chuyển <code>waiting_human</code>.</li>
+<li>Cho PR đã merged, khi poll, thì có sự kiện kèm <code>merge_commit_sha</code>.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_github pulls</code></p>
+<hr>
+<h3>T4.6 · Đối soát effect GitHub</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Sau khi Zed tắt giữa chừng, Crew biết thao tác GitHub nào đã xảy ra mà không làm lại</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 44; spec 14.1 bước 2</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_github/src/reconcile.rs</code>; đăng ký vào khung reconciler của T1.3</td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Reconciler cho issue, PR, push, merge</td>
+</tr>
+</tbody></table></div>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho effect tạo issue ở <code>intent</code> và trên GitHub đã có issue mang marker tương ứng, khi khởi động lại, thì effect thành <code>done</code> và không tạo issue mới.</li>
+<li>Cho effect merge ở <code>intent</code> và PR chưa merged, khi khởi động lại, thì effect thành <code>unknown</code> và có báo, không tự merge.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_github reconcile</code></p>
+<hr>
+<h3>T4.7 · Artifact dạng file qua PR</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>ADR, glossary và tài liệu quyết định là file trong repo, thay đổi qua PR</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 51; spec 12 (ADR, glossary, tài liệu quyết định)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew/src/artifacts.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Ghi artifact dạng file dưới <code>artifacts_path</code>; ADR cũ thành <code>superseded</code></td>
+</tr>
+</tbody></table></div>
+<p><code>artifacts_path</code> được chốt ở Kickoff (T5.8). Trước đó, test dùng giá trị giả.</p>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho một ADR mới thay ADR cũ, khi ghi, thì PR chứa ADR mới và ADR cũ chuyển <code>superseded</code>, có liên kết sang ADR mới.</li>
+<li>Cho <code>artifacts_path</code> chưa đặt, khi ghi artifact dạng file, thì bị từ chối kèm hướng dẫn chạy Kickoff.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew artifacts</code></p>
+<hr>
+<h2>Điều kiện xong M4</h2>
+<ul>
+<li><input type="checkbox" disabled> T4.1–T4.7 đạt theo Định nghĩa Xong chung.</li>
+<li><input type="checkbox" disabled> Trên repo thử thật (repo của Human, đã cài App): từ nhánh tích hợp ra PR. Human duyệt trên GitHub, rồi Crew merge theo <code>sha</code>. Lần thử thứ hai đẩy commit mới sau khi duyệt: Crew từ chối merge.</li>
+<li><input type="checkbox" disabled> Không có token hay private key trong log, run store hay body PR.</li>
+</ul>
+  </main>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M6 · Giao diện — Zed AI Crew</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-brand">
+      <a href="../index.html">Zed AI Crew</a>
+      <span class="brand-tag">Docs · Full Width</span>
+    </div>
+    <nav class="site-nav">
+      <a href="../index.html">Trang chủ</a>
+      <a href="../brief.html">Product Brief</a>
+      <a href="../tech-spec.html">Tech Spec</a>
+      <a href="../open-question.html">Open Questions</a>
+      <a href="../spike-list.html">Spike List</a>
+      <span class="nav-sep"></span>
+      <a href="../plan/00-overview.html">Kế hoạch</a>
+      <a href="../plan/M0-prep-and-spikes.html">M0</a>
+      <a href="../plan/M1-foundation.html">M1</a>
+      <a href="../plan/M2-orchestrator.html">M2</a>
+      <a href="../plan/M3-execution.html">M3</a>
+      <a href="../plan/M4-github.html">M4</a>
+      <a href="../plan/M5-playbook.html">M5</a>
+      <a href="../plan/M6-ui.html" class="active">M6</a>
+      <a href="../plan/M7-model-and-retro.html">M7</a>
+    </nav>
+  </header>
+  <main class="page-container">
+    <div class="doc-toolbar">
+      <span>Tài liệu: <code>docs/crew/plan/M6-ui.md</code> · Giao diện HTML Full-Width</span>
+      <a class="raw-link" href="M6-ui.md">Xem bản Markdown (M6-ui.md)</a>
+    </div>
+<h1>M6 · Giao diện</h1>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Human nhìn thấy cả team làm việc, biết ngay việc nào đang cần mình, tìm lại được session và OUTPUT, thiết lập Crew qua Settings và onboarding. Mọi bề mặt dùng component của Zed</td>
+</tr>
+<tr>
+<td>Spec</td>
+<td>Mục 18 bước 6; 15; 3.2 (H5b, H5c, H6, H7)</td>
+</tr>
+<tr>
+<td>Cần có trước</td>
+<td>M1, M5 (projection và artifact để hiển thị)</td>
+</tr>
+<tr>
+<td>Spike</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Quy tắc chung cho mọi task</td>
+<td>Chỉ dùng component của crate <code>ui</code> và màu theme. Trạng thái có chữ hoặc icon đi kèm màu. Mở được bằng bàn phím. Không có nút Approve hay Re-run (NEED 13). Phần trăm tiến độ chỉ hiện khi có cơ sở đo. Số liệu ghi rõ là đo được, ước tính hay không có (NEED 30). Mọi task chạy app thật và đính ảnh chụp (NEED 03)</td>
+</tr>
+</tbody></table></div>
+<h2>Danh sách task</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Task</th>
+<th>Tên</th>
+<th>Phụ thuộc</th>
+<th>NEED</th>
+</tr></thead><tbody>
+<tr>
+<td>T6.1</td>
+<td>Tổng quan session</td>
+<td>M5</td>
+<td>43, 49, 50</td>
+</tr>
+<tr>
+<td>T6.2</td>
+<td>Thread worker chỉ đọc (H5b)</td>
+<td>M3</td>
+<td>50</td>
+</tr>
+<tr>
+<td>T6.3</td>
+<td>Việc chờ Human: prototype rồi hiện thực</td>
+<td>T5.9</td>
+<td>12, 52</td>
+</tr>
+<tr>
+<td>T6.4</td>
+<td>Status bar</td>
+<td>M1</td>
+<td>50, 56, 60</td>
+</tr>
+<tr>
+<td>T6.5</td>
+<td>Sidebar và History (H5c)</td>
+<td>M2</td>
+<td>53</td>
+</tr>
+<tr>
+<td>T6.6</td>
+<td>Trang Settings (H7, phần UI)</td>
+<td>T1.2</td>
+<td>27</td>
+</tr>
+<tr>
+<td>T6.7</td>
+<td>Onboarding (H6)</td>
+<td>T4.2</td>
+<td>04, 05, 17</td>
+</tr>
+<tr>
+<td>T6.8</td>
+<td>Tài liệu quyết định; rà soát tuân thủ Zed UI</td>
+<td>T6.1–T6.7</td>
+<td>13, 51, 57</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h3>T6.1 · Tổng quan session</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Một màn hình cho biết session đang ở đâu, ai đang làm gì, bằng chứng nằm đâu</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 43, 49, 50; spec 15 (Tổng quan session)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_ui/src/overview.rs</code>; action “Crew: Open Session Overview”</td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Workspace item Tổng quan session</td>
+</tr>
+</tbody></table></div>
+<p><strong>Nội dung:</strong> loại session, trạng thái, phiên bản INPUT, tiêu chí OUTPUT và trạng thái từng tiêu chí, pipeline dạng cây có dependency. Với mỗi worker: ROLE, provider, model, work item age, mức cách ly, rủi ro còn lại (T3.5). Thêm compaction, effect, bằng chứng (spec 11.3).</p>
+<p>Mọi dữ liệu đọc từ projection của run store, không suy từ lời của agent (NEED 43).</p>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho session có 3 task ở 3 trạng thái khác nhau, khi mở Tổng quan, thì cây pipeline hiện đúng trạng thái và dependency.</li>
+<li>Cho worker Antigravity tài khoản cá nhân, khi xem dòng của nó, thì thấy mức cách ly “thấp” và rủi ro còn lại.</li>
+<li>Cho tiêu chí <code>passed</code>, khi mở, thì đi được tới bằng chứng của tiêu chí đó.</li>
+<li>Cho chỉ dùng bàn phím, khi điều hướng Tổng quan, thì mở được mọi mục.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_ui overview</code>; chạy app, chụp Tổng quan của một session thật trên repo thử.</p>
+<hr>
+<h3>T6.2 · Thread worker chỉ đọc (H5b)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Human xem được hội thoại của worker nhưng không gõ vào được</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 50; spec 3.2 (H5b), 3.3 (Session worker)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/agent_ui/src/conversation_view/thread_view.rs</code> (nhánh subagent không composer, <code>is_subagent</code> ở <code>:1529</code> <span class="tag tag-verified">[Đã kiểm]</span>); predicate “session worker của Crew” trong registry của <code>agent_servers</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>View chỉ đọc cho thread worker</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế:</strong> tái dùng nhánh render subagent không có composer. Thread worker mở lại sau khi Zed khởi động lại vẫn đi qua CrewConnection (T1.7), nhưng Crew không gửi prompt giao việc mới (spec 14.1 bước 3).</p>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho thread worker, khi mở, thì không có ô nhập và không gửi được tin nhắn.</li>
+<li>Cho thread thường của Human, khi mở, thì vẫn có ô nhập như cũ.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p agent_ui</code>; chạy app, chụp thread worker.</p>
+<hr>
+<h3>T6.3 · Việc chờ Human: prototype rồi hiện thực</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Human biết ngay việc nào đang cần mình, ở đâu, vì sao</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 12, 52; spec 15 (Việc chờ Human)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_ui/src/pending.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Prototype để Human chọn bề mặt; bản hiện thực theo lựa chọn</td>
+</tr>
+</tbody></table></div>
+<p><strong>Các bước</strong></p>
+<ol>
+<li>Làm prototype theo T5.9, nhánh <code>crew/prototype/pending-human</code>, với hai hoặc ba phương án bề mặt. Ví dụ: panel riêng, mục trong Tổng quan, badge trên status bar.</li>
+<li>Human chọn phương án trong hội thoại; quyết định được ghi qua T2.6.</li>
+<li>Hiện thực phương án đã chọn trên nhánh task, đọc từ projection “việc chờ Human” của run store.</li>
+</ol>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho prototype, khi xong, thì có artifact ghi câu hỏi thiết kế, các phương án, quyết định của Human.</li>
+<li>Cho câu hỏi đang mở từ <code>crew_ask_human</code>, khi xem bề mặt đã chọn, thì thấy câu hỏi kèm bối cảnh và đường tới thread Orchestrator.</li>
+<li>Cho bước chỉ Human làm được (T2.7), khi xem, thì thấy hướng dẫn thực hiện.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> chạy app, chụp từng phương án của prototype và bản hiện thực.</p>
+<hr>
+<h3>T6.4 · Status bar</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Liếc là biết Crew đang chạy gì và có gì bất thường</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 50, 56, 60; spec 15 (Status bar)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_ui/src/status_bar.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Status bar item</td>
+</tr>
+</tbody></table></div>
+<p><strong>Nội dung:</strong> số worker đang chạy, số việc chờ Human, trạng thái đăng nhập từng provider (T1.8), provider có hạn mức sắp chạm ngưỡng (T1.12), tuổi của lần cập nhật gần nhất.</p>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho Claude ở <code>not_logged_in</code>, khi xem status bar, thì thấy trạng thái bằng chữ hoặc icon, không chỉ bằng màu, và bấm vào thì tới chỉ dẫn đăng nhập.</li>
+<li>Cho hạn mức <code>unknown</code>, khi xem, thì hiện “không rõ”, không hiện 0 hay 100%.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_ui status_bar</code>; chạy app, chụp status bar.</p>
+<hr>
+<h3>T6.5 · Sidebar và History (H5c)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Tìm và quay lại đúng session hoặc OUTPUT</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 53; spec 3.2 (H5c), 15 (Tìm và lưu trữ)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/agent_ui</code> (nhóm thread Crew trong sidebar, qua registry của <code>agent_servers</code>); <code>crates/crew_ui</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Thread Crew có nhãn và được nhóm theo session trong Threads Sidebar và Thread History</td>
+</tr>
+</tbody></table></div>
+<p>Thread import đã lọc session Crew và session thăm dò từ T2.3.</p>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho một session Crew có Orchestrator và 2 worker, khi mở sidebar, thì ba thread nằm chung một nhóm có nhãn Crew.</li>
+<li>Cho thread Crew mở từ History, khi load, thì đi qua CrewConnection (test bất biến của T1.7 vẫn đạt).</li>
+<li>Cho session thăm dò, khi xem sidebar và History, thì không hiện.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p agent_ui -p crew_ui</code>; chạy app, chụp sidebar.</p>
+<hr>
+<h3>T6.6 · Trang Settings (H7, phần UI)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Human xem và sửa cấu hình Crew mà không cần viết JSON</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 27; spec 5</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/settings_ui</code> (trang Crew); <code>crates/crew_ui</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Trang Settings cho Crew</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>Tách rõ user-scope và project-scope.</li>
+<li>Với khóa project, hiện giá trị hiệu lực sau khi gộp và cảnh báo khi project cố nới rộng (T1.2).</li>
+<li>Hiện snapshot model kèm tuổi, cùng nguồn với readiness (NEED 56).</li>
+<li>Ngưỡng Q7 chưa đặt thì ghi rõ “chưa cấu hình”, không điền sẵn số.</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho project đặt allowlist rộng hơn trần, khi mở Settings, thì thấy giá trị hiệu lực là phần giao, kèm cảnh báo.</li>
+<li>Cho Human sửa một khóa user-scope trong Settings, khi lưu, thì <code>settings.json</code> của user có giá trị mới, và lần gộp kế tiếp dùng giá trị đó.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p settings_ui -p crew_ui</code>; chạy app, chụp trang Settings.</p>
+<hr>
+<h3>T6.7 · Onboarding (H6)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Thiết lập Crew cho một project từ đầu tới lúc sẵn sàng</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 04, 05, 17; brief 4.3 (Onboarding); spec 3.2 (H6)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/onboarding</code> (trang crew-onboarding); <code>crates/crew_ui</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Trang onboarding</td>
+</tr>
+</tbody></table></div>
+<p><strong>Các bước trên trang</strong></p>
+<ol>
+<li>Trạng thái đăng nhập từng provider; chưa đăng nhập thì chỉ dẫn tới luồng của Zed.</li>
+<li>Kết nối GitHub App: hướng dẫn (T4.1), nhập key (T4.2), kiểm sẵn sàng (T4.2).</li>
+<li>Mở session Kickoff đầu tiên (T5.8).</li>
+</ol>
+<p>Mỗi bước chỉ Human làm được có hướng dẫn thực hiện theo mẫu T2.7.</p>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho project chưa kết nối App, khi mở onboarding, thì bước 2 hiện “chưa sẵn sàng” kèm việc còn thiếu.</li>
+<li>Cho mọi bước đạt, khi xem, thì onboarding báo sẵn sàng theo NEED 05 và mở được Kickoff.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> chạy app, chụp từng bước.</p>
+<hr>
+<h3>T6.8 · Tài liệu quyết định; rà soát tuân thủ Zed UI</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Tài liệu quyết định đọc được ngay trong Zed; toàn bộ UI của Crew tuân thủ Zed UI</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 13, 51, 57; spec 15</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_ui</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Mở tài liệu quyết định bằng Markdown Preview; báo cáo rà soát UI</td>
+</tr>
+</tbody></table></div>
+<p><strong>Rà soát</strong>, theo checklist ở đầu file:</p>
+<ul>
+<li>component và màu;</li>
+<li>trạng thái có chữ hoặc icon;</li>
+<li>bàn phím;</li>
+<li>không có Approve hay Re-run;</li>
+<li>phần trăm có cơ sở đo;</li>
+<li>số liệu có nhãn đo được, ước tính hay không có.</li>
+</ul>
+<p>Agent kiểm chứng độc lập chạy app và đối chiếu từng bề mặt với checklist.</p>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho một tài liệu quyết định, khi mở từ Tổng quan, thì hiện bằng Markdown Preview.</li>
+<li>Cho mọi bề mặt của Crew, khi rà, thì không mục nào trong checklist bị vi phạm.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> chạy app; báo cáo rà soát kèm ảnh chụp từng bề mặt.</p>
+<hr>
+<h2>Điều kiện xong M6</h2>
+<ul>
+<li><input type="checkbox" disabled> T6.1–T6.8 đạt theo Định nghĩa Xong chung.</li>
+<li><input type="checkbox" disabled> Mọi bề mặt ở spec mục 15 chạy trong app thật, có ảnh chụp trong PR.</li>
+</ul>
+  </main>
+</body>
+</html>

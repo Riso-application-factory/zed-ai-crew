@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M5 · Playbook và pipeline — Zed AI Crew</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-brand">
+      <a href="../index.html">Zed AI Crew</a>
+      <span class="brand-tag">Docs · Full Width</span>
+    </div>
+    <nav class="site-nav">
+      <a href="../index.html">Trang chủ</a>
+      <a href="../brief.html">Product Brief</a>
+      <a href="../tech-spec.html">Tech Spec</a>
+      <a href="../open-question.html">Open Questions</a>
+      <a href="../spike-list.html">Spike List</a>
+      <span class="nav-sep"></span>
+      <a href="../plan/00-overview.html">Kế hoạch</a>
+      <a href="../plan/M0-prep-and-spikes.html">M0</a>
+      <a href="../plan/M1-foundation.html">M1</a>
+      <a href="../plan/M2-orchestrator.html">M2</a>
+      <a href="../plan/M3-execution.html">M3</a>
+      <a href="../plan/M4-github.html">M4</a>
+      <a href="../plan/M5-playbook.html" class="active">M5</a>
+      <a href="../plan/M6-ui.html">M6</a>
+      <a href="../plan/M7-model-and-retro.html">M7</a>
+    </nav>
+  </header>
+  <main class="page-container">
+    <div class="doc-toolbar">
+      <span>Tài liệu: <code>docs/crew/plan/M5-playbook.md</code> · Giao diện HTML Full-Width</span>
+      <a class="raw-link" href="M5-playbook.md">Xem bản Markdown (M5-playbook.md)</a>
+    </div>
+<h1>M5 · Playbook và pipeline</h1>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Mọi loại session trong brief 4.3 có workflow và điều kiện Done chạy được: danh mục ROLE theo scrum team, playbook theo loại session, DoneEvaluator, đối soát trước khi implement, đổi yêu cầu giữa chừng, ghim phiên bản khi nâng cấp, Kickoff, prototype, bản đồ quyết định và tham chiếu</td>
+</tr>
+<tr>
+<td>Spec</td>
+<td>Mục 18 bước 5; 5.4, 9.1, 9.7, 11.2, 11.3, 14.2</td>
+</tr>
+<tr>
+<td>Cần có trước</td>
+<td>M2, M3, M4</td>
+</tr>
+<tr>
+<td>Spike</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Nguồn nội dung</td>
+<td>Bản đồ seed ở brief 5.3.1. Nguyên tắc: lấy nội dung, không lấy cơ chế. Hook, slash command và tool riêng của Claude Code không chạy trên Codex hay Antigravity, nên Crew dựng lại các cổng kiểm thành sensor tất định của mình</td>
+</tr>
+</tbody></table></div>
+<h2>Danh sách task</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Task</th>
+<th>Tên</th>
+<th>Phụ thuộc</th>
+<th>NEED</th>
+</tr></thead><tbody>
+<tr>
+<td>T5.1</td>
+<td>Định dạng và bộ nạp ROLE, playbook</td>
+<td>M2</td>
+<td>27, 55</td>
+</tr>
+<tr>
+<td>T5.2</td>
+<td>Danh mục ROLE theo scrum team</td>
+<td>T5.1</td>
+<td>55</td>
+</tr>
+<tr>
+<td>T5.3</td>
+<td>Playbook và workflow theo loại session</td>
+<td>T5.1</td>
+<td>18, 27</td>
+</tr>
+<tr>
+<td>T5.4</td>
+<td>Loại session và DoneEvaluator</td>
+<td>T5.3, T4.5</td>
+<td>18, 43, 45</td>
+</tr>
+<tr>
+<td>T5.5</td>
+<td>Đối soát chỉ đọc trước khi implement</td>
+<td>T5.3, T3.11</td>
+<td>22</td>
+</tr>
+<tr>
+<td>T5.6</td>
+<td>Đổi yêu cầu giữa chừng (H3b)</td>
+<td>T5.3, S6</td>
+<td>36, 42</td>
+</tr>
+<tr>
+<td>T5.7</td>
+<td>Nâng cấp không làm mất việc đang chạy</td>
+<td>M1</td>
+<td>28</td>
+</tr>
+<tr>
+<td>T5.8</td>
+<td>Kickoff</td>
+<td>T5.3, T4.2, T3.10</td>
+<td>04, 19, 23, 27, 39</td>
+</tr>
+<tr>
+<td>T5.9</td>
+<td>Prototype</td>
+<td>T5.3</td>
+<td>12</td>
+</tr>
+<tr>
+<td>T5.10</td>
+<td>Bản đồ quyết định, bản đồ tham chiếu, kế hoạch, truy vết</td>
+<td>T5.3</td>
+<td>11, 20, 21, 49</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h3>T5.1 · Định dạng và bộ nạp ROLE, playbook</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>ROLE và playbook là file có phiên bản ở user-scope; mỗi lần dùng đều truy được nội dung</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 27, 55; spec 5.4</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew/src/roles.rs</code>, <code>crates/crew/src/playbooks.rs</code> (mở rộng bản tối thiểu của T2.4)</td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Bộ nạp có kiểm schema; bộ cài seed; lưu nội dung và hash theo session</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>Front matter ROLE theo spec 5.4: <code>id</code>, <code>version</code>, <code>task_kinds</code>, <code>allowed</code>, <code>tools_deny</code>, <code>handoff_schema</code>, <code>seed</code>.</li>
+<li><code>allowed</code> chỉ được thu hẹp tập được phép ở user-scope; rộng hơn thì bị cắt về phần giao, kèm cảnh báo.</li>
+<li>Seed đóng gói trong crate. Lần đầu bật Crew thì chép vào <code>crew/roles/</code> và <code>crew/playbooks/</code> của user. Lần sau chỉ thêm file mới, không ghi đè file Human đã sửa, và ghi phiên bản seed.</li>
+<li>Mỗi lần dùng, Crew lưu nội dung và hash vào run store (NEED 28, 49).</li>
+<li>Nạp ROLE không tự cấp quyền cho tool trong profile (NEED 55).</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho ROLE thiếu trường bắt buộc, khi nạp, thì lỗi chỉ ra trường thiếu.</li>
+<li>Cho ROLE có <code>allowed</code> rộng hơn user-scope, khi nạp, thì tập hiệu lực là phần giao, kèm cảnh báo.</li>
+<li>Cho Human đã sửa một ROLE seed, khi seed mới ra phiên bản khác, thì bản của Human giữ nguyên và Crew báo có bản seed mới.</li>
+<li>Cho một session đã dùng ROLE, khi đọc bản ghi spawn, thì có hash trùng nội dung đã dùng.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew -- roles playbooks</code></p>
+<hr>
+<h3>T5.2 · Danh mục ROLE theo scrum team</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Có đủ ROLE cho các vai trò SDLC của brief NEED 55, khởi tạo từ bản đồ seed</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 55; brief 5.3.1; rủi ro R8 của brief</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew/assets/roles/*.md</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Danh mục ROLE</td>
+</tr>
+</tbody></table></div>
+<p><strong>Danh mục và nguồn seed</strong> (brief 5.3.1)</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>ROLE</th>
+<th>Nguồn</th>
+</tr></thead><tbody>
+<tr>
+<td>Business Analyst</td>
+<td>Viết mới</td>
+</tr>
+<tr>
+<td>Product Manager, Backlog Analyst (PO)</td>
+<td>BMAD (PM, PO)</td>
+</tr>
+<tr>
+<td>UX Researcher/Designer, UI Designer</td>
+<td>BMAD (UX)</td>
+</tr>
+<tr>
+<td>Software Engineer</td>
+<td>BMAD (Dev); compound-engineering <code>implementation-worker</code> cho hợp đồng bàn giao</td>
+</tr>
+<tr>
+<td>Software/Solution Architect</td>
+<td>BMAD (Architect)</td>
+</tr>
+<tr>
+<td>Tech Lead</td>
+<td>GSD</td>
+</tr>
+<tr>
+<td>Project/Delivery Manager</td>
+<td>Viết mới</td>
+</tr>
+<tr>
+<td>Release Manager</td>
+<td>Viết mới</td>
+</tr>
+<tr>
+<td>Platform/DevOps Engineer</td>
+<td>Viết mới</td>
+</tr>
+<tr>
+<td>SRE</td>
+<td>wshobson <code>incident-response</code>, <code>postmortem-writing</code></td>
+</tr>
+<tr>
+<td>QA/Test Engineer</td>
+<td>GSD (QA); compound-engineering <code>testing-reviewer</code></td>
+</tr>
+<tr>
+<td>Security Engineer</td>
+<td>GSD (Security, <code>SECURITY.md</code>)</td>
+</tr>
+<tr>
+<td>Evaluator (độc lập)</td>
+<td>compound-engineering <code>ce-code-review</code>, <code>testing-reviewer</code></td>
+</tr>
+<tr>
+<td>Orchestrator</td>
+<td>Bản của T2.4, bổ sung theo playbook</td>
+</tr>
+</tbody></table></div>
+<p><strong>Quy tắc khi chuyển nội dung</strong></p>
+<ul>
+<li>Bỏ cơ chế trong danh sách “không dùng” của brief 5.3.1:<ul><li>tự tiến hóa, tự duyệt, tự nâng model;</li><li>push thẳng <code>main</code>, bỏ qua PR;</li><li>duyệt bằng file cờ;</li><li>worker ACP tự duyệt mọi quyền.</li></ul></li>
+<li>Mỗi ROLE ghi nguồn seed và phần đã bỏ trong front matter <code>seed</code>.</li>
+<li>Mỗi ROLE nêu chuẩn đầu ra và quy ước bàn giao theo <code>crew.handoff/1</code>.</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho danh mục, khi nạp, thì mọi ROLE hợp lệ theo T5.1.</li>
+<li>Agent kiểm chứng độc lập đối chiếu từng ROLE với nguồn seed và danh sách “không dùng”. Không ROLE nào chứa chỉ dẫn tự duyệt, tự merge hay bỏ qua PR.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew roles</code>; kiểm chứng độc lập theo checklist trên.</p>
+<hr>
+<h3>T5.3 · Playbook và workflow theo loại session</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Mỗi loại session có workflow; Orchestrator dựng pipeline từ playbook và điều chỉnh có phiên bản</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 18, 27; brief 4.3, 5.5; spec 9.1</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew/assets/playbooks/*.md</code>, <code>crates/crew/src/playbooks.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Playbook cho Hỏi nhanh, Kickoff, Brainstorm, Research, Refine, Implement, Release / migration, Incident, Review / retro, Retirement</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>Mỗi workflow gồm bước, ROLE cho từng bước, artifact đầu vào và đầu ra, sensor, điểm cần Human quyết.</li>
+<li>Workflow implement có bước đối soát chỉ đọc trước khi implement (T5.5).</li>
+<li>Release / migration, Retirement và Hỏi nhanh không có workflow nào trong 13 repo seed (brief 5.3.1), nên viết mới.</li>
+<li>Đo cỡ trước khi chạy (NEED 18): việc nhỏ đi đường nhanh với ít bước hơn, và vẫn có tiêu chí Done.</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho mỗi loại session, khi nạp playbook, thì có workflow hợp lệ, mọi ROLE tham chiếu đều có trong danh mục.</li>
+<li>Cho việc nhỏ kiểu Hỏi nhanh, khi Orchestrator dựng pipeline, thì pipeline chỉ có các bước của đường nhanh.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew playbooks</code></p>
+<hr>
+<h3>T5.4 · Loại session và DoneEvaluator</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Chỉ DoneEvaluator kết luận Done, theo điều kiện của từng loại session</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 18, 43, 45; spec 11.2; brief 4.3</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew/src/done.rs</code>; công cụ <code>crew_propose_done</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>DoneEvaluator với điều kiện của 11 dòng trong spec 11.2</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li><code>crew_propose_done</code> chỉ là đề nghị; DoneEvaluator kiểm từng điều kiện bằng dữ liệu trong run store, git và GitHub.</li>
+<li>Implement chỉ Done khi có sự kiện “PR merged” kèm <code>merge_commit_sha</code> (T4.5). PR mở hay CI xanh chưa đủ.</li>
+<li>Tiêu chí mặc định FAIL: tiêu chí <code>passed</code> phải có <code>evidence_ref</code> (NEED 43).</li>
+<li>Done thì khóa bản ghi kết quả (T1.1, NEED 41).</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong> (mỗi loại session một test)</p>
+<ul>
+<li>Cho session Implement có PR đã mở và CI xanh nhưng chưa merged, khi đề nghị Done, thì bị từ chối kèm điều kiện còn thiếu.</li>
+<li>Cho session Research thiếu mức chắc chắn cho một nhận định quan trọng, khi đề nghị Done, thì bị từ chối.</li>
+<li>Cho session Review / retro còn một đề xuất chưa có quyết định của Human, khi đề nghị Done, thì bị từ chối.</li>
+<li>Cho agent viết “đã xong” trong tin nhắn, khi không gọi <code>crew_propose_done</code>, thì trạng thái không đổi.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew done</code></p>
+<hr>
+<h3>T5.5 · Đối soát chỉ đọc trước khi implement</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Implement không phải bù cho đặc tả hay kế hoạch lệch nhau</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 22; spec 9.1; seed spec-kit <code>analyze.md</code>, GSD <code>gsd-plan-checker</code></td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew/assets/playbooks/implement.md</code>; ROLE đối soát; bước kiểm trong <code>crates/crew/src/pipeline.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Bước đối soát chặn task implement</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế:</strong> một worker chỉ đọc đối chiếu đặc tả ↔ kế hoạch ↔ nhiệm vụ và trả danh sách lệch có dẫn chứng. Còn lệch chưa xử lý thì task implement không chuyển <code>ready</code>.</p>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho story có tiêu chí không có task nào phủ, khi đối soát, thì có lệch và task implement vẫn <code>pending</code>.</li>
+<li>Cho đối soát đạt, khi kiểm, thì task implement chuyển <code>ready</code>.</li>
+<li>Cho worker đối soát, khi chạy, thì gate từ chối mọi yêu cầu sửa file của nó.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew pipeline</code></p>
+<hr>
+<h3>T5.6 · Đổi yêu cầu giữa chừng (H3b)</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Human đổi yêu cầu khi đang chạy; Crew biết phần nào hết hiệu lực và báo worker đúng cách theo provider</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 36, 42; spec 3.2 (H3b), 9.7; báo cáo S6</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/agent_servers/src/acp/v1.rs</code> (H3b, gọi <code>_session/steering</code>); <code>crates/crew/src/change_requests.rs</code>; công cụ <code>crew_steer_worker</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Phiên bản INPUT mới; lan truyền <code>stale</code>; steering hoặc cancel rồi gửi lại</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>Tin nhắn đổi yêu cầu tạo phiên bản INPUT mới (T2.6). Artifact và task dẫn xuất từ bản cũ thành <code>stale</code>.</li>
+<li>Báo worker đang chạy:<ul><li>Claude, Codex: gửi <code>_session/steering</code>, theo API ở báo cáo S6. Cả hai adapter đều khai method này <span class="tag tag-verified">[Đã kiểm]</span>.</li><li>Antigravity: không có steering; cancel lượt rồi gửi lại prompt có yêu cầu mới.</li></ul></li>
+<li>Orchestrator trình Human phần bị ảnh hưởng trước khi chạy tiếp.</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho task B dẫn xuất từ artifact A, khi INPUT của A đổi, thì B thành <code>stale</code>.</li>
+<li>Cho worker Claude đang chạy, khi Orchestrator gọi <code>crew_steer_worker</code>, thì agent giả nhận <code>_session/steering</code> với nội dung mới.</li>
+<li>Cho worker Antigravity đang chạy, khi steering, thì lượt bị cancel và có prompt mới.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew change_requests</code>, <code>cargo test -p agent_servers</code></p>
+<hr>
+<h3>T5.7 · Nâng cấp không làm mất việc đang chạy</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Nâng cấp Crew hoặc adapter không làm hỏng session đang chạy</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 28; spec 14.2</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew/src/session.rs</code>, <code>crates/crew/src/upgrade.rs</code>; <code>docs/crew/upgrade-adapters.md</code> (mới)</td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Ghim phiên bản theo session; quy trình đổi bản ghim adapter</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>Session ghim: phiên bản Crew, phiên bản schema, hash cấu hình, hash playbook và ROLE, phiên bản adapter.</li>
+<li>Migration schema chỉ thêm mới (T1.1). Session không tương thích với bản Crew mới thì dừng, kèm lý do, không chạy tiếp với cấu hình đoán.</li>
+<li>Đổi bản ghim adapter: 1. chạy toàn bộ contract test với bản mới; 2. đo lại ngưỡng context của Antigravity và <code>$TMPDIR</code> của sandbox Claude; 3. Human đồng ý; 4. bản mới chỉ áp cho session mới.</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho session đang chạy với adapter 0.95.0, khi bản ghim đổi sang bản mới, thì session đó vẫn dùng 0.95.0; session mới dùng bản mới.</li>
+<li>Cho session tạo bởi schema cũ không tương thích, khi mở bằng bản Crew mới, thì session dừng kèm lý do.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew upgrade</code></p>
+<hr>
+<h3>T5.8 · Kickoff</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Session Kickoff đầu tiên dựng nền Outer Harness cho target repo</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 04, 19, 23, 27, 39; brief 4.3 (Kickoff); spec 5.1, 5.2</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew/assets/playbooks/kickoff.md</code>; <code>crates/crew/src/kickoff.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Workflow Kickoff chạy được</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>Khảo sát repo: cách build, test, lint, chạy app; quy ước có sẵn (<code>AGENTS.md</code>, <code>CLAUDE.md</code>).</li>
+<li>Đề xuất khóa <code>crew</code> cho <code>.zed/settings.json</code>:<ul><li>bước verification và baseline;</li><li>quyền môi trường;</li><li>repo GitHub và loại chủ sở hữu;</li><li>allowlist mạng trong trần user-scope;</li><li><code>artifacts_path</code>.</li></ul></li>
+<li>Human xác nhận từng giả định trong hội thoại (T2.6).</li>
+<li>File thêm vào repo đi qua PR đã merged (T4.5).</li>
+<li>Done theo brief 4.3: baseline check chạy lại từ worktree sạch cho cùng kết quả (T3.10).</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho repo thử chưa có cấu hình Crew, khi chạy Kickoff, thì có PR thêm khóa <code>crew</code> vào <code>.zed/settings.json</code>, và mọi giả định đã có quyết định của Human.</li>
+<li>Cho PR Kickoff chưa merged, khi đề nghị Done, thì bị từ chối.</li>
+<li>Cho baseline cho hai kết quả khác nhau giữa hai lần chạy, khi đề nghị Done, thì bị từ chối kèm hai kết quả.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew kickoff</code>; chạy thử trên repo thử của Human.</p>
+<hr>
+<h3>T5.9 · Prototype</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Dùng prototype dễ chạy để chốt một câu hỏi thiết kế, không để nó thành code sản phẩm</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 12; spec 9.5 (Prototype)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew/src/prototype.rs</code>; luật gate trong <code>crates/crew/src/gate.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Workflow prototype; gate chặn PR từ nhánh prototype</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế:</strong> prototype nằm trên nhánh <code>crew/prototype/*</code>. Gate chặn mọi yêu cầu mở PR từ nhánh này. Crew ghi lại câu hỏi, kết luận, giới hạn và nguồn thử trước khi áp vào sản phẩm.</p>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho nhánh <code>crew/prototype/x</code>, khi có yêu cầu mở PR từ nhánh đó, thì bị từ chối.</li>
+<li>Cho prototype xong, khi đọc artifact, thì có câu hỏi, kết luận, giới hạn và nguồn thử.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew prototype</code></p>
+<hr>
+<h3>T5.10 · Bản đồ quyết định, bản đồ tham chiếu, kế hoạch, truy vết</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Việc lớn được làm rõ bằng bản đồ quyết định; tham chiếu gắn với capability thật; kết quả truy được tới yêu cầu và bằng chứng</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 11, 20, 21, 49; spec 11.3; seed mattpocock <code>grilling</code>, <code>wayfinder</code>; OpenSpec cho delta spec</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew/src/artifacts.rs</code>; công cụ <code>crew_write_artifact</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Schema cho các artifact; kiểm <code>derived_from</code>; truy vết bằng chứng</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li><strong>Bản đồ quyết định:</strong> câu hỏi, phương án, khuyến nghị, quyết định đã chốt (NEED 11).</li>
+<li><strong>Bản đồ tham chiếu ↔ capability:</strong> mỗi tham chiếu sản phẩm gắn với một capability thật của hệ thống (NEED 20).</li>
+<li><strong>Kế hoạch có đầu ra kiểm được:</strong> trên target repo, mỗi phần bàn giao là một lát dọc dùng được (NEED 21).</li>
+<li><strong>Truy vết (spec 11.3):</strong> mỗi bằng chứng gắn phiên bản INPUT, commit, cặp Model–Harness và phần chưa chứng minh được.</li>
+<li>Mọi artifact phải có <code>derived_from</code>; thiếu thì <code>crew_write_artifact</code> từ chối.</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho artifact không có <code>derived_from</code>, khi ghi, thì bị từ chối.</li>
+<li>Cho một bằng chứng, khi đọc, thì có phiên bản INPUT, commit, provider, model, effort, phiên bản adapter, hash ROLE và phần chưa chứng minh.</li>
+<li>Cho kế hoạch implement trên target repo, khi kiểm, thì mỗi phần bàn giao có đầu ra kiểm được và chạy được độc lập.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew artifacts</code></p>
+<hr>
+<h2>Điều kiện xong M5</h2>
+<ul>
+<li><input type="checkbox" disabled> T5.1–T5.10 đạt theo Định nghĩa Xong chung.</li>
+<li><input type="checkbox" disabled> Trên repo thử, chạy một session cho mỗi loại trong brief 4.3; mỗi session hoặc Done theo đúng điều kiện, hoặc bị từ chối Done với lý do đúng.</li>
+<li><input type="checkbox" disabled> Kickoff chạy được trên repo thử của Human.</li>
+</ul>
+  </main>
+</body>
+</html>

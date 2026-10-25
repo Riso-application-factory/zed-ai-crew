@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M7 · Chọn model, retro và bàn giao manual test — Zed AI Crew</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-brand">
+      <a href="../index.html">Zed AI Crew</a>
+      <span class="brand-tag">Docs · Full Width</span>
+    </div>
+    <nav class="site-nav">
+      <a href="../index.html">Trang chủ</a>
+      <a href="../brief.html">Product Brief</a>
+      <a href="../tech-spec.html">Tech Spec</a>
+      <a href="../open-question.html">Open Questions</a>
+      <a href="../spike-list.html">Spike List</a>
+      <span class="nav-sep"></span>
+      <a href="../plan/00-overview.html">Kế hoạch</a>
+      <a href="../plan/M0-prep-and-spikes.html">M0</a>
+      <a href="../plan/M1-foundation.html">M1</a>
+      <a href="../plan/M2-orchestrator.html">M2</a>
+      <a href="../plan/M3-execution.html">M3</a>
+      <a href="../plan/M4-github.html">M4</a>
+      <a href="../plan/M5-playbook.html">M5</a>
+      <a href="../plan/M6-ui.html">M6</a>
+      <a href="../plan/M7-model-and-retro.html" class="active">M7</a>
+    </nav>
+  </header>
+  <main class="page-container">
+    <div class="doc-toolbar">
+      <span>Tài liệu: <code>docs/crew/plan/M7-model-and-retro.md</code> · Giao diện HTML Full-Width</span>
+      <a class="raw-link" href="M7-model-and-retro.md">Xem bản Markdown (M7-model-and-retro.md)</a>
+    </div>
+<h1>M7 · Chọn model, retro và bàn giao manual test</h1>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Dịch vụ chấm điểm model theo loại nhiệm vụ thay cho xếp hạng mặc định; session retro biến kết quả đã kiểm chứng thành đề xuất cho Human; chuẩn bị bản build và danh sách việc cho manual test</td>
+</tr>
+<tr>
+<td>Spec</td>
+<td>Mục 18 bước 7; 13; 8 (xếp hạng); 11.2 (Review / retro)</td>
+</tr>
+<tr>
+<td>Cần có trước</td>
+<td>M1 (snapshot), M3 (kết quả worker), M5 (loại session)</td>
+</tr>
+<tr>
+<td>Spike</td>
+<td>S13 (T7.1)</td>
+</tr>
+<tr>
+<td>Làm sớm được</td>
+<td>T7.2–T7.4 chỉ cần snapshot model của M1, nên làm song song với M3–M6 được</td>
+</tr>
+</tbody></table></div>
+<h2>Danh sách task</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Task</th>
+<th>Tên</th>
+<th>Phụ thuộc</th>
+<th>NEED</th>
+</tr></thead><tbody>
+<tr>
+<td>T7.1</td>
+<td>Spike S13: nhóm hạn mức của Gemini 4 Argon</td>
+<td>T1.12</td>
+<td>60</td>
+</tr>
+<tr>
+<td>T7.2</td>
+<td>Nạp danh mục models.dev</td>
+<td>M1</td>
+<td>60</td>
+</tr>
+<tr>
+<td>T7.3</td>
+<td>Nạp Terminal-Bench 2.1 và Artificial Analysis</td>
+<td>T7.2</td>
+<td>60</td>
+</tr>
+<tr>
+<td>T7.4</td>
+<td>Chấm điểm theo loại nhiệm vụ</td>
+<td>T7.3</td>
+<td>60</td>
+</tr>
+<tr>
+<td>T7.5</td>
+<td>Eval của Crew theo cặp Model–Harness</td>
+<td>T7.4, M3</td>
+<td>54, 60</td>
+</tr>
+<tr>
+<td>T7.6</td>
+<td>Nối <code>rank()</code> vào quy trình chọn</td>
+<td>T7.4, T2.8</td>
+<td>26, 60</td>
+</tr>
+<tr>
+<td>T7.7</td>
+<td>Session retro</td>
+<td>T7.5, T5.4</td>
+<td>54</td>
+</tr>
+<tr>
+<td>T7.8</td>
+<td>Chuẩn bị manual test</td>
+<td>Mọi task trước</td>
+<td>03</td>
+</tr>
+</tbody></table></div>
+<hr>
+<h3>T7.1 · Spike S13: nhóm hạn mức của Gemini 4 Argon</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Câu hỏi</td>
+<td>Gemini 4 Argon tính vào nhóm hạn mức nào của Antigravity?</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>Spec 20.1 (S13), 6.7. <code>/usage</code> ghi nhóm “Gemini Models” gồm “Gemini Flash, Gemini Pro”, không nhắc Argon <span class="tag tag-spike">[Spike]</span></td>
+</tr>
+<tr>
+<td>Ảnh hưởng</td>
+<td>Khi chưa có kết quả, hạn mức của Argon là <code>unknown</code>. Với chính sách <code>skip</code>, Argon luôn bị bỏ qua</td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td><code>docs/crew/spikes/S13.md</code>; cập nhật bảng gắn model với nhóm trong ProviderProfile và contract test</td>
+</tr>
+</tbody></table></div>
+<p><strong>Cách đo</strong></p>
+<ol>
+<li>Đọc <code>/usage</code>.</li>
+<li>Chạy một loạt prompt đủ dài với <code>gemini-4-argon</code>, đủ để phần trăm còn lại của một nhóm giảm thấy rõ.</li>
+<li>Đọc lại <code>/usage</code> và so hai nhóm.</li>
+<li>Lặp lại một lần để loại trùng hợp với việc dùng ở nơi khác.</li>
+</ol>
+<p>Báo cáo ghi số prompt và lượng token đã dùng.</p>
+<p><strong>Tiêu chí xong:</strong> xác định được nhóm của Argon, hoặc kết luận không xác định được. Nếu xác định được, contract test khóa mapping theo phiên bản adapter, vì bản sau có thể đổi.</p>
+<hr>
+<h3>T7.2 · Nạp danh mục models.dev</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Có metadata của model: giá, context, effort, ngày phát hành</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 60; spec 13 (Metadata)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_models/src/catalog.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Bộ nạp <code>https://models.dev/api.json</code>, có cache và phiên bản</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>Nguồn: <code>https://models.dev/api.json</code> <span class="tag tag-verified">[Đã kiểm, README của repo models.dev]</span>.</li>
+<li>Chỉ tải dữ liệu công khai; không gửi dữ liệu project ra ngoài (NEED 02, 60).</li>
+<li>Giữ cả giá theo ngày và theo tier. Ví dụ: giá giới thiệu của Argon tăng gấp đôi từ 2026-12-01 <span class="tag tag-verified">[Đã kiểm, dữ liệu models.dev]</span>.</li>
+<li>Ghép với snapshot ACP theo model id. Model có trong snapshot mà không có trong models.dev thì ghi “chưa có metadata”.</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho fixture <code>api.json</code>, khi nạp, thì có giá, context, effort cho các model trong snapshot.</li>
+<li>Cho mạng lỗi, khi nạp, thì giữ bản cache cũ, gắn <code>stale</code>.</li>
+<li>Cho model có giá phụ thuộc ngày, khi tính giá ở một ngày, thì dùng đúng mức giá của ngày đó.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_models catalog</code></p>
+<hr>
+<h3>T7.3 · Nạp Terminal-Bench 2.1 và Artificial Analysis</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Có điểm benchmark công khai, ưu tiên benchmark đo cặp model và harness</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 60; spec 13 (Benchmark)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_models/src/benchmarks.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Bộ nạp cho từng nguồn; bảng <code>crew_scores</code></td>
+</tr>
+</tbody></table></div>
+<p><strong>Nguồn</strong></p>
+<ul>
+<li><strong>Terminal-Bench 2.1:</strong> repo <code>github.com/harbor-framework/terminal-bench-2-1</code>, file <code>leaderboard/submissions/*.json</code>, Apache-2.0 <span class="tag tag-verified">[Đã kiểm qua repo clone]</span>. Mỗi dòng có agent và phiên bản agent, model, effort, accuracy ± stderr, cost, thời gian.</li>
+<li><strong>models.dev <code>[[benchmarks]]</code>:</strong> có <code>harness</code>, <code>version</code>, <code>source</code>, <code>date</code>. Phần lớn do vendor tự báo, nên gắn <code>self_reported</code> <span class="tag tag-verified">[Đã kiểm]</span>.</li>
+<li><strong>Artificial Analysis</strong> (tùy chọn): API dùng header <code>x-api-key</code>; key nằm trong Keychain. Điều khoản bản miễn phí yêu cầu ghi nguồn <span class="tag tag-inferred">[Suy luận: mới thấy qua kết quả tìm kiếm, chưa đọc trang gốc]</span>, nên mọi chỗ hiện điểm từ nguồn này phải ghi nguồn.</li>
+</ul>
+<p><strong>Quy tắc lưu:</strong> không gộp điểm khác phiên bản benchmark hay khác harness. Lưu <code>harness_version</code> và <code>benchmark_version</code>. Ví dụ: models.dev gom Terminal-Bench 2.0, 2.1 và 4.0 chung một tên, nên phải tách theo <code>version</code> <span class="tag tag-verified">[Đã kiểm]</span>.</p>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho fixture submission của Terminal-Bench 2.1, khi nạp, thì mỗi dòng thành một điểm theo cặp (agent, model, effort) kèm stderr.</li>
+<li>Cho hai điểm cùng model nhưng khác phiên bản harness, khi lưu, thì là hai bản ghi riêng.</li>
+<li>Cho điểm vendor tự báo, khi lưu, thì có <code>self_reported = true</code>.</li>
+<li>Cho không có key Artificial Analysis, khi nạp, thì bỏ qua nguồn này và ghi lý do.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_models benchmarks</code></p>
+<hr>
+<h3>T7.4 · Chấm điểm theo loại nhiệm vụ</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Mỗi cặp (provider, model, effort) có điểm theo loại nhiệm vụ, kèm căn cứ</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 60; spec 13 (Cách chấm, Quy tắc)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_models/src/scoring.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Hàm <code>rank(task_kind, constraints)</code> trả danh sách xếp hạng kèm căn cứ</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>Loại nhiệm vụ lấy từ playbook: orchestrate, architecture, implement, review, debug, research, ui, test, docs.</li>
+<li>Điểm công khai chỉ là giá trị ban đầu; kết quả của chính Crew (T7.5) điều chỉnh dần.</li>
+<li>Benchmark đo cặp model + harness được ưu tiên hơn benchmark đo model đơn lẻ. Điểm vendor tự báo bị giảm trọng số.</li>
+<li>Thiếu dữ liệu thì ghi “chưa đánh giá”, không coi là 0 và không coi là tốt nhất.</li>
+<li>Xếp hạng gồm cả chi phí, tốc độ và mức cách ly của provider.</li>
+<li>Không có benchmark công khai cho harness Antigravity, nên điểm của ứng viên Antigravity chủ yếu đến từ T7.5.</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho một ứng viên không có điểm nào, khi xếp hạng, thì ứng viên có nhãn “chưa đánh giá” và vị trí theo quy tắc đã ghi, không theo điểm 0.</li>
+<li>Cho hai ứng viên cùng model nhưng khác harness, khi xếp hạng, thì là hai ứng viên riêng.</li>
+<li>Cho mỗi ứng viên trong kết quả, khi đọc, thì có căn cứ: nguồn, phiên bản, ngày, mức tin cậy.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_models scoring</code></p>
+<hr>
+<h3>T7.5 · Eval của Crew theo cặp Model–Harness</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Điểm phản ánh kết quả thật trên việc của Human</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 54, 60; spec 13 (Cách chấm)</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew_models/src/crew_eval.rs</code>; đọc dữ liệu từ run store của <code>crew</code> qua một trait, giữ đúng chiều phụ thuộc</td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Chỉ số theo cặp Model–Harness tính từ run store</td>
+</tr>
+</tbody></table></div>
+<p><strong>Chỉ số:</strong> tỷ lệ bàn giao được nhận ở lần đầu, số lần phải làm lại, chi phí, thời gian. Tách theo loại nhiệm vụ, provider, model, effort, phiên bản adapter.</p>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho các bản ghi spawn và handoff trong run store, khi tính, thì chỉ số khớp với tính tay trên fixture.</li>
+<li>Cho hai phiên bản adapter khác nhau, khi tính, thì chỉ số tách riêng.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_models crew_eval</code></p>
+<hr>
+<h3>T7.6 · Nối <code>rank()</code> vào quy trình chọn</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Quy trình chọn dùng xếp hạng của dịch vụ model thay cho danh sách mặc định</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 26, 60; spec 8</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew/src/selection.rs</code></td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td><code>select</code> gọi <code>rank</code>; <code>default_candidates</code> chỉ còn là dự phòng</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế:</strong> <code>rank</code> không có dữ liệu cho loại nhiệm vụ thì dùng <code>default_candidates</code> (T2.8). Điểm không tự đổi tập được phép và không đổi provider của worker đang chạy (NEED 60).</p>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho dịch vụ model có dữ liệu, khi chọn, thì bản ghi spawn có danh sách xếp hạng kèm căn cứ từ <code>rank</code>.</li>
+<li>Cho dịch vụ model chưa có dữ liệu cho loại nhiệm vụ, khi chọn, thì dùng <code>default_candidates</code> và ghi rõ nguồn xếp hạng.</li>
+<li>Các test của T2.8 vẫn đạt.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew selection</code></p>
+<hr>
+<h3>T7.7 · Session retro</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Cải tiến dựa trên kết quả đã kiểm chứng, và mọi thay đổi đều do Human quyết</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 54; brief 4.3 (Review / retro); seed mattpocock <code>retro</code></td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/crew/assets/playbooks/retro.md</code>; ROLE liên quan</td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Workflow retro</td>
+</tr>
+</tbody></table></div>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>Đề xuất cải tiến phải dẫn bằng chứng từ run store: sensor fail lặp lại, phải làm lại nhiều, lựa chọn model kém.</li>
+<li>Đề xuất có thể là một sensor tất định mới, một chỉnh sửa playbook, hoặc một thay đổi trong tập được phép.</li>
+<li>Không tự áp dụng: Human quyết từng đề xuất; đề xuất được chấp nhận mở thành session hoặc story mới (NEED 54). Không dùng cơ chế tự tiến hóa (brief 5.3.1, danh sách “không dùng”).</li>
+</ul>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho một đề xuất không có bằng chứng, khi Orchestrator ghi, thì bị từ chối.</li>
+<li>Cho retro còn đề xuất chưa có quyết định của Human, khi đề nghị Done, thì bị từ chối (T5.4).</li>
+<li>Cho đề xuất được chấp nhận, khi Done, thì đã có session hoặc story mới tương ứng.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew retro</code></p>
+<hr>
+<h3>T7.8 · Chuẩn bị manual test</h3>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>Mục</th>
+<th>Nội dung</th>
+</tr></thead><tbody>
+<tr>
+<td>Mục tiêu</td>
+<td>Human có bản build bật Crew và danh sách việc để bắt đầu manual test</td>
+</tr>
+<tr>
+<td>Căn cứ</td>
+<td>NEED 03; brief 9 (Bàn giao), Q7–Q9</td>
+</tr>
+<tr>
+<td>Được sửa</td>
+<td><code>crates/feature_flags/src/flags.rs</code> (<code>CrewFeatureFlag::enabled_for_all</code>); <code>docs/crew/manual-test.md</code> (mới)</td>
+</tr>
+<tr>
+<td>Bàn giao</td>
+<td>Bản release của fork bật Crew; checklist manual test</td>
+</tr>
+</tbody></table></div>
+<p><strong>Các bước</strong></p>
+<ol>
+<li>Chạy toàn bộ contract test ở bản ghim hiện tại và ghi kết quả.</li>
+<li>Human đặt các giá trị Q7, dựa trên số đo S10 và kết quả S13:<ul><li>ngưỡng “sắp hết hạn mức”;</li><li>tuổi tối đa của snapshot model;</li><li>trần song song, kể cả trần riêng cho Antigravity.</li></ul></li>
+<li>Human chọn target repo cho lần manual test đầu tiên (Q9). Repo này phải có rủi ro thấp (brief 9).</li>
+<li>Đổi <code>CrewFeatureFlag::enabled_for_all()</code> thành <code>true</code>. Bản release không nhận override từ settings (T0.5), nên đây là cách bật cho Human. Rollback là đổi lại thành <code>false</code>.</li>
+<li>Viết <code>docs/crew/manual-test.md</code>: thứ tự loại session nên thử, cách đọc Tổng quan, cách dừng session, cách gỡ Crew khỏi project (brief 9, Rollback).</li>
+<li>Q8 (ngưỡng chỉ số) được đặt sau khi có baseline từ các session thử.</li>
+</ol>
+<p><strong>Tiêu chí nghiệm thu</strong></p>
+<ul>
+<li>Cho bản release mới build, khi mở Command Palette, thì có các action Crew.</li>
+<li>Cho contract test, khi chạy toàn bộ, thì đạt, hoặc từng lỗi có lý do và đã được Human chấp nhận.</li>
+<li>Cho checklist, khi Human đọc, thì làm theo được mà không cần hỏi thêm.</li>
+</ul>
+<p><strong>Kiểm chứng:</strong> build bản release (<code>cargo build --release</code>), mở app và chụp Command Palette có action Crew; báo cáo contract test đính kèm PR.</p>
+<hr>
+<h2>Điều kiện xong M7</h2>
+<ul>
+<li><input type="checkbox" disabled> T7.1–T7.8 đạt theo Định nghĩa Xong chung.</li>
+<li><input type="checkbox" disabled> Quy trình chọn dùng <code>rank()</code> và bản ghi spawn ghi đủ căn cứ.</li>
+<li><input type="checkbox" disabled> Human đã đặt Q7, chọn Q9, và có bản build bật Crew.</li>
+</ul>
+  </main>
+</body>
+</html>
