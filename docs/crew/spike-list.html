@@ -43,11 +43,11 @@
 </tr></thead><tbody>
 <tr>
 <td>Phiên bản</td>
-<td>1.0 · 2026-10-25</td>
+<td>1.1 · 2026-10-25</td>
 </tr>
 <tr>
 <td>Nguồn</td>
-<td>Tổng hợp từ <a href="brief.html">Product Brief v3.5</a> (<a href="brief.html#ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them">Phụ lục C</a>), <a href="tech-spec.html">Tech Spec v2.2</a> (<a href="tech-spec.html#muc-20">mục 20.1</a>, <a href="tech-spec.html#phu-luc-b">Phụ lục B.3</a>) và <a href="plan/00-overview.html">Kế hoạch triển khai v1.1</a> (<a href="plan/M0-prep-and-spikes.html">M0</a>–<a href="plan/M7-model-and-retro.html">M7</a>).</td>
+<td>Tổng hợp từ <a href="brief.html">Product Brief v3.5</a> (<a href="brief.html#ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them">Phụ lục C</a>), <a href="tech-spec.html">Tech Spec v2.3</a> (<a href="tech-spec.html#muc-20">mục 20.1</a>, <a href="tech-spec.html#phu-luc-b">Phụ lục B.3</a>) và <a href="plan/00-overview.html">Kế hoạch triển khai v1.1</a> (<a href="plan/M0-prep-and-spikes.html">M0</a>–<a href="plan/M7-model-and-retro.html">M7</a>).</td>
 </tr>
 <tr>
 <td>Quy tắc Spike</td>
@@ -127,7 +127,7 @@
 </tr>
 <tr>
 <td><a href="#s6">S6</a></td>
-<td>API của crate ACP 3.4.0 cho ext notification <code>_auth/status_update</code> và ext method <code>_session/steering</code></td>
+<td>Ext notification <code>_auth/status_update</code> và ext method <code>_session/steering</code> chạy qua H3 (API của crate 3.4.0 đã xác định)</td>
 <td><strong>Còn mở</strong></td>
 <td>M0 · <a href="plan/M0-prep-and-spikes.html">T0.7</a></td>
 <td>Chặn Bước 0 → <a href="plan/M1-foundation.html">T1.8</a>, <a href="plan/M5-playbook.html">T5.6</a></td>
@@ -135,7 +135,7 @@
 </tr>
 <tr>
 <td><a href="#s7">S7</a></td>
-<td>Framing của <code>McpServer</code> trên socket và cầu nối MCP stdio với 3 provider</td>
+<td>Cầu nối MCP stdio với 3 provider (framing đã rõ; <code>McpServer</code> cần handler <code>initialize</code>)</td>
 <td><strong>Còn mở</strong></td>
 <td>M0 · <a href="plan/M0-prep-and-spikes.html">T0.8</a></td>
 <td>Chặn Bước 0 → <a href="plan/M2-orchestrator.html">T2.1</a></td>
@@ -159,7 +159,7 @@
 </tr>
 <tr>
 <td><a href="#s10">S10</a></td>
-<td>Chi phí bộ nhớ và CPU của N workspace nền cùng N process agent (N = 1, 2, 4)</td>
+<td>Chi phí bộ nhớ và CPU của N Project không cửa sổ cùng N process agent (N = 1, 2, 4)</td>
 <td><strong>Còn mở</strong></td>
 <td>M3 · <a href="plan/M3-execution.html">T3.3</a></td>
 <td>Chặn Bước 3 → <a href="plan/M3-execution.html">T3.13</a>, đầu vào cho <a href="open-question.html#q7">Q7</a></td>
@@ -356,7 +356,7 @@
 </tr></thead><tbody>
 <tr>
 <td><strong>Câu hỏi</strong></td>
-<td>Dùng API nào của crate <code>agent-client-protocol</code> 3.4.0 để (a) nhận ext notification <code>_auth/status_update</code> và (b) gọi ext method <code>_session/steering</code>?</td>
+<td>Qua H3, client có (a) nhận được ext notification <code>_auth/status_update</code> và (b) gọi được ext method <code>_session/steering</code> không? API của crate <code>agent-client-protocol</code> 3.4.0 đã xác định khi kiểm thiết kế: <code>Builder::on_receive_notification</code> (<code>src/jsonrpc.rs:1579</code>), <code>ConnectionTo::send_request</code> (<code>:4300</code>), <code>UntypedMessage</code> (<code>:5676-5685</code>). H3 phải sửa <code>v1.rs</code>, vì field <code>connection</code> của <code>AcpConnection</code> là private (<code>v1.rs:75</code>) <span class="tag tag-verified">[Đã kiểm]</span>.</td>
 </tr>
 <tr>
 <td><strong>Căn cứ</strong></td>
@@ -372,7 +372,7 @@
 </tr>
 <tr>
 <td><strong>Các bước</strong></td>
-<td>1. Đọc mã crate trong <code>~/.cargo/registry/src/*/agent-client-protocol-3.4.0/</code> và cách Zed dựng client ở <code>crates/agent_servers/src/acp/v1.rs</code> (<code>Client.builder()</code>, gần <code>:428-476</code>).<br>2. Trên nhánh spike, viết test với agent giả: agent gửi <code>_auth/status_update</code> ngay sau initialize; client gửi request <code>_session/steering</code> và nhận response.<br>3. Ghi lại tên API, kiểu payload, cách đăng ký handler bên cạnh các <code>on_receive_notification</code> hiện có và giới hạn nếu có.</td>
+<td>1. Đọc ba API trên trong mã crate (<code>~/.cargo/registry/src/*/agent-client-protocol-3.4.0/</code>) và cách Zed dựng client ở <code>crates/agent_servers/src/acp/v1.rs</code> (<code>client_builder</code>, <code>:368-442</code>).<br>2. Trên nhánh spike, viết test với agent giả: agent gửi <code>_auth/status_update</code> ngay sau initialize; client gửi request <code>_session/steering</code> và nhận response.<br>3. Ghi lại tên API, kiểu payload, cách đăng ký handler bên cạnh các <code>on_receive_notification</code> hiện có và giới hạn nếu có.</td>
 </tr>
 <tr>
 <td><strong>Tiêu chí xong</strong></td>
@@ -388,7 +388,7 @@
 </tr></thead><tbody>
 <tr>
 <td><strong>Câu hỏi</strong></td>
-<td>Framing của <code>McpServer</code> qua socket có chạy với một cầu nối stdio đơn giản không? Cả ba provider có khởi động MCP server stdio <code>&lt;zed&gt; --crew-mcp-bridge &lt;socket&gt;</code> và gọi được tool không?</td>
+<td>Cả ba provider có khởi động MCP server stdio <code>&lt;zed&gt; --crew-mcp-bridge &lt;socket&gt;</code> và gọi được tool không? Framing đã rõ: JSON-RPC, mỗi message một dòng (<code>crates/context_server/src/listener.rs:360-394</code>), nên cầu nối chỉ chép byte; <code>McpServer</code> chỉ trả lời <code>tools/call</code>, <code>tools/list</code> và handler đã đăng ký (<code>listener.rs:214-242</code>), nên phải đăng ký handler <code>initialize</code> <span class="tag tag-verified">[Đã kiểm]</span>.</td>
 </tr>
 <tr>
 <td><strong>Căn cứ</strong></td>
@@ -404,7 +404,7 @@
 </tr>
 <tr>
 <td><strong>Các bước</strong></td>
-<td>1. Trên nhánh spike, thêm tạm flag <code>--crew-mcp-bridge</code> vào <code>main.rs</code> theo mẫu <code>--askpass</code> (<code>crates/zed/src/main.rs:215-219</code>): sao chép hai chiều stdin ↔ socket.<br>2. Tạo <code>McpServer::new</code> với một tool <code>crew_ping</code> (socket <code>mcp.sock</code> trong thư mục tạm <code>zed-mcp*</code>).<br>3. Với từng provider ở bản ghim, tạo session với <code>mcpServers: [{ name: "crew", command: std::env::current_exe(), args: ["--crew-mcp-bridge", &lt;socket&gt;] }]</code>, rồi gửi prompt yêu cầu gọi <code>crew_ping</code>.<br>4. Ghi lại cho từng provider: có gọi được tool không; có yêu cầu xin quyền cho tool MCP không và option là gì; Antigravity có nhận MCP stdio không.</td>
+<td>1. Trên nhánh spike, thêm tạm flag <code>--crew-mcp-bridge</code> vào <code>main.rs</code> theo mẫu <code>--askpass</code> (<code>crates/zed/src/main.rs:213-220</code>): sao chép hai chiều stdin ↔ socket.<br>2. Tạo <code>McpServer::new</code> với một tool <code>crew_ping</code> và handler <code>initialize</code> đăng ký bằng <code>handle_request</code> (socket <code>mcp.sock</code> trong thư mục tạm <code>zed-mcp*</code>, đặt quyền thư mục về 0700).<br>3. Với từng provider ở bản ghim, tạo session với <code>mcpServers: [{ name: "crew", command: std::env::current_exe(), args: ["--crew-mcp-bridge", &lt;socket&gt;] }]</code>, rồi gửi prompt yêu cầu gọi <code>crew_ping</code>.<br>4. Ghi lại cho từng provider: có gọi được tool không; có yêu cầu xin quyền cho tool MCP không và option là gì; Antigravity có nhận MCP stdio không.</td>
 </tr>
 <tr>
 <td><strong>Tiêu chí xong</strong></td>
@@ -436,7 +436,7 @@
 </tr>
 <tr>
 <td><strong>Các bước</strong></td>
-<td>1. Dùng harness T0.9 với repo thử có một git worktree tạo như <code>create_worktree_workspace</code> (gitdir nằm ngoài worktree).<br>2. Với mỗi provider ở mode worker (Claude <code>default</code> có sandbox, Codex <code>workspace-write</code>, Antigravity <code>default</code>), yêu cầu agent: sửa file trong/ngoài worktree; chạy lệnh trong worktree; chạy <code>git commit</code> và <code>git push</code>; truy cập mạng; đọc một <strong>file bí mật giả</strong> trong thư mục tạm ngoài worktree; ghi vào <code>$TMPDIR</code> và <code>/tmp</code>.<br>3. Ghi lại có yêu cầu xin quyền không, các <code>kind</code> của option và kết quả thực tế (chỉ in <code>OK</code>/<code>DENIED</code>).<br>4. Lặp lại bước 2 với Codex ở mode <code>agent</code> để đối chiếu auto review.</td>
+<td>1. Dùng harness T0.9 với repo thử có một git worktree tạo bằng <code>git worktree add</code> trên nhánh riêng, như <code>GitStore::create_worktree</code> (gitdir nằm ngoài worktree).<br>2. Với mỗi provider ở mode worker (Claude <code>default</code> có sandbox, Codex <code>workspace-write</code>, Antigravity <code>default</code>), yêu cầu agent: sửa file trong/ngoài worktree; chạy lệnh trong worktree; chạy <code>git commit</code> và <code>git push</code>; truy cập mạng; đọc một <strong>file bí mật giả</strong> trong thư mục tạm ngoài worktree; ghi vào <code>$TMPDIR</code> và <code>/tmp</code>.<br>3. Ghi lại có yêu cầu xin quyền không, các <code>kind</code> của option và kết quả thực tế (chỉ in <code>OK</code>/<code>DENIED</code>).<br>4. Lặp lại bước 2 với Codex ở mode <code>agent</code> để đối chiếu auto review.</td>
 </tr>
 <tr>
 <td><strong>Tiêu chí xong</strong></td>
@@ -472,7 +472,7 @@
 </tr>
 </tbody></table></div>
 <a id="s10"></a>
-<h3>S10 · Tài nguyên bộ nhớ và CPU của N workspace nền (<a href="plan/M3-execution.html">T3.3</a>)</h3>
+<h3>S10 · Tài nguyên bộ nhớ và CPU của N Project không cửa sổ (<a href="plan/M3-execution.html">T3.3</a>)</h3>
 <div class="table-wrap"><table>
 <thead><tr>
 <th>Mục</th>
@@ -480,7 +480,7 @@
 </tr></thead><tbody>
 <tr>
 <td><strong>Câu hỏi</strong></td>
-<td>Bộ nhớ và CPU của N workspace nền cùng N process agent là bao nhiêu với N = 1, 2, 4?</td>
+<td>Bộ nhớ và CPU của N Project không cửa sổ cùng N process agent là bao nhiêu với N = 1, 2, 4?</td>
 </tr>
 <tr>
 <td><strong>Căn cứ</strong></td>
@@ -496,7 +496,7 @@
 </tr>
 <tr>
 <td><strong>Cách đo</strong></td>
-<td>Mở N worker giả lập bằng N worktree workspace chạy nền, mỗi workspace một session ACP đang làm một việc ngắn có thật (ví dụ đọc và tóm tắt một file). Đo bộ nhớ và CPU của process Zed cùng các process adapter bằng công cụ của macOS, ở trạng thái rảnh và khi đang chạy.</td>
+<td>Mở N worker giả lập bằng N worktree, mỗi worktree một <code>Project::local</code> không cửa sổ và một session ACP đang làm một việc ngắn có thật (ví dụ đọc và tóm tắt một file). Đo bộ nhớ và CPU của process Zed cùng các process adapter bằng công cụ của macOS, ở trạng thái rảnh và khi đang chạy.</td>
 </tr>
 <tr>
 <td><strong>Tiêu chí xong</strong></td>

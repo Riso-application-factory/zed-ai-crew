@@ -38,7 +38,8 @@
     </div>
 
     <h1>Kiểm thiết kế Crew với code Zed thật</h1>
-    <p>Câu hỏi: những điều tech spec v2.2 khẳng định về code Zed có đúng trên bản fork này không? Bốn agent đọc song song bốn mảng code: vòng đời thread, lớp ACP client, hạ tầng, và cách adapter Claude/Codex chạy bên trong Zed. Sau đó các kết luận quan trọng được đọc lại trực tiếp trong code. Không build, không chạy, không sửa dòng code nào. Spec, kế hoạch và danh sách câu hỏi mở giữ nguyên cho tới khi bạn duyệt.</p>
+    <p>Câu hỏi: những điều tech spec v2.2 khẳng định về code Zed có đúng trên bản fork này không? Bốn agent đọc song song bốn mảng code: vòng đời thread, lớp ACP client, hạ tầng, và cách adapter Claude/Codex chạy bên trong Zed. Sau đó các kết luận quan trọng được đọc lại trực tiếp trong code. Không build, không chạy, không sửa dòng code nào.</p>
+    <p><strong>Kết quả:</strong> bạn chọn phương án A ngày 2026-10-25. Cả 24 đề xuất đã được áp vào <a href="tech-spec.html">tech spec v2.3</a>, <a href="plan/00-overview.html">kế hoạch triển khai</a>, <a href="open-question.html">danh sách câu hỏi mở</a> và <a href="spike-list.html">danh sách spike</a>. Báo cáo này giữ lại bằng chứng.</p>
 
     <div class="kpi-strip">
       <div class="kpi-box">
@@ -47,15 +48,15 @@
       </div>
       <div class="kpi-box">
         <div class="kpi-num">7 lỗi nặng</div>
-        <div class="kpi-label">Phải sửa thiết kế trước khi làm M2–M4</div>
+        <div class="kpi-label">Đã sửa trong spec v2.3, trước khi làm M2–M4</div>
       </div>
       <div class="kpi-box">
         <div class="kpi-num">24 điểm</div>
-        <div class="kpi-label">Đề xuất sửa spec, đã gom theo từng mục</div>
+        <div class="kpi-label">Đề xuất sửa spec, đã áp vào spec v2.3</div>
       </div>
       <div class="kpi-box">
         <div class="kpi-num">2 câu hỏi mở</div>
-        <div class="kpi-label">Được trả lời luôn: mục 3 và 6 trong danh sách câu hỏi mở</div>
+        <div class="kpi-label">Được trả lời và đã bỏ khỏi danh sách câu hỏi mở</div>
       </div>
     </div>
 
@@ -106,29 +107,17 @@
 
     <h2>4. Câu hỏi mở được trả lời</h2>
     <ul>
-      <li><strong>Câu hỏi mở mục 3</strong> (sự kiện nào để bắt tin nhắn của Human): sự kiện <code>NewEntry</code> với tin nhắn người dùng, nhưng không có id ổn định (D12).</li>
-      <li><strong>Câu hỏi mở mục 6</strong> (Antigravity có ghi được qua worktree ẩn không): có (D2).</li>
-      <li><strong>Spike S6 và S7</strong>: đã xác định API cần dùng và cách đóng gói tin nhắn; vẫn cần chạy thử thật trên máy Mac của bạn.</li>
+      <li><strong>Sự kiện nào để bắt tin nhắn của Human:</strong> sự kiện <code>NewEntry</code> với tin nhắn người dùng, nhưng không có id ổn định (D12). Đã đưa vào spec mục 7.4.</li>
+      <li><strong>Antigravity có ghi được qua worktree ẩn không:</strong> có (D2). Đã đưa vào spec mục 3.2 (H12) và 10.4.</li>
+      <li><strong>Spike S6 và S7</strong>: đã xác định API cần dùng và cách đóng gói tin nhắn; vẫn cần chạy thử thật trên máy Mac của bạn. Danh sách spike đã thu hẹp hai spike này.</li>
     </ul>
 
-    <h2>5. Quyết định cần bạn: có cập nhật spec theo các đề xuất không?</h2>
-    <div class="table-wrap">
-      <table>
-        <tbody>
-          <tr><td><strong>Bối cảnh</strong></td><td>Spec v2.2 đã được bạn duyệt. Các đề xuất thêm một điểm nối mới vào core (H12), mở rộng H5, H5b và H10, đổi cách tạo worktree của worker và đổi chỗ lưu run store. Các task M0–M3 dựa trên những phần này.</td></tr>
-          <tr><td><strong>Vì sao cần bạn</strong></td><td>Đây là thay đổi thiết kế đã duyệt. Thêm điểm nối thì tăng phần sửa vào core, trong khi NEED 59 muốn phần này tối thiểu; nhưng không thêm H12 thì lỗ hổng D2 vẫn còn.</td></tr>
-          <tr><td><strong>Ví dụ</strong></td><td>Nếu đồng ý: một agent cập nhật tech spec (bản .md và .html), danh sách câu hỏi mở và kế hoạch M0–M3 trong một PR, và T0.2 dùng luôn bảng số dòng của báo cáo. Nếu chưa: spec giữ nguyên, các lỗi được ghi thành rủi ro còn lại, và tới M2–M3 agent làm task sẽ vấp D4–D6 rồi phải dừng lại hỏi.</td></tr>
-          <tr><td><strong>Lựa chọn</strong></td><td>A) Cập nhật spec theo cả 24 đề xuất <em>(khuyến nghị)</em>. B) Chỉ cập nhật 7 lỗi nặng, phần còn lại xử lý khi làm từng task. C) Chưa cập nhật.</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h2>6. Giới hạn</h2>
+    <h2>5. Giới hạn</h2>
     <ul>
       <li>Không có mã nguồn adapter Antigravity, nên các dòng “Baseline” về Antigravity trong spec giữ nguyên.</li>
       <li>Chưa rõ sandbox của Claude có chặn công cụ Write/Edit hay chỉ chặn lệnh Bash; spike mới đo Bash.</li>
       <li>Chưa rõ sandbox <code>workspace-write</code> của Codex có giới hạn việc đọc không.</li>
-      <li>Chưa kiểm cách push qua askpass với <code>-c credential.helper=</code> (câu hỏi mở mục 7).</li>
+      <li>Chưa kiểm cách push qua askpass với <code>-c credential.helper=</code> (vẫn nằm trong danh sách câu hỏi mở).</li>
     </ul>
   </main>
 </body>
