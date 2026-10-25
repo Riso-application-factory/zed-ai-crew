@@ -1,0 +1,24 @@
+{
+  "provider": "antigravity",
+  "protocolVersion": 1,
+  "agentCapabilities": {
+    "loadSession": true,
+    "promptCapabilities": {
+      "image": true,
+      "audio": true,
+      "embeddedContext": true
+    },
+    "mcpCapabilities": {
+      "http": true,
+      "sse": true,
+      "acp": false
+    },
+    "sessionCapabilities": {
+      "list": {},
+      "resume": {}
+    },
+    "auth": {
+      "logout": {}
+    }
+  }
+}

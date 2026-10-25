@@ -1,0 +1,29 @@
+{
+  "provider": "codex",
+  "protocolVersion": 1,
+  "agentCapabilities": {
+    "loadSession": true,
+    "promptCapabilities": {
+      "image": true,
+      "audio": false,
+      "embeddedContext": true
+    },
+    "mcpCapabilities": {
+      "http": true,
+      "sse": false,
+      "acp": false
+    },
+    "sessionCapabilities": {
+      "list": {},
+      "delete": {},
+      "additionalDirectories": {},
+      "fork": {},
+      "resume": {},
+      "close": {}
+    },
+    "auth": {
+      "logout": {}
+    },
+    "providers": {}
+  }
+}
