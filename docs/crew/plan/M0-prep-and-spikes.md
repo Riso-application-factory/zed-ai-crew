@@ -32,10 +32,10 @@
 | Căn cứ | NEED 03, 58; spec, dòng “Nguồn” |
 | Được sửa | `docs/crew/**` (mới) |
 | Không được sửa | Mọi file khác |
-| Bàn giao | `docs/crew/brief.md`, `docs/crew/tech-spec.md`, `docs/crew/plan/*.md`, `docs/crew/spikes/S1-S5.md` |
+| Bàn giao | `docs/crew/brief.md`, `docs/crew/tech-spec.md`, `docs/crew/design-check.md`, `docs/crew/plan/*.md`, `docs/crew/spikes/S1-S5.md` |
 
 **Các bước**
-1. Chép brief v3.5 thành `docs/crew/brief.md` và tech spec v2.2 thành `docs/crew/tech-spec.md`. Phiên bản ghi trong nội dung, không trong tên file, để đường dẫn ổn định.
+1. Chép brief v3.5 thành `docs/crew/brief.md`, tech spec v2.3 thành `docs/crew/tech-spec.md` và báo cáo design check thành `docs/crew/design-check.md`. Phiên bản ghi trong nội dung, không trong tên file, để đường dẫn ổn định.
 2. Chép các file kế hoạch này vào `docs/crew/plan/`.
 3. Viết `docs/crew/spikes/S1-S5.md` từ báo cáo spike Q1–Q5 của Human, cộng hai kết quả bổ sung:
    - Q1b: ROLE của Antigravity còn sau compaction.
@@ -45,7 +45,7 @@
 4. Kiểm repo là private.
 
 **Tiêu chí nghiệm thu**
-- Cho repo fork, khi mở `docs/crew/`, thì có đủ bốn nhóm tài liệu ở mục Bàn giao.
+- Cho repo fork, khi mở `docs/crew/`, thì có đủ các tài liệu ở mục Bàn giao.
 - Cho mọi file trong `docs/crew/`, khi kiểm liên kết `#anchor` và liên kết tương đối, thì không có liên kết hỏng.
 - Cho repo trên GitHub, khi kiểm visibility, thì kết quả là `PRIVATE` (NEED 58).
 
@@ -61,19 +61,20 @@ Kiểm liên kết bằng một script ngắn: liệt kê `](#…)` và `<a id="
 
 | Mục | Nội dung |
 | --- | -------- |
-| Mục tiêu | Xác nhận H1–H11 và các API “có sẵn” ở spec 3.2 còn đúng trên `main` hiện tại của fork, và ghi vị trí theo fork |
-| Căn cứ | NEED 59; spec 3.2, Phụ lục B.1 |
+| Mục tiêu | Xác nhận H1–H12 và các API “có sẵn” ở spec 3.2 còn đúng trên `main` hiện tại của fork, và ghi vị trí theo fork |
+| Căn cứ | NEED 59; spec 3.2, Phụ lục B.1; báo cáo [`docs/crew/design-check.md`](../design-check.md) (bảng số dòng spec → fork và các khẳng định đã kiểm) |
 | Được sửa | `docs/crew/hook-points.md` (mới). Không sửa code |
-| Bàn giao | Bảng: ID, symbol, đường dẫn và dòng trên fork, dòng trên upstream `347f171`, trạng thái (`khớp`, `dời dòng`, `đổi API`) |
+| Bàn giao | Bảng: ID, symbol, đường dẫn và dòng trên fork, dòng ghi trong spec, trạng thái (`khớp`, `dời dòng`, `đổi API`) |
 
 **Các bước**
-1. Với mỗi điểm nối H1–H11 và mỗi dữ kiện ở Phụ lục B.1, tìm theo **tên symbol**, không theo số dòng: `new_session`, `mcp_servers_for_project`, `handle_session_update`, `Agent::server`, `bounded_npm_package_spec`, `remove_stale_versioned_archive_cache_dirs`, `create_worktree_workspace`, `McpServer::new`…
-2. Ghi version và feature của crate `agent-client-protocol` trong `Cargo.toml` của fork. Spec ghi 3.4.0 với feature `unstable` **[Spike]**.
-3. Kiểm `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` ở gốc repo vẫn là symlink tới `.rules`. Trên upstream, cả ba là symlink **[Đã kiểm]**. T0.3 dựa vào điều này.
-4. Dòng nào trạng thái `đổi API` thì báo tech lead cập nhật spec trước khi task M1–M2 chạm điểm đó bắt đầu.
+1. Bắt đầu từ bảng số dòng spec → fork và bảng khẳng định đã kiểm của báo cáo design check. Báo cáo đọc fork ở commit `11caaae`, nên mọi dòng vẫn phải mở lại trên `main` hiện tại.
+2. Với mỗi điểm nối H1–H12 và mỗi dữ kiện ở Phụ lục B.1, tìm theo **tên symbol**, không theo số dòng: `new_session`, `mcp_servers_for_project`, `handle_session_update`, `handle_write_text_file`, `Agent::server`, `bounded_npm_package_spec`, `remove_stale_versioned_archive_cache_dirs`, `GitStore::create_worktree`, `McpServer::new`…
+3. Ghi version và feature của crate `agent-client-protocol` trong `Cargo.toml` của fork. Spec ghi 3.4.0 với feature `unstable` **[Spike]**.
+4. Kiểm `AGENTS.md`, `CLAUDE.md`, `GEMINI.md` ở gốc repo vẫn là symlink tới `.rules`. Trên upstream, cả ba là symlink **[Đã kiểm]**. T0.3 dựa vào điều này.
+5. Dòng nào trạng thái `đổi API` thì báo tech lead cập nhật spec trước khi task M1–M2 chạm điểm đó bắt đầu.
 
 **Tiêu chí nghiệm thu**
-- Cho bảng hook-points, khi đối chiếu với spec 3.2, thì mỗi H1–H11 và mỗi API “có sẵn” có đúng một dòng.
+- Cho bảng hook-points, khi đối chiếu với spec 3.2, thì mỗi H1–H12 và mỗi API “có sẵn” có đúng một dòng.
 - Cho một dòng bất kỳ, khi mở đường dẫn và dòng ghi trong bảng, thì thấy đúng symbol.
 
 **Kiểm chứng:** agent kiểm chứng độc lập chọn ngẫu nhiên 5 dòng và mở lại.
@@ -145,13 +146,14 @@ cargo tree -p crew_acp -e normal | grep -E "^.* crew v" || true   # không có c
 | --- | -------- |
 | Mục tiêu | Mọi hành vi Crew nằm sau một feature flag. Tắt flag thì fork chạy như Zed upstream |
 | Căn cứ | NEED 03; brief 9; spec 3.2 (H8, H9) |
-| Được sửa | `crates/feature_flags/src/flags.rs` (H8), `crates/zed/src/zed.rs` (H9), `crates/crew_ui` |
+| Được sửa | `crates/feature_flags/src/flags.rs` (H8), `crates/zed/src/main.rs` (H9), `crates/crew_ui` |
 | Bàn giao | `CrewFeatureFlag`; `crew_ui::init(cx)` được gọi lúc khởi động |
 
 **Thiết kế**
 - Khai theo mẫu các flag khác trong `flags.rs` **[Đã kiểm]**: struct `CrewFeatureFlag`, `const NAME = "crew"`, `type Value = PresenceFlag`, `register_feature_flag!(CrewFeatureFlag)`.
 - **`enabled_for_staff()` trả `false`.** Bản debug coi người dùng như staff (`store.rs:180`) **[Đã kiểm]**, nên nếu để mặc định thì Crew tự bật trong mọi bản debug. Đặt `false` thì Crew tắt mặc định, và bật bằng `"feature_flags": { "crew": "on" }` trong bản debug; khóa override là `on`/`off` **[Đã kiểm]**.
 - **Bản release của Human** không nhận override từ settings vì Human không phải staff (`store.rs:105-107`) **[Đã kiểm]**. Vì vậy bản fork hằng ngày luôn tắt Crew, đúng brief mục 9. T7.8 đổi `enabled_for_all()` để bật cho manual test.
+- **H9:** gọi `crew_ui::init(cx)` trong `crates/zed/src/main.rs`, ngay sau `agent_ui::init` (`:713`), không trong `zed.rs` **[Đã kiểm]**. Workspace và `AgentPanel::load` (`crates/zed/src/zed.rs:864`) chạy sau đó, nên agent id của Crew (T1.5) và factory (T1.7) được đăng ký trước khi panel khôi phục thread.
 - `crew_ui::init(cx)` đăng ký action và observer. Mọi đường vào kiểm `cx.has_flag::<CrewFeatureFlag>()` và theo dõi khi flag đổi.
 
 **Tiêu chí nghiệm thu**
@@ -203,10 +205,12 @@ Danh sách cho phép (allowlist) nằm ngay trong test, mỗi mục có lý do. 
 | Nhánh | `spike/S6-acp-ext`, không merge |
 | Bàn giao | `docs/crew/spikes/S6.md`, cập nhật T1.8 và T5.6 nếu cần |
 
+Báo cáo design check đã xác định API **[Đã kiểm]**: `on_receive_notification` của builder (`agent-client-protocol-3.4.0 src/jsonrpc.rs:1579`), `ConnectionTo::send_request` (`:4300`) và `UntypedMessage` (`:5676-5685`). H3 phải sửa `v1.rs`, vì trường `AcpConnection.connection` là private (`v1.rs:75`). Spike chỉ còn phải chạy được test với agent giả.
+
 **Các bước**
-1. Đọc mã crate trong `~/.cargo/registry/src/*/agent-client-protocol-3.4.0/` và cách Zed dựng client ở `crates/agent_servers/src/acp/v1.rs` (đoạn `Client.builder()`, gần `:428-476`) **[Đã kiểm]**.
+1. Đọc các API trên và cách Zed dựng client ở `crates/agent_servers/src/acp/v1.rs` (`client_builder`, `:368-442`) **[Đã kiểm]**.
 2. Trên nhánh spike, viết test với agent giả: agent gửi `_auth/status_update` ngay sau initialize; client gửi request `_session/steering` và nhận response.
-3. Ghi lại: tên API, kiểu payload, cách đăng ký handler bên cạnh các `on_receive_notification` hiện có, giới hạn nếu có.
+3. Ghi lại: kiểu payload, cách đăng ký handler bên cạnh các `on_receive_notification` hiện có, phần sửa cần có trong `v1.rs`, giới hạn nếu có.
 
 **Tiêu chí xong:** báo cáo trả lời được (a) và (b), có đoạn code mẫu, và test trên nhánh spike đạt.
 
@@ -216,15 +220,17 @@ Danh sách cho phép (allowlist) nằm ngay trong test, mỗi mục có lý do. 
 
 | Mục | Nội dung |
 | --- | -------- |
-| Câu hỏi | Framing của `McpServer` qua socket có chạy với một cầu nối stdio đơn giản không? Cả ba provider có khởi động MCP server stdio `<zed> --crew-mcp-bridge <socket>` và gọi được tool không? |
+| Câu hỏi | Cả ba provider có khởi động MCP server stdio `<zed> --crew-mcp-bridge <socket>` và gọi được tool qua cầu nối chỉ chép byte không? |
 | Căn cứ | Spec 20.1 (S7), 7.2 |
 | Chặn | T2.1 |
 | Nhánh | `spike/S7-mcp-bridge`, không merge |
 | Bàn giao | `docs/crew/spikes/S7.md` |
 
+Báo cáo design check đã trả lời phần framing **[Đã kiểm]**: `McpServer` dùng JSON-RPC theo dòng (`crates/context_server/src/listener.rs:360-394`), nên cầu nối chỉ chép byte. Server không tự trả lời `initialize`: nó chỉ xử lý `tools/call`, `tools/list` và handler đã đăng ký (`:214-242`). Spike còn phải chạy ba provider qua cầu nối.
+
 **Các bước**
 1. Trên nhánh spike, thêm tạm flag `--crew-mcp-bridge` vào `main.rs` theo mẫu `--askpass` (`crates/zed/src/main.rs:215-219`) **[Đã kiểm]**: sao chép stdin → socket và socket → stdout.
-2. Tạo `McpServer::new` với một tool `crew_ping`. Server tạo socket `mcp.sock` trong thư mục tạm `zed-mcp*` (`crates/context_server/src/listener.rs:55-60`) **[Đã kiểm]**.
+2. Tạo `McpServer::new` với một tool `crew_ping` và một handler `initialize` đăng ký bằng `McpServer::handle_request` (`listener.rs:143`). Server tạo socket `mcp.sock` trong thư mục tạm `zed-mcp*` (`listener.rs:55-60`) **[Đã kiểm]**.
 3. Với từng provider ở bản ghim, tạo session với `mcpServers: [{ name: "crew", command: <đường dẫn app>, args: ["--crew-mcp-bridge", <socket>] }]`, rồi gửi prompt yêu cầu gọi `crew_ping`.
    - `command` phải là đường dẫn tuyệt đối của chính app Zed đang chạy (`std::env::current_exe()`), như askpass làm (`crates/askpass/src/askpass.rs:278-281`) **[Đã kiểm]**. `zed` trên PATH là CLI, không phải app **[Nhớ]**.
 4. Ghi lại cho từng provider: có gọi được tool không; có yêu cầu xin quyền cho tool MCP không và option là gì (Codex có bộ option riêng cho MCP **[Đã kiểm]**); Antigravity có nhận MCP stdio không.
@@ -248,15 +254,20 @@ Harness của spike ở `/tmp/crew-spike` không được giữ lại **[Spike]*
 - Test gắn `#[ignore]` và chỉ chạy khi có `CREW_CONTRACT=1`.
 - Lệnh adapter lấy từ biến môi trường `CREW_CONTRACT_CLAUDE_CMD`, `CREW_CONTRACT_CODEX_CMD`, `CREW_CONTRACT_ANTIGRAVITY_CMD`, cho tới khi T1.5 cung cấp đường dẫn bản ghim.
 - Client ACP tối thiểu qua stdio, dùng thẳng crate `agent-client-protocol`, cùng kiểu builder như `v1.rs`, để test không cần GPUI. Client có:
-  - initialize và ghi lại capability của agent;
-  - trả lời yêu cầu xin quyền theo chính sách của từng test;
+  - initialize với đúng capability Zed khai trong `client_capabilities_for_agent` (`v1.rs:445-475`): fs đọc và ghi, terminal, elicitation dạng form và URL **[Đã kiểm]**. Adapter đổi hành vi theo capability, ví dụ Claude chỉ giữ `AskUserQuestion` khi client có form elicitation (`acp-agent.js:8586`) **[Đã kiểm]**, nên khai khác Zed thì test không phản ánh hành vi dưới Zed;
+  - ghi lại capability của agent;
+  - trả lời yêu cầu xin quyền và elicitation theo chính sách của từng test;
+  - hiện thực `fs/read_text_file` và `fs/write_text_file` chỉ trong thư mục của test, vì Antigravity ghi file qua đó **[Baseline]**;
   - ghi traffic thô vào thư mục tạm;
   - che dữ liệu (email, token) trước khi ghi fixture vào `test_fixtures/contract/`.
+- **Kiểm chung cho mọi contract test với Claude và Codex:** không có request `fs/*` hay `terminal/*` nào từ agent. Zed ghi file qua `fs/write_text_file` mà không xin quyền (`v1.rs:9416-9449`) và chạy `terminal/create` không sandbox (`v1.rs:9650-9709`); hai adapter này ở bản ghim không dùng hai nhóm đó **[Đã kiểm]**, nên một bản cập nhật bắt đầu dùng thì test phải fail.
 - Không test nào in hay lưu nội dung file bí mật thật. Test về đường dẫn bí mật dùng file giả trong thư mục tạm.
 
 **Tiêu chí nghiệm thu**
 - Cho máy Human đã đăng nhập ba provider, khi chạy lệnh contract test, thì test initialize đạt cho cả ba adapter và ghi lại capability.
 - Cho adapter Claude, khi initialize, thì capability có `sessionCapabilities.systemPrompt` **[Spike]**.
+- Cho request initialize của harness, khi đọc, thì `clientCapabilities` có fs, terminal và elicitation (form, URL) như `client_capabilities_for_agent` của Zed.
+- Cho một traffic mẫu của Claude hoặc Codex có request `fs/write_text_file` hay `terminal/create`, khi harness chạy bước kiểm chung, thì test fail (kiểm chính harness, không gọi provider).
 - Cho môi trường không có `CREW_CONTRACT`, khi chạy `cargo test -p crew_acp`, thì contract test bị bỏ qua, không gọi provider.
 
 **Kiểm chứng**

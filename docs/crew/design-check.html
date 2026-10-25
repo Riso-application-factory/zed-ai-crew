@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kiểm thiết kế với code Zed — Zed AI Crew</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-brand">
+      <a href="index.html">Zed AI Crew</a>
+      <span class="brand-tag">Docs · Full Width</span>
+    </div>
+    <nav class="site-nav">
+      <a href="index.html">Trang chủ</a>
+      <a href="brief.html">Product Brief</a>
+      <a href="tech-spec.html">Tech Spec</a>
+      <a href="open-question.html">Open Questions</a>
+      <a href="spike-list.html">Spike List</a>
+      <a href="design-check.html" class="active">Design Check</a>
+      <span class="nav-sep"></span>
+      <a href="plan/00-overview.html">Kế hoạch</a>
+      <a href="plan/M0-prep-and-spikes.html">M0</a>
+      <a href="plan/M1-foundation.html">M1</a>
+      <a href="plan/M2-orchestrator.html">M2</a>
+      <a href="plan/M3-execution.html">M3</a>
+      <a href="plan/M4-github.html">M4</a>
+      <a href="plan/M5-playbook.html">M5</a>
+      <a href="plan/M6-ui.html">M6</a>
+      <a href="plan/M7-model-and-retro.html">M7</a>
+    </nav>
+  </header>
+  <main class="page-container">
+    <div class="doc-toolbar">
+      <span>Tài liệu: <code>docs/crew/design-check.md</code> · Bản đọc cho Human</span>
+      <a class="raw-link" href="design-check.md">Xem bản Markdown cho agent (design-check.md)</a>
+    </div>
+
+    <h1>Kiểm thiết kế Crew với code Zed thật</h1>
+    <p>Câu hỏi: những điều tech spec v2.2 khẳng định về code Zed có đúng trên bản fork này không? Bốn agent đọc song song bốn mảng code: vòng đời thread, lớp ACP client, hạ tầng, và cách adapter Claude/Codex chạy bên trong Zed. Sau đó các kết luận quan trọng được đọc lại trực tiếp trong code. Không build, không chạy, không sửa dòng code nào.</p>
+    <p><strong>Kết quả:</strong> bạn chọn phương án A ngày 2026-10-25. Cả 24 đề xuất đã được áp vào <a href="tech-spec.html">tech spec v2.3</a>, <a href="plan/00-overview.html">kế hoạch triển khai</a>, <a href="open-question.html">danh sách câu hỏi mở</a> và <a href="spike-list.html">danh sách spike</a>. Báo cáo này giữ lại bằng chứng.</p>
+
+    <div class="kpi-strip">
+      <div class="kpi-box">
+        <div class="kpi-num">Lõi đứng vững</div>
+        <div class="kpi-label">CrewConnection, H2, gate và kết quả sandbox của spike đều đúng</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">7 lỗi nặng</div>
+        <div class="kpi-label">Đã sửa trong spec v2.3, trước khi làm M2–M4</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">24 điểm</div>
+        <div class="kpi-label">Đề xuất sửa spec, đã áp vào spec v2.3</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">2 câu hỏi mở</div>
+        <div class="kpi-label">Được trả lời và đã bỏ khỏi danh sách câu hỏi mở</div>
+      </div>
+    </div>
+
+    <h2>1. Điều gì đứng vững</h2>
+    <ul>
+      <li><strong>Một cửa duy nhất.</strong> Mọi đường tạo, mở lại, kết nối lại thread của agent ngoài đều đi qua <code>Agent::server()</code>. Thiết kế <code>CrewConnection</code> dựa vào điều này, và nó đúng.</li>
+      <li><strong>H2 làm được.</strong> Crate ACP 3.4.0 đã có trường <code>system_prompt</code> và <code>_meta</code> cho tạo, load và resume session; tính năng <code>unstable</code> mà fork đang bật đã mở chúng.</li>
+      <li><strong>Gate thấy mọi yêu cầu xin quyền.</strong> Zed không tự duyệt yêu cầu xin quyền của agent ngoài, và code khác UI có thể đọc rồi trả lời từng yêu cầu.</li>
+      <li><strong>Kết quả spike vẫn dùng được.</strong> Zed khai báo khả năng file system và terminal, nhưng adapter Claude 0.95.0 và Codex 2.2.2 không dùng chúng; đọc, ghi file và chạy lệnh vẫn diễn ra trong process của provider. Sandbox mà spike đo vẫn áp dụng.</li>
+      <li>Feature flag, cấu hình theo tầng, cài adapter đúng bản ghim vào thư mục riêng, và chế độ <code>--askpass</code> làm mẫu cho cầu nối MCP: đều đúng như spec mô tả.</li>
+    </ul>
+
+    <h2>2. Bảy lỗi nặng</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Mã</th><th>Vấn đề</th><th>Vì sao quan trọng</th><th>Đề xuất</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>D1</strong></td><td>Câu hỏi agent gửi cho người dùng (elicitation) đi vòng qua gate</td><td>Zed bật tính năng form, nên Claude bật công cụ <code>AskUserQuestion</code>. Câu hỏi đi qua một sự kiện khác mà gate không nghe. Worker không có ô nhập sẽ treo, và câu trả lời trong form không được ghi thành quyết định.</td><td>Tắt <code>AskUserQuestion</code> trong mọi session Crew; Crew từ chối elicitation; worker hỏi qua bàn giao, Orchestrator hỏi qua <code>crew_ask_human</code>.</td></tr>
+          <tr><td><strong>D2</strong></td><td>Zed cho ghi file ngoài project qua “worktree ẩn”</td><td>Chỉ cần nêu một đường dẫn ngoài project trong tool call, Zed tự tạo worktree ẩn cho nó; sau đó lệnh ghi file của agent được chấp nhận, không qua bước xin quyền nào. Khẳng định “Antigravity chỉ ghi được trong worktree” không đúng, và Orchestrator chạy trên Antigravity không giữ được chế độ chỉ đọc.</td><td>Thêm điểm nối mới H12: với session của Crew, mọi lệnh ghi và đọc file qua Zed phải qua chính sách của Crew (chỉ trong worktree của worker).</td></tr>
+          <tr><td><strong>D3</strong></td><td>Bản build từ mã nguồn không dùng Keychain</td><td>Repo đặt kênh <code>dev</code>. Ở kênh này Zed lưu credential bằng cơ chế dành cho phát triển, không vào Keychain, trái NEED 05 cho private key của GitHub App.</td><td>Crew luôn ghi secret vào Keychain bất kể kênh build, hoặc từ chối lưu khi không có Keychain.</td></tr>
+          <tr><td><strong>D4</strong></td><td>Agent id của Crew cần thêm nhiều chỗ nối</td><td>Id phải được đăng ký vào kho agent của Zed trước khi panel nạp và sau mỗi lần kho được dựng lại. Thread lưu id của connection bên trong. Zed chỉ xóa <code>ANTHROPIC_API_KEY</code> cho đúng id <code>claude-acp</code>, nên adapter Claude của Crew có thể đăng nhập bằng API key trong môi trường thay vì gói bạn đang dùng.</td><td>Đăng ký id đúng thứ tự, dựng connection bên trong bằng id Crew, chép các xử lý đặc biệt theo id, không nhận cấu hình <code>agent_servers</code> cho id Crew.</td></tr>
+          <tr><td><strong>D5</strong></td><td>Xem một thread Crew làm đổi agent đang chọn của panel</td><td>Sau khi bạn mở một thread Crew, nút “+” tạo thêm một session Crew ngoài ý muốn.</td><td>Mở rộng H5: id Crew không bao giờ thành agent đang chọn; session Crew chỉ tạo từ lệnh “Crew: New Session”.</td></tr>
+          <tr><td><strong>D6</strong></td><td>Không dùng lại được giao diện subagent cho worker chỉ đọc</td><td>Giao diện đó chỉ bật khi thread có session cha, mà không có cách nào đặt giá trị này. Phím tắt “allow always” còn có thể trả lời nhầm yêu cầu của worker.</td><td>H5b thành một cờ chỉ đọc thật; gate trả lời yêu cầu của worker trước khi hiện ra; không hiện lựa chọn <code>allow_always</code> cho session Crew.</td></tr>
+          <tr><td><strong>D7</strong></td><td>Yêu cầu nới sandbox của Codex trông như lệnh bình thường</td><td>Codex gửi yêu cầu xin thêm quyền dưới dạng “chạy lệnh” với nút “cho phép một lần”. Gate chọn theo loại nút sẽ vô tình cho phép.</td><td>Gate phân loại theo nội dung yêu cầu (<code>rawInput</code>) trước khi chọn nút.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>3. Các điểm còn lại (tóm tắt)</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Mã</th><th>Nội dung</th><th>Mức</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>D8</td><td>Hàm tạo worktree của Zed chỉ chạy từng cái một và mở mỗi worker thành một workspace đầy đủ trong cùng cửa sổ. Có đường khác không cần cửa sổ: tạo worktree qua <code>GitStore</code> trên một nhánh riêng, kèm <code>Project</code> chạy nền.</td><td>Trung bình–cao</td></tr>
+          <tr><td>D9</td><td>MCP server của Zed không tự trả lời bước bắt tay <code>initialize</code>; thư mục socket mở quyền 0755 chứ không phải 0700; không thu hồi được kết nối đang mở khi dừng.</td><td>Trung bình–cao</td></tr>
+          <tr><td>D10</td><td>Run store nằm chung database của Zed, và có thể âm thầm chạy trong bộ nhớ nếu mở file lỗi.</td><td>Trung bình</td></tr>
+          <tr><td>D11</td><td>Session con của provider (subagent) được load qua connection của Crew; quy tắc “từ chối session lạ” sẽ làm chúng hỏng âm thầm.</td><td>Trung bình</td></tr>
+          <tr><td>D12</td><td>Tin nhắn trong thread không có id ổn định và không biết ai gửi. Crew phải tự gán id và ghi lại các prompt do chính nó gửi.</td><td>Trung bình</td></tr>
+          <tr><td>D13–D17</td><td>ModeGuard không thấy thay đổi phía Zed; không ghi log được update bị bỏ ở tầng thread; Restricted Mode ẩn cấu hình project; thư mục bổ sung nới vùng ghi của Codex; Claude đọc file cấu hình <code>.claude/</code> trong worktree và cấu hình riêng của bạn.</td><td>Trung bình</td></tr>
+          <tr><td>D18–D24</td><td>Sandbox cho lệnh kiểm chứng cần thư mục tạm; rollback feature flag phải build lại; vị trí đúng của H6 và H9; lớp bọc làm mất log ACP; nguy cơ upstream chuyển sang ACP v2; terminal không sandbox của Zed; spec viết theo bản upstream mới hơn fork.</td><td>Thấp</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>4. Câu hỏi mở được trả lời</h2>
+    <ul>
+      <li><strong>Sự kiện nào để bắt tin nhắn của Human:</strong> sự kiện <code>NewEntry</code> với tin nhắn người dùng, nhưng không có id ổn định (D12). Đã đưa vào spec mục 7.4.</li>
+      <li><strong>Antigravity có ghi được qua worktree ẩn không:</strong> có (D2). Đã đưa vào spec mục 3.2 (H12) và 10.4.</li>
+      <li><strong>Spike S6 và S7</strong>: đã xác định API cần dùng và cách đóng gói tin nhắn; vẫn cần chạy thử thật trên máy Mac của bạn. Danh sách spike đã thu hẹp hai spike này.</li>
+    </ul>
+
+    <h2>5. Giới hạn</h2>
+    <ul>
+      <li>Không có mã nguồn adapter Antigravity, nên các dòng “Baseline” về Antigravity trong spec giữ nguyên.</li>
+      <li>Chưa rõ sandbox của Claude có chặn công cụ Write/Edit hay chỉ chặn lệnh Bash; spike mới đo Bash.</li>
+      <li>Chưa rõ sandbox <code>workspace-write</code> của Codex có giới hạn việc đọc không.</li>
+      <li>Chưa kiểm cách push qua askpass với <code>-c credential.helper=</code> (vẫn nằm trong danh sách câu hỏi mở).</li>
+    </ul>
+  </main>
+</body>
+</html>

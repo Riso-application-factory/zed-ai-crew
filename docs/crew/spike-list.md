@@ -2,8 +2,8 @@
 
 | Mục | Nội dung |
 | --- | -------- |
-| Phiên bản | 1.0 · 2026-10-25 |
-| Nguồn | Tổng hợp từ [Product Brief v3.5](brief.md) ([Phụ lục C](brief.md#ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them)), [Tech Spec v2.2](tech-spec.md) ([mục 20.1](tech-spec.md#muc-20), [Phụ lục B.3](tech-spec.md#phu-luc-b)) và [Kế hoạch triển khai v1.1](plan/00-overview.md) ([M0](plan/M0-prep-and-spikes.md)–[M7](plan/M7-model-and-retro.md)). |
+| Phiên bản | 1.1 · 2026-10-25 |
+| Nguồn | Tổng hợp từ [Product Brief v3.5](brief.md) ([Phụ lục C](brief.md#ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them)), [Tech Spec v2.3](tech-spec.md) ([mục 20.1](tech-spec.md#muc-20), [Phụ lục B.3](tech-spec.md#phu-luc-b)) và [Kế hoạch triển khai v1.1](plan/00-overview.md) ([M0](plan/M0-prep-and-spikes.md)–[M7](plan/M7-model-and-retro.md)). |
 | Quy tắc Spike | Code spike nằm trên nhánh `spike/<id>-<tên>` và **không bao giờ merge vào `main`** ([NEED 03](brief.md#need-03)). Kết quả là báo cáo `docs/crew/spikes/<id>.md` merge qua PR tài liệu, kèm cập nhật các task/spec bị ảnh hưởng. Không bao giờ đọc hay in nội dung file bí mật thật; luôn che email/token trước khi lưu fixture. |
 | Nhãn | **[Đã kiểm]** đọc trong mã nguồn hoặc tài liệu gốc · **[Spike]** kết quả spike 2026-10-25 · **[Baseline]** theo baseline provider của Human · **[Nhớ]** kiến thức đáng tin, chưa kiểm lại · **[Suy luận]** cần kiểm |
 
@@ -27,11 +27,11 @@
 | [S3](#s3) | Ma trận sandbox của Claude, chặn đọc đường dẫn bí mật và `$TMPDIR` (gồm Q3 & Q3b) | **Đã xong** (2026-10-25) | Trước M0 ([T0.1](plan/M0-prep-and-spikes.md)) | Đã tích hợp vào Spec 6.2, 10.4 | `docs/crew/spikes/S1-S5.md` |
 | [S4](#s4) | Hành vi Antigravity Ultra: danh sách model, chi phí cố định, song song, compaction (Q4) | **Đã xong** (2026-10-25) | Trước M0 ([T0.1](plan/M0-prep-and-spikes.md)) | Đã tích hợp vào Spec 6.1, 6.8, 13 | `docs/crew/spikes/S1-S5.md` |
 | [S5](#s5) | Định dạng hạn mức `/status` của Codex và `/usage` của Antigravity (Q5) | **Đã xong** (2026-10-25) | Trước M0 ([T0.1](plan/M0-prep-and-spikes.md)) | Đã tích hợp vào Spec 6.7 | `docs/crew/spikes/S1-S5.md` |
-| [S6](#s6) | API của crate ACP 3.4.0 cho ext notification `_auth/status_update` và ext method `_session/steering` | **Còn mở** | M0 · [T0.7](plan/M0-prep-and-spikes.md) | Chặn Bước 0 → [T1.8](plan/M1-foundation.md), [T5.6](plan/M5-playbook.md) | `spike/S6-acp-ext` → `docs/crew/spikes/S6.md` |
-| [S7](#s7) | Framing của `McpServer` trên socket và cầu nối MCP stdio với 3 provider | **Còn mở** | M0 · [T0.8](plan/M0-prep-and-spikes.md) | Chặn Bước 0 → [T2.1](plan/M2-orchestrator.md) | `spike/S7-mcp-bridge` → `docs/crew/spikes/S7.md` |
+| [S6](#s6) | Ext notification `_auth/status_update` và ext method `_session/steering` chạy qua H3 (API của crate 3.4.0 đã xác định) | **Còn mở** | M0 · [T0.7](plan/M0-prep-and-spikes.md) | Chặn Bước 0 → [T1.8](plan/M1-foundation.md), [T5.6](plan/M5-playbook.md) | `spike/S6-acp-ext` → `docs/crew/spikes/S6.md` |
+| [S7](#s7) | Cầu nối MCP stdio với 3 provider (framing đã rõ; `McpServer` cần handler `initialize`) | **Còn mở** | M0 · [T0.8](plan/M0-prep-and-spikes.md) | Chặn Bước 0 → [T2.1](plan/M2-orchestrator.md) | `spike/S7-mcp-bridge` → `docs/crew/spikes/S7.md` |
 | [S8](#s8) | Độ phủ gate và vùng ghi của từng provider ở mode worker | **Còn mở** | M3 · [T3.1](plan/M3-execution.md) | Chặn Bước 3 → [T3.4](plan/M3-execution.md), [T3.5](plan/M3-execution.md), [T3.6](plan/M3-execution.md) | `spike/S8-gate-coverage` → `docs/crew/spikes/S8.md` |
 | [S9](#s9) | Hiệu lực thực tế của `maxBudgetUsd`, `maxTurns`, `permissions.deny` (Claude) và `disabledTools` (Antigravity) | **Còn mở** | M3 · [T3.2](plan/M3-execution.md) | Chặn Bước 3 → [T3.6](plan/M3-execution.md), [T3.13](plan/M3-execution.md) | `spike/S9-limits-deny` → `docs/crew/spikes/S9.md` |
-| [S10](#s10) | Chi phí bộ nhớ và CPU của N workspace nền cùng N process agent (N = 1, 2, 4) | **Còn mở** | M3 · [T3.3](plan/M3-execution.md) | Chặn Bước 3 → [T3.13](plan/M3-execution.md), đầu vào cho [Q7](open-question.md#q7) | `spike/S10-resources` → `docs/crew/spikes/S10.md` |
+| [S10](#s10) | Chi phí bộ nhớ và CPU của N Project không cửa sổ cùng N process agent (N = 1, 2, 4) | **Còn mở** | M3 · [T3.3](plan/M3-execution.md) | Chặn Bước 3 → [T3.13](plan/M3-execution.md), đầu vào cho [Q7](open-question.md#q7) | `spike/S10-resources` → `docs/crew/spikes/S10.md` |
 | [S11](#s11) | ROLE của Codex qua `customInstructions` khi load/resume trong process mới | **Còn mở** | M2 · [T2.10](plan/M2-orchestrator.md) | Chặn Bước 2 → Phục hồi Orchestrator ([T2.10](plan/M2-orchestrator.md)) | `spike/S11-codex-role-resume` → `docs/crew/spikes/S11.md` |
 | [S12](#s12) | Định dạng output thật của `/usage` và cấu trúc `_claude/rateLimit` trên Claude | **Còn mở** | M1 · [T1.11](plan/M1-foundation.md) | Chặn Bước 1 → Phần Claude của [T1.12](plan/M1-foundation.md) | `spike/S12-claude-quota` → `docs/crew/spikes/S12.md` |
 | [S13](#s13) | Xác định nhóm hạn mức của `gemini-4-argon` trên Antigravity | **Còn mở** | M7 · [T7.1](plan/M7-model-and-retro.md) | Không chặn (trong lúc chờ, Argon có hạn mức `unknown`) | `spike/S13-argon-quota-group` → `docs/crew/spikes/S13.md` |
@@ -130,11 +130,11 @@ Thực hiện ngày 2026-10-25 trên máy macOS của Human (fork `20ea81ef29`; 
 
 | Mục | Nội dung |
 | --- | -------- |
-| **Câu hỏi** | Dùng API nào của crate `agent-client-protocol` 3.4.0 để (a) nhận ext notification `_auth/status_update` và (b) gọi ext method `_session/steering`? |
+| **Câu hỏi** | Qua H3, client có (a) nhận được ext notification `_auth/status_update` và (b) gọi được ext method `_session/steering` không? API của crate `agent-client-protocol` 3.4.0 đã xác định khi kiểm thiết kế: `Builder::on_receive_notification` (`src/jsonrpc.rs:1579`), `ConnectionTo::send_request` (`:4300`), `UntypedMessage` (`:5676-5685`). H3 phải sửa `v1.rs`, vì field `connection` của `AcpConnection` là private (`v1.rs:75`) **[Đã kiểm]**. |
 | **Căn cứ** | [Tech Spec 20.1 (S6)](tech-spec.md#muc-20), [3.2 (H3)](tech-spec.md#muc-3-2) |
 | **Chặn** | Bước 0 → [T1.8](plan/M1-foundation.md) (handler đăng nhập), [T5.6](plan/M5-playbook.md) (steering khi đổi yêu cầu) |
 | **Nhánh & Bàn giao** | Nhánh `spike/S6-acp-ext` (không merge) → Báo cáo `docs/crew/spikes/S6.md`, cập nhật T1.8 và T5.6 nếu cần |
-| **Các bước** | 1. Đọc mã crate trong `~/.cargo/registry/src/*/agent-client-protocol-3.4.0/` và cách Zed dựng client ở `crates/agent_servers/src/acp/v1.rs` (`Client.builder()`, gần `:428-476`).<br>2. Trên nhánh spike, viết test với agent giả: agent gửi `_auth/status_update` ngay sau initialize; client gửi request `_session/steering` và nhận response.<br>3. Ghi lại tên API, kiểu payload, cách đăng ký handler bên cạnh các `on_receive_notification` hiện có và giới hạn nếu có. |
+| **Các bước** | 1. Đọc ba API trên trong mã crate (`~/.cargo/registry/src/*/agent-client-protocol-3.4.0/`) và cách Zed dựng client ở `crates/agent_servers/src/acp/v1.rs` (`client_builder`, `:368-442`).<br>2. Trên nhánh spike, viết test với agent giả: agent gửi `_auth/status_update` ngay sau initialize; client gửi request `_session/steering` và nhận response.<br>3. Ghi lại tên API, kiểu payload, cách đăng ký handler bên cạnh các `on_receive_notification` hiện có và giới hạn nếu có. |
 | **Tiêu chí xong** | Báo cáo trả lời đủ (a) và (b), có đoạn code mẫu, và test trên nhánh spike đạt (0 prompt tốn hạn mức vì dùng agent giả). |
 
 <a id="s7"></a>
@@ -143,11 +143,11 @@ Thực hiện ngày 2026-10-25 trên máy macOS của Human (fork `20ea81ef29`; 
 
 | Mục | Nội dung |
 | --- | -------- |
-| **Câu hỏi** | Framing của `McpServer` qua socket có chạy với một cầu nối stdio đơn giản không? Cả ba provider có khởi động MCP server stdio `<zed> --crew-mcp-bridge <socket>` và gọi được tool không? |
+| **Câu hỏi** | Cả ba provider có khởi động MCP server stdio `<zed> --crew-mcp-bridge <socket>` và gọi được tool không? Framing đã rõ: JSON-RPC, mỗi message một dòng (`crates/context_server/src/listener.rs:360-394`), nên cầu nối chỉ chép byte; `McpServer` chỉ trả lời `tools/call`, `tools/list` và handler đã đăng ký (`listener.rs:214-242`), nên phải đăng ký handler `initialize` **[Đã kiểm]**. |
 | **Căn cứ** | [Tech Spec 20.1 (S7)](tech-spec.md#muc-20), [7.2](tech-spec.md#muc-7) |
 | **Chặn** | Bước 0 → [T2.1](plan/M2-orchestrator.md) (Cầu nối MCP và khung MCP server) |
 | **Nhánh & Bàn giao** | Nhánh `spike/S7-mcp-bridge` (không merge) → Báo cáo `docs/crew/spikes/S7.md` |
-| **Các bước** | 1. Trên nhánh spike, thêm tạm flag `--crew-mcp-bridge` vào `main.rs` theo mẫu `--askpass` (`crates/zed/src/main.rs:215-219`): sao chép hai chiều stdin ↔ socket.<br>2. Tạo `McpServer::new` với một tool `crew_ping` (socket `mcp.sock` trong thư mục tạm `zed-mcp*`).<br>3. Với từng provider ở bản ghim, tạo session với `mcpServers: [{ name: "crew", command: std::env::current_exe(), args: ["--crew-mcp-bridge", <socket>] }]`, rồi gửi prompt yêu cầu gọi `crew_ping`.<br>4. Ghi lại cho từng provider: có gọi được tool không; có yêu cầu xin quyền cho tool MCP không và option là gì; Antigravity có nhận MCP stdio không. |
+| **Các bước** | 1. Trên nhánh spike, thêm tạm flag `--crew-mcp-bridge` vào `main.rs` theo mẫu `--askpass` (`crates/zed/src/main.rs:213-220`): sao chép hai chiều stdin ↔ socket.<br>2. Tạo `McpServer::new` với một tool `crew_ping` và handler `initialize` đăng ký bằng `handle_request` (socket `mcp.sock` trong thư mục tạm `zed-mcp*`, đặt quyền thư mục về 0700).<br>3. Với từng provider ở bản ghim, tạo session với `mcpServers: [{ name: "crew", command: std::env::current_exe(), args: ["--crew-mcp-bridge", <socket>] }]`, rồi gửi prompt yêu cầu gọi `crew_ping`.<br>4. Ghi lại cho từng provider: có gọi được tool không; có yêu cầu xin quyền cho tool MCP không và option là gì; Antigravity có nhận MCP stdio không. |
 | **Tiêu chí xong** | Mỗi provider hoặc gọi được `crew_ping`, hoặc báo cáo nêu rõ lỗi và nguyên nhân. Chi phí khoảng 3 prompt ngắn. |
 
 <a id="s8"></a>
@@ -160,7 +160,7 @@ Thực hiện ngày 2026-10-25 trên máy macOS của Human (fork `20ea81ef29`; 
 | **Căn cứ** | [Tech Spec 20.1 (S8)](tech-spec.md#muc-20), [9.5](tech-spec.md#muc-9), [10.4](tech-spec.md#muc-10-4). Codex `workspace-write` có `excludeTmpdirEnvVar: false`, `excludeSlashTmp: false` (`dist/index.js:34264-34320`) **[Đã kiểm]** |
 | **Chặn** | Bước 3 → [T3.4](plan/M3-execution.md) (Spawn worker), [T3.5](plan/M3-execution.md) (Luật gate cho worker), [T3.6](plan/M3-execution.md) (Sandbox Claude) |
 | **Nhánh & Bàn giao** | Nhánh `spike/S8-gate-coverage` (không merge) → Báo cáo `docs/crew/spikes/S8.md`, cập nhật Spec 10.4 và T3.5 |
-| **Các bước** | 1. Dùng harness T0.9 với repo thử có một git worktree tạo như `create_worktree_workspace` (gitdir nằm ngoài worktree).<br>2. Với mỗi provider ở mode worker (Claude `default` có sandbox, Codex `workspace-write`, Antigravity `default`), yêu cầu agent: sửa file trong/ngoài worktree; chạy lệnh trong worktree; chạy `git commit` và `git push`; truy cập mạng; đọc một **file bí mật giả** trong thư mục tạm ngoài worktree; ghi vào `$TMPDIR` và `/tmp`.<br>3. Ghi lại có yêu cầu xin quyền không, các `kind` của option và kết quả thực tế (chỉ in `OK`/`DENIED`).<br>4. Lặp lại bước 2 với Codex ở mode `agent` để đối chiếu auto review. |
+| **Các bước** | 1. Dùng harness T0.9 với repo thử có một git worktree tạo bằng `git worktree add` trên nhánh riêng, như `GitStore::create_worktree` (gitdir nằm ngoài worktree).<br>2. Với mỗi provider ở mode worker (Claude `default` có sandbox, Codex `workspace-write`, Antigravity `default`), yêu cầu agent: sửa file trong/ngoài worktree; chạy lệnh trong worktree; chạy `git commit` và `git push`; truy cập mạng; đọc một **file bí mật giả** trong thư mục tạm ngoài worktree; ghi vào `$TMPDIR` và `/tmp`.<br>3. Ghi lại có yêu cầu xin quyền không, các `kind` của option và kết quả thực tế (chỉ in `OK`/`DENIED`).<br>4. Lặp lại bước 2 với Codex ở mode `agent` để đối chiếu auto review. |
 | **Tiêu chí xong** | Bảng trả lời đủ 5 câu hỏi; câu (4) nếu không chặn được qua ACP thì ghi vào danh sách rủi ro còn lại. Chi phí khoảng 20 lượt prompt. |
 
 <a id="s9"></a>
@@ -177,15 +177,15 @@ Thực hiện ngày 2026-10-25 trên máy macOS của Human (fork `20ea81ef29`; 
 
 <a id="s10"></a>
 
-### S10 · Tài nguyên bộ nhớ và CPU của N workspace nền ([T3.3](plan/M3-execution.md))
+### S10 · Tài nguyên bộ nhớ và CPU của N Project không cửa sổ ([T3.3](plan/M3-execution.md))
 
 | Mục | Nội dung |
 | --- | -------- |
-| **Câu hỏi** | Bộ nhớ và CPU của N workspace nền cùng N process agent là bao nhiêu với N = 1, 2, 4? |
+| **Câu hỏi** | Bộ nhớ và CPU của N Project không cửa sổ cùng N process agent là bao nhiêu với N = 1, 2, 4? |
 | **Căn cứ** | [Tech Spec 20.1 (S10)](tech-spec.md#muc-20); đầu vào cho [Brief Q7](open-question.md#q7) |
 | **Chặn** | Bước 3 → [T3.13](plan/M3-execution.md) (giá trị đề xuất cho trần song song) và [T7.8](plan/M7-model-and-retro.md) |
 | **Nhánh & Bàn giao** | Nhánh `spike/S10-resources` (không merge) → Báo cáo `docs/crew/spikes/S10.md` |
-| **Cách đo** | Mở N worker giả lập bằng N worktree workspace chạy nền, mỗi workspace một session ACP đang làm một việc ngắn có thật (ví dụ đọc và tóm tắt một file). Đo bộ nhớ và CPU của process Zed cùng các process adapter bằng công cụ của macOS, ở trạng thái rảnh và khi đang chạy. |
+| **Cách đo** | Mở N worker giả lập bằng N worktree, mỗi worktree một `Project::local` không cửa sổ và một session ACP đang làm một việc ngắn có thật (ví dụ đọc và tóm tắt một file). Đo bộ nhớ và CPU của process Zed cùng các process adapter bằng công cụ của macOS, ở trạng thái rảnh và khi đang chạy. |
 | **Tiêu chí xong** | Bảng có số đo cho N = 1, 2, 4 ở cả hai trạng thái, ghi cấu hình máy, đo lặp lại ít nhất hai lần. Spike cung cấp dữ kiện cho Human, không tự đặt trần. |
 
 <a id="s11"></a>

@@ -41,12 +41,12 @@
         <div class="kpi-label">Yêu cầu gốc đã được Human duyệt (Brief v3.5)</div>
       </div>
       <div class="kpi-box">
-        <div class="kpi-num">6 Crates · 11 Hooks</div>
-        <div class="kpi-label">Kiến trúc tách biệt & điểm nối core H1–H11 (Spec v2.2)</div>
+        <div class="kpi-num">6 Crates · 12 Hooks</div>
+        <div class="kpi-label">Kiến trúc tách biệt & điểm nối core H1–H12 (Spec v2.3)</div>
       </div>
       <div class="kpi-box">
         <div class="kpi-num">M0 → M7</div>
-        <div class="kpi-label">8 Milestone triển khai tuần tự & song song (Plan v1.1)</div>
+        <div class="kpi-label">8 Milestone triển khai tuần tự & song song (Plan v1.2)</div>
       </div>
       <div class="kpi-box">
         <div class="kpi-num">13 Spikes</div>
@@ -80,13 +80,13 @@
         <div>
           <div class="card-header">
             <h3 class="card-title"><a href="tech-spec.html">Tech Spec</a></h3>
-            <span class="card-badge">v2.2 · Đã duyệt thiết kế</span>
+            <span class="card-badge">v2.3 · Đã duyệt thiết kế</span>
           </div>
-          <p class="card-desc">Kiến trúc 6 crate (<code>crew</code>, <code>crew_acp</code>, <code>crew_mcp</code>, <code>crew_github</code>, <code>crew_models</code>, <code>crew_ui</code>), điểm nối H1–H11, <code>CrewConnection</code>, run store SQLite, PolicyGate và truy vết 61 NEED.</p>
+          <p class="card-desc">Kiến trúc 6 crate (<code>crew</code>, <code>crew_acp</code>, <code>crew_mcp</code>, <code>crew_github</code>, <code>crew_models</code>, <code>crew_ui</code>), điểm nối H1–H12, <code>CrewConnection</code>, run store SQLite, PolicyGate và truy vết 61 NEED.</p>
         </div>
         <div class="card-links">
           <a class="btn-link" href="tech-spec.html">Đọc bản HTML</a>
-          <a class="btn-link secondary" href="tech-spec.html#muc-3-2">Điểm nối H1–H11</a>
+          <a class="btn-link secondary" href="tech-spec.html#muc-3-2">Điểm nối H1–H12</a>
           <a class="btn-link secondary" href="tech-spec.html#phu-luc-a">Truy vết NEED</a>
           <a class="btn-link secondary" href="tech-spec.md">tech-spec.md</a>
         </div>
@@ -138,6 +138,19 @@
           <a class="btn-link secondary" href="seed/README.md">README.md</a>
         </div>
       </div>
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <h3 class="card-title"><a href="design-check.html">Kiểm thiết kế với code Zed</a></h3>
+            <span class="card-badge">24 phát hiện · đã áp vào spec</span>
+          </div>
+          <p class="card-desc">Đối chiếu các khẳng định của Tech Spec v2.2 với code thật của fork, crate ACP 3.4.0 và adapter đã ghim. Lõi thiết kế đứng vững; 24 phát hiện (7 nặng) đã được Human duyệt và áp vào Tech Spec v2.3 cùng kế hoạch.</p>
+        </div>
+        <div class="card-links">
+          <a class="btn-link" href="design-check.html">Đọc bản HTML</a>
+          <a class="btn-link secondary" href="design-check.md">design-check.md</a>
+        </div>
+      </div>
     </div>
 
     <h2>2. Kế hoạch triển khai theo Milestone (<code>docs/crew/plan/</code>)</h2>
@@ -156,7 +169,7 @@
         <tbody>
           <tr>
             <td><strong><a href="plan/00-overview.html">00 · Tổng quan kế hoạch</a></strong></td>
-            <td>Tổng quan (v1.1)</td>
+            <td>Tổng quan (v1.2)</td>
             <td>Bản đồ milestone, chiều phụ thuộc 6 crate, quy trình mỗi task, Định nghĩa Xong, quy tắc spike và bảng truy vết 61 NEED → Task.</td>
             <td>—</td>
             <td>—</td>
@@ -165,7 +178,7 @@
           <tr>
             <td><strong><a href="plan/M0-prep-and-spikes.html">M0 · Chuẩn bị và spike chặn</a></strong></td>
             <td>M0 (T0.1–T0.9)</td>
-            <td>Tài liệu nguồn trong repo, kiểm điểm nối H1–H11 trên fork, <code>AGENTS.md</code>, khung 6 crate rỗng, <code>CrewFeatureFlag</code>, check tĩnh NEED 61, harness contract test.</td>
+            <td>Tài liệu nguồn trong repo, kiểm điểm nối H1–H12 trên fork, <code>AGENTS.md</code>, khung 6 crate rỗng, <code>CrewFeatureFlag</code>, check tĩnh NEED 61, harness contract test.</td>
             <td>—</td>
             <td><a href="spike-list.html#s6">S6</a>, <a href="spike-list.html#s7">S7</a></td>
             <td><a href="plan/M0-prep-and-spikes.html">HTML</a> · <a href="plan/M0-prep-and-spikes.md">MD</a></td>
@@ -288,7 +301,7 @@
           <tr>
             <td><strong><a href="spike-list.html#s8">S8</a> · <a href="spike-list.html#s9">S9</a> · <a href="spike-list.html#s10">S10</a></strong></td>
             <td>Spike M3</td>
-            <td>Độ phủ gate &amp; vùng ghi (S8); hiệu lực giới hạn/deny của Claude &amp; Antigravity (S9); bộ nhớ/CPU của N workspace nền (S10).</td>
+            <td>Độ phủ gate &amp; vùng ghi (S8); hiệu lực giới hạn/deny của Claude &amp; Antigravity (S9); bộ nhớ/CPU của N Project không cửa sổ (S10).</td>
             <td>Agent AI</td>
             <td>M3 (<a href="plan/M3-execution.html">T3.1–T3.3</a>)</td>
           </tr>

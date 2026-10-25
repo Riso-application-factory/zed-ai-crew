@@ -40,7 +40,7 @@
 | Bàn giao | `docs/crew/spikes/S8.md`: bảng độ phủ gate theo provider và mode; cập nhật spec 10.4 và T3.5 |
 
 **Các bước**
-1. Dùng harness T0.9 với repo thử có một git worktree, tạo đúng như `create_worktree_workspace` làm. Gitdir của worktree nằm ngoài worktree.
+1. Dùng harness T0.9 với repo thử có một git worktree, tạo đúng như T3.4 làm (`GitStore::create_worktree` trên một nhánh có tên). Gitdir của worktree nằm ngoài worktree.
 2. Với mỗi provider ở mode worker (Claude `default` có sandbox, Codex `workspace-write`, Antigravity `default`), yêu cầu agent:
    - sửa file trong và ngoài worktree;
    - chạy lệnh trong worktree;
@@ -48,7 +48,7 @@
    - truy cập mạng;
    - đọc một **file bí mật giả** đặt trong thư mục tạm ngoài worktree;
    - ghi vào `$TMPDIR` và `/tmp`.
-3. Ghi lại cho từng thao tác: có yêu cầu xin quyền không, option gồm những `kind` nào, kết quả thực tế. Chỉ in `OK`/`DENIED`, không in nội dung file.
+3. Ghi lại cho từng thao tác: có yêu cầu xin quyền không, option gồm những `kind` nào, kết quả thực tế. Chỉ in `OK`/`DENIED`, không in nội dung file. Với yêu cầu nới quyền của Codex, lưu `rawInput` đã che dữ liệu làm fixture cho gate (T3.5).
 4. Lặp lại bước 2 với Codex ở mode `agent` để thấy auto review duyệt những gì.
 
 **Tiêu chí xong:** bảng trả lời đủ 5 câu hỏi. Câu (4) nếu không có cách qua ACP thì ghi rõ, để T3.5 ghi thành rủi ro còn lại. Chi phí khoảng 20 lượt prompt.
@@ -72,12 +72,12 @@
 
 | Mục | Nội dung |
 | --- | -------- |
-| Câu hỏi | Bộ nhớ và CPU của N workspace nền cùng N process agent là bao nhiêu với N = 1, 2, 4? |
+| Câu hỏi | Bộ nhớ và CPU của N worker (mỗi worker một worktree, một `Project` không cửa sổ và một session ACP, như T3.4) cùng các process agent là bao nhiêu với N = 1, 2, 4? |
 | Căn cứ | Spec 20.1 (S10); brief Q7 |
 | Chặn | T3.13 (giá trị đề xuất cho trần song song) |
 | Bàn giao | `docs/crew/spikes/S10.md`: bảng số đo, cách đo, máy đo. Đây là căn cứ để Human đặt trần ở Q7; spike không tự chọn trần |
 
-**Cách đo:** mở N worker giả lập bằng N worktree workspace chạy nền, mỗi workspace một session ACP đang làm một việc ngắn có thật (ví dụ đọc và tóm tắt một file). Đo bộ nhớ và CPU của process Zed cùng các process adapter bằng công cụ của macOS, ở trạng thái rảnh và khi đang chạy.
+**Cách đo:** mở N worker giả lập bằng N worktree tạo như T3.4 (`GitStore::create_worktree` và `Project::local`), mỗi worktree một session ACP đang làm một việc ngắn có thật (ví dụ đọc và tóm tắt một file). Đo bộ nhớ và CPU của process Zed cùng các process adapter bằng công cụ của macOS, ở trạng thái rảnh và khi đang chạy.
 
 **Tiêu chí xong:** bảng có số đo cho N = 1, 2, 4 ở cả hai trạng thái, ghi cấu hình máy, và đo lặp lại ít nhất hai lần.
 
@@ -94,8 +94,8 @@
 
 **Các bước của spawn**
 1. `select(task)` (T2.8). `Blocked` thì trả về Orchestrator kèm lý do.
-2. Tạo worktree workspace bằng `create_worktree_workspace` (`crates/git_ui_core/src/worktree_service.rs:736`). Hàm này mở workspace mới ở nền, không chuyển focus **[Đã kiểm]**.
-3. Tạo session qua CrewConnection (kind `worker`), gộp `role_options` với `worker_options` của profile.
+2. Tạo worktree bằng `GitStore::create_worktree` với đích `CreateWorktreeTarget::NewBranch` (`crates/project/src/git_store.rs:9276`), mỗi task một nhánh có tên, rồi mở một `Project::local` không cửa sổ cho worktree đó (`crates/project/src/project.rs:1232`; `crates/eval_cli/src/main.rs:735` đã dùng như vậy) **[Đã kiểm]**. Thread worker hiện chỉ đọc từ workspace của Orchestrator (T6.2). Không dùng `create_worktree_workspace` (`crates/git_ui_core/src/worktree_service.rs:736`): hàm này cần `Workspace` và `Window` có gốc là `MultiWorkspace`, từ chối chạy khi đang có lần tạo khác (`:781`), tạo worktree detached (`:504`), và thêm một workspace đầy đủ cho mỗi worker vào cửa sổ của Human (`:1362-1367`) **[Đã kiểm]**.
+3. Tạo session qua CrewConnection (kind `worker`), gộp `role_options` với `worker_options` của profile. Session chỉ có một thư mục làm việc là worktree: Zed gửi mọi thư mục sau thư mục đầu thành `additionalDirectories` (`v1.rs:1157-1175`), và Codex thêm chúng vào vùng ghi (`codex-acp dist/index.js:35878-35885`) **[Đã kiểm]**.
 4. Đặt mode và config option.
    - Codex: mode mặc định của adapter là `agent`, nên phải đặt `workspace-write` tường minh **[Đã kiểm]**.
    - Đối chiếu giá trị agent trả về với lựa chọn; lệch thì hủy session và báo lỗi.
@@ -104,7 +104,9 @@
 7. Ghi `crew_spawns`: ranked, skipped, hạn mức, mức cách ly, rủi ro còn lại, phiên bản adapter, kênh ROLE, hash của option.
 
 **Tiêu chí nghiệm thu** (agent giả, repo git tạm)
-- Cho task `ready` và lựa chọn hợp lệ, khi spawn, thì agent giả nhận `session/new` có cwd là worktree mới, ROLE và option đúng profile, rồi nhận packet làm prompt đầu.
+- Cho task `ready` và lựa chọn hợp lệ, khi spawn, thì agent giả nhận `session/new` có cwd là worktree mới, ROLE và option đúng profile, không có `additionalDirectories`, rồi nhận packet làm prompt đầu.
+- Cho spawn xong, khi kiểm repo, thì worktree nằm trên một nhánh có tên của task, không detached; cửa sổ của Human không có workspace mới.
+- Cho hai spawn cùng lúc, khi chạy, thì cả hai tạo được worktree, không lần nào bị từ chối vì đang có lần tạo khác.
 - Cho agent trả mode khác mode đã đặt, khi spawn, thì session bị hủy và Orchestrator nhận lỗi.
 - Cho task chưa `ready`, khi gọi `crew_spawn_worker`, thì bị từ chối.
 - Cho spawn thành công, khi đọc `crew_spawns`, thì có đủ các trường ở bước 7.
@@ -124,11 +126,14 @@
 
 **Luật:** theo bảng spec 10.1 cho worker. Điểm chính:
 - Sửa và đọc trong worktree: cho phép. Ngoài worktree hoặc trong `effective.secret_paths`: từ chối.
+- Luật trên áp cho cả `fs/read_text_file` và `fs/write_text_file` qua H12 (T2.2): chỉ cho đường dẫn đã chuẩn hóa (resolve symlink) nằm trong worktree của worker; worker chỉ đọc (ví dụ đối soát, T5.5) bị từ chối mọi `fs/write_text_file`.
 - `SandboxNetworkAccess {host}` của Claude: cho phép khi host thuộc allowlist; host đã cho phép giữ hiệu lực tới hết session **[Spike]**.
 - Lệnh shell trên Antigravity tài khoản cá nhân: chỉ lệnh khớp allowlist của project.
-- Yêu cầu nới quyền sandbox của Codex: từ chối, trừ khi S8 chỉ ra trường hợp hợp lệ.
+- Yêu cầu nới quyền sandbox của Codex: từ chối, trừ khi S8 chỉ ra trường hợp hợp lệ. Nhận biết từ `rawInput` (T2.2), không từ `kind`, vì yêu cầu này đến như lệnh `kind: execute` có `allow_once`.
 - Lệnh git ghi: từ chối.
 - Release, migration, tác động môi trường: từ chối, trừ khi project có quyền và có artifact rollback đã duyệt (NEED 06).
+
+Gate trả lời yêu cầu của worker ngay trong handler của event, không qua tác vụ async, để yêu cầu không kịp hiện trong view của worker **[Suy luận: kiểm bằng test]**. Phím tắt “allow always” của view gốc trả lời yêu cầu đang chờ của mọi session trong conversation (`conversation_view.rs:463-486`) **[Đã kiểm]**, nên yêu cầu của worker không được nằm chờ trong UI.
 
 **Rủi ro còn lại:** lấy từ spec 10.4 và báo cáo S8, ghi theo provider vào `residual_risks_json` của bản ghi spawn. M6 hiển thị phần này.
 
@@ -138,8 +143,13 @@
 - Cho lệnh `git push` của Antigravity, khi xin quyền, thì từ chối.
 - Cho lệnh triển khai khi project không có quyền release, khi xin quyền, thì từ chối kèm lý do NEED 06.
 - Cho worker Codex, khi đọc bản ghi spawn, thì rủi ro còn lại có mục về `$TMPDIR` và `/tmp`, trừ khi S8 tìm được cách chặn.
+- Cho worker gửi `fs/write_text_file` tới đường dẫn ngoài worktree, hoặc tới symlink trong worktree trỏ ra ngoài, khi Zed nhận, thì bị từ chối và project không có worktree mới.
+- Cho worker chỉ đọc gửi `fs/write_text_file` tới file trong worktree, khi Zed nhận, thì bị từ chối.
+- Cho yêu cầu Codex trong fixture S8 có `additionalPermissions` hoặc ngữ cảnh mạng, khi gate xử lý, thì từ chối; lệnh thường cùng `kind: execute` trong worktree thì cho phép một lần.
+- Cho yêu cầu xin quyền của worker, khi event được xử lý xong, thì thread không còn yêu cầu đang chờ.
+- **Contract:** cho worker Codex ở `workspace-write`, khi prompt yêu cầu một lệnh cần mạng, thì yêu cầu nới quyền đến với `rawInput` khớp fixture, và gate từ chối. Chi phí khoảng 1 prompt.
 
-**Kiểm chứng:** `cargo test -p crew gate`
+**Kiểm chứng:** `cargo test -p crew gate`, cộng contract test `gate_`.
 
 ---
 
@@ -155,6 +165,7 @@
 **Thiết kế**
 - `sandbox`: `enabled`, `failIfUnavailable`, `allowUnsandboxedCommands: false`; `network.allowedDomains` = allowlist hiệu lực, `strictAllowlist: true`; `filesystem.denyRead` = đường dẫn bí mật hiệu lực; `filesystem.denyWrite` = `$TMPDIR` thật của sandbox.
 - `settings.permissions.deny`: luật `Read(//<đường dẫn>/**)` cho cùng danh sách đường dẫn bí mật, cộng tool bị cấm theo ROLE.
+- `settingSources: ["project"]` (T1.6): adapter vẫn đọc `.claude/settings.json` của repo, nhưng bỏ `.claude/settings.local.json` và settings user của Human. Luật cho phép trong file của repo không được thắng luật deny của Crew; contract test khóa điều này.
 - `$TMPDIR` thật được đo bằng contract test (lệnh Bash trong sandbox in `$TMPDIR`) và lưu theo phiên bản adapter. Spike đo được `/tmp/claude-501` **[Spike]**.
 
 **Tiêu chí nghiệm thu** (contract test; danh sách chặn có thêm một thư mục bí mật giả trong thư mục tạm)
@@ -162,6 +173,8 @@
 - Cho lệnh Bash ghi ra ngoài worktree hoặc vào `$TMPDIR`, khi chạy, thì `DENIED`.
 - Cho host ngoài allowlist, khi Bash truy cập, thì không truy cập được; host trong allowlist thì được.
 - Cho payload thật, khi kiểm, thì có đủ các đường dẫn bí mật thật ở `effective.secret_paths`. Test không đọc các đường dẫn thật này.
+- Cho worktree có `.claude/settings.json` cho phép đọc thư mục bí mật giả, khi Bash hoặc tool Read đọc file trong đó, thì vẫn `DENIED`.
+- Cho worktree có `.claude/settings.local.json` cho phép một lệnh vốn phải xin quyền, khi worker chạy lệnh đó, thì vẫn có yêu cầu xin quyền tới gate.
 - Test chỉ in `OK` hoặc `DENIED`, không in nội dung file.
 
 **Kiểm chứng:** `cargo test -p crew_acp`, cộng contract test `sandbox_`.
@@ -252,16 +265,18 @@
 | Bàn giao | Bộ chạy kiểm chứng; phân loại lỗi `infra`/`product`; readiness |
 
 **Thiết kế**
-- Dùng `sandbox::Sandbox::new(SandboxPolicy { … })` rồi `execute` (`crates/sandbox/src/sandbox.rs:85-118, 519, 638`) **[Đã kiểm]**:
-  - `fs: SandboxFsPolicy::Restricted { writable_paths: [worktree], protected_paths }`;
+- Dùng `sandbox::Sandbox::new(SandboxPolicy { … })` rồi `execute` (`crates/sandbox/src/sandbox.rs:85-118, 519, 638`) **[Đã kiểm]**. Chỉ dùng API public (`new`, `wrap`, `execute`); `wrap_invocation` nằm trong module private (`sandbox.rs:23-24`) **[Đã kiểm]**.
+  - `fs: SandboxFsPolicy::Restricted { writable_paths: [worktree, scratch], protected_paths }`;
   - `network: SandboxNetPolicy::Blocked`, hoặc `Restricted { allowed_domains }` khi bước đó có `network: true`.
+- **Thư mục scratch:** Seatbelt chỉ cho ghi vào thư mục được liệt kê và vài đường dẫn `/dev` (`crates/sandbox/src/macos_seatbelt.rs:310-341`) **[Đã kiểm]**, nên build và test ghi file tạm sẽ lỗi. Mỗi lần chạy có một thư mục scratch riêng, nằm trong `writable_paths` và được đặt làm `TMPDIR`. Bước build cần unix socket thì khai trong policy của bước đó.
 - Chỉ chạy lệnh có trong cấu hình project (snapshot lúc session bắt đầu).
 - Ghi exit code và output làm bằng chứng; phân loại `infra` (port bận, timeout, hết dung lượng, lỗi mạng, state bẩn) hay `product` theo mã thoát và mẫu output.
-- **Readiness (NEED 23):** đăng nhập provider, snapshot, adapter ghim, baseline.
+- **Readiness (NEED 23):** đăng nhập provider, snapshot, adapter ghim, baseline, store bền (T1.1), worktree được tin (T1.2).
 - **Baseline (NEED 19):** chạy `verification.baseline` từ một worktree sạch.
 
 **Tiêu chí nghiệm thu**
 - Cho lệnh kiểm chứng ghi file ngoài worktree, khi chạy, thì bị sandbox chặn (test chỉ chạy trên macOS).
+- Cho lệnh kiểm chứng ghi file tạm qua `$TMPDIR`, khi chạy, thì ghi được, và file nằm trong thư mục scratch của lần chạy đó (test chỉ chạy trên macOS).
 - Cho bước `network: false` cần mạng, khi chạy, thì lỗi được phân loại `infra` kèm lý do mạng.
 - Cho lệnh không có trong cấu hình project, khi Orchestrator yêu cầu chạy, thì bị từ chối.
 - Cho baseline chạy hai lần từ worktree sạch, khi so, thì cùng kết quả.
