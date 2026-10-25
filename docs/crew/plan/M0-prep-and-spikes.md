@@ -307,4 +307,4 @@ The changed-crate test command passed 13 tests, with three real-adapter tests ig
 cargo test -p crew_ui -p feature_flags -p crew -p crew_acp -p crew_mcp -p crew_github -p crew_models
 ```
 
-Full-workspace formatting (`cargo fmt --all -- --check`) and real-app UI evidence now pass. Workspace lint and GitHub PR review/merge remain pending. No implementation or spike branch has been pushed or merged. Spike source remains isolated on `spike/S6-acp-ext` (`2fdbd33f34`) and `spike/S7-mcp-bridge` (`ec6efc014d`); only reports belong in the product branch.
+`./script/clippy` (workspace release clippy, cargo-shear, typos), full-workspace formatting (`cargo fmt --all -- --check`), and real-app UI evidence now pass. GitHub PR review/merge and the NEED 58 private-fork decision remain pending. No implementation or spike branch has been pushed or merged. Spike source remains isolated on `spike/S6-acp-ext` (`2fdbd33f34`) and `spike/S7-mcp-bridge` (`ec6efc014d`); only reports belong in the product branch.
