@@ -72,7 +72,7 @@
           <tr><td>3</td><td>Với mỗi dòng <code>Task T1 → ROLE software-engineer</code>: mở thread mới, dán file ROLE đó cùng task packet (khối JSON). Việc sửa code chạy trong git worktree riêng.</td><td>Worker làm việc và kết thúc bằng một khối bàn giao <code>crew.handoff/1</code>: đã làm gì, bằng chứng, giới hạn, blocker.</td></tr>
           <tr><td>4</td><td>Dán khối bàn giao về thread Orchestrator.</td><td>Orchestrator kiểm bàn giao và trả lại phần thiếu. Nó có thể xin bạn output của một lệnh cụ thể để tự kiểm.</td></tr>
           <tr><td>5</td><td>Mở thread mới với <a href="roles/evaluator.md"><code>roles/evaluator.md</code></a> và gói đánh giá do Orchestrator in ra.</td><td>Evaluator độc lập chạy lại bằng chứng và trả <code>pass</code> hoặc <code>fail</code>, kèm phát hiện có dẫn <code>file:dòng</code>.</td></tr>
-          <tr><td>6</td><td>Commit, mở PR, review và merge theo hướng dẫn của Orchestrator.</td><td>Orchestrator đề nghị Done theo đúng tiêu chí của loại session; bạn quyết.</td></tr>
+          <tr><td>6</td><td>Commit đúng những file worker đã khai báo (sau khi quét secret), mở PR, review, rồi merge đúng commit bạn đã review. PR do chính bạn tạo thì GitHub không cho bạn tự approve, nên Orchestrator hướng dẫn merge có ràng buộc commit đã review (ví dụ <code>gh pr merge --match-head-commit</code>).</td><td>Orchestrator đề nghị Done theo đúng tiêu chí của loại session; bạn quyết.</td></tr>
         </tbody>
       </table>
     </div>
@@ -155,7 +155,7 @@
         </thead>
         <tbody>
           <tr><td>Spec 13 không có loại nhiệm vụ cho release, vận hành, review bảo mật</td><td>Xếp hạng model cho các việc này dựa vào loại gần nhất</td><td>Gán loại gần nhất trong 9 loại; T5.3 quyết có thêm loại không</td></tr>
-          <tr><td>Không trường nào báo cho gate biết worker chỉ được đọc</td><td>Worker đối soát (T5.5) và evaluator cần bị chặn sửa file</td><td>Ghi “chỉ đọc” trong ROLE và packet; T5.1 hoặc T5.5 chốt cơ chế</td></tr>
+          <tr><td>Không trường nào báo cho gate biết worker chỉ được đọc</td><td>Worker đối soát (T5.5) và evaluator cần bị chặn sửa file</td><td>Ghi “chỉ đọc” trong ROLE và packet; báo cáo của worker chỉ đọc nằm trong bàn giao; T5.1 hoặc T5.5 chốt cơ chế</td></tr>
           <tr><td>Packet ở spec 9.3 thiếu <code>problem_id</code></td><td>Worker không biết mình đang thử lại vấn đề nào, nên không điền được <code>attempt_of_problem</code></td><td>Packet thủ công của Orchestrator thêm <code>problem_id</code></td></tr>
           <tr><td>Kết quả của evaluator (spec 11.1) chưa có tên schema</td><td>Bộ nạp cần tên để kiểm</td><td>Đặt tạm là <code>crew.verdict/1</code></td></tr>
         </tbody>
@@ -165,10 +165,11 @@
     <h2>7. Đã kiểm gì</h2>
     <ul>
       <li>Front matter đọc được; <code>id</code> khớp tên file; mọi loại nhiệm vụ thuộc 9 loại của spec 13.</li>
-      <li>Playbook chỉ tham chiếu ROLE có thật; bảng loại session của Orchestrator chỉ trỏ tới playbook có thật.</li>
+      <li>Playbook chỉ tham chiếu ROLE có thật, và loại nhiệm vụ của mỗi bước thuộc danh sách ROLE đó khai báo; bảng loại session của Orchestrator chỉ trỏ tới playbook có thật.</li>
       <li>Phần quy tắc chung giống hệt nhau từng ký tự ở cả 14 ROLE dùng nó.</li>
       <li>Khóa JSON khớp spec 9.4 (bàn giao), 9.3 (packet, thêm <code>problem_id</code>) và 11.1 (kết quả evaluator). Mọi công cụ <code>crew_*</code> được nhắc đều có trong spec.</li>
       <li>Không file nào còn chứa cơ chế đã bỏ ở mục 4, trừ dòng ghi nguồn <code>dropped:</code>.</li>
+      <li>Một agent rà soát độc lập (context mới) đối chiếu 6 file quan trọng nhất với spec và brief, tìm ra 15 lỗi. 3 lỗi nặng: merge ở chế độ thủ công cần tự approve PR của chính mình, điều GitHub không cho phép; evaluator bị giao một phép kiểm trên commit gốc mà nó không chạy được; lỗi hạ tầng bị trả về thành việc làm lại. Cả 15 lỗi đã được sửa trong bản này.</li>
     </ul>
   </main>
 </body>

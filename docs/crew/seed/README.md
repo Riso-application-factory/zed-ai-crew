@@ -23,13 +23,13 @@ Draft content for the ROLE catalogue and the playbooks, written before the loade
 | `ui-designer` | UI Designer | ui, docs | BMAD UX validation; mattpocock prototype |
 | `software-architect` | Software Architect | architecture, research, docs | BMAD architect, architecture spine, reviewer gate |
 | `tech-lead` | Tech Lead | architecture, review | GSD planner, plan checker; spec-kit analyze; mattpocock to-tickets |
-| `software-engineer` | Software Engineer | implement, debug, test, ui | BMAD dev; compound worker contract; Superpowers TDD, verification, debugging |
+| `software-engineer` | Software Engineer | implement, debug, test, ui, research | BMAD dev; compound worker contract; Superpowers TDD, verification, debugging |
 | `qa-engineer` | QA Engineer | test, review | compound testing reviewer; BMAD verification gap; GSD verifier |
 | `security-engineer` | Security Engineer | review, architecture | GSD security auditor, SECURITY.md template |
 | `evaluator` | Evaluator (independent) | review | mattpocock code-review; compound ce-code-review, validator; BMAD claims check |
-| `delivery-manager` | Delivery Manager | docs, review | Written new; mattpocock retro |
+| `delivery-manager` | Delivery Manager | docs, review, research | Written new; mattpocock retro |
 | `release-manager` | Release Manager | docs, review, test | Written new |
-| `platform-engineer` | Platform / DevOps Engineer | implement, test, debug | Written new; BMAD project context; GSD codebase mapper |
+| `platform-engineer` | Platform / DevOps Engineer | implement, test, debug, research, docs | Written new; BMAD project context; GSD codebase mapper |
 | `sre` | Site Reliability Engineer | debug, test, docs | wshobson incident-responder, postmortem-writing |
 
 | Playbook | Session type (brief 4.3) |
@@ -87,12 +87,12 @@ Before Crew exists, the Human plays the part of the Crew tools:
 3. For each task it prints `Task <id> → ROLE <role-id>` and a packet. Open a new thread, paste the ROLE file and the packet; give code tasks their own git worktree.
 4. The worker ends with a `crew.handoff/1` block. Paste it back into the Orchestrator thread.
 5. Evaluation runs in a fresh thread with `roles/evaluator.md` and the evaluation packet.
-6. Commits, pull requests, and merges are done by the Human, following the Orchestrator's steps.
+6. Commits, pull requests, and merges are done by the Human, following the Orchestrator's steps: stage only the files the handoff declares, scan the staged diff for secrets, and merge only the head that was reviewed. Without the Crew GitHub App the pull request is the Human's own, and GitHub does not let an author approve it, so the reviewed-head rule (for example `gh pr merge --match-head-commit <sha>`) stands in for the approval of NEED 14.
 
 ## Gaps found while drafting
 
 1. **Task kinds.** Spec 13 has no kind for release or rollout, operations, security review, or product discovery. The drafts map such work to the nearest of the nine kinds; T5.3 decides whether to add kinds.
-2. **Read-only workers.** The analysis worker (T5.5) and the evaluator must not edit files, but no field tells the gate that a worker is read-only. Decide in T5.1 or T5.5: a ROLE field, or a packet constraint the gate reads.
+2. **Read-only workers.** The analysis worker (T5.5) and the evaluator must not edit files, but no field tells the gate that a worker is read-only. Decide in T5.1 or T5.5: a ROLE field, or a packet constraint the gate reads. Such a worker also cannot write a report file, and spec 9.4 checks that every output location exists, so the drafts put the analysis report inside the handoff (`summary`); a dedicated report field may fit better.
 3. **Verdict schema id.** Spec 11.1 gives the evaluator's verdict shape without an id; the drafts call it `crew.verdict/1`.
 4. **`problem_id` in the packet.** The handoff has `attempt_of_problem` and `crew_tasks` has `problem_id`, but the packet of spec 9.3 has no field to carry it to the worker. The Orchestrator's manual-mode packet adds `problem_id`; spec 9.3 should add it too.
 5. **BMAD ticket template.** Brief 5.3.1 names `ticket-template.md` and `github-ticketing.toml`; neither exists in `bmad-method@6.12.4`. The story format comes from `bmad-create-epics-and-stories`. Check another BMAD version or module during T5.2.
@@ -102,9 +102,11 @@ Before Crew exists, the Human plays the part of the Crew tools:
 ## Checks run on these drafts
 
 - Front matter parses; every `id` matches its file name; every task kind is one of the nine in spec 13.
-- Playbook steps reference only existing ROLE ids; the Orchestrator's session table names only existing playbooks.
+- Playbook steps reference only existing ROLE ids, and each step's task kind is one the assigned ROLE declares; the Orchestrator's session table names only existing playbooks.
 - The shared worker sections are byte-identical across the 14 ROLEs that use them.
 - JSON blocks match spec 9.4 (handoff keys), spec 9.3 (packet keys, plus `problem_id`), and spec 11.1 (verdict keys and finding categories). Every `crew_*` tool named exists in the spec.
 - No ROLE or playbook body contains the removed mechanisms (self-approval, auto-merge, push to main, permission-bypass modes, `allow_always`, flag-file approval, model upgrades on retry); they appear only in `dropped:` provenance lines.
 
-Not done yet: running any ROLE on a real provider, and the independent review that plan step 7 requires; both belong to T5.2 and T5.3.
+- An independent reviewer with fresh context checked the Orchestrator, Software Engineer, Evaluator, and Tech Lead ROLEs and the implement and refine playbooks against the spec and the brief. It reported 15 problems (3 high: manual-mode merge impossible without self-approval, the evaluator asked to run a base-commit check it cannot run, infra failures turned into rework); all 15 are fixed in this draft.
+
+Not done yet: running any ROLE on a real provider. That, and the independent verification of each task, belong to T5.2 and T5.3.
