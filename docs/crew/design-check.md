@@ -2,12 +2,12 @@
 
 | Field | Content |
 | --- | --- |
-| Version | 1 · 2026-10-25 |
+| Version | 1.1 · 2026-10-25 |
 | Question | Do the claims about Zed that the tech spec (v2.2) relies on hold in the code of this fork? |
 | Basis | Fork `main` at `11caaae`. ACP crates `agent-client-protocol` 3.4.0 and `agent-client-protocol-schema` 1.12.0 from crates.io. Adapters `@agentclientprotocol/claude-agent-acp@0.95.0` and `@agentclientprotocol/codex-acp@2.2.2` from npm. Nothing was built or run. |
 | Method | Four readers worked in parallel (thread lifecycle, ACP client, infrastructure, adapter behaviour under Zed). The author then re-read the load-bearing findings in the code; those are marked **re-checked**. |
 | Line numbers | All paths and lines refer to the fork. Spec commit `347f171` is not in this (shallow) clone; the fork's upstream base appears to be about 2026-10-17. Spec lines still match in slow-moving files but have moved in `v1.rs`, `acp_thread.rs`, and `agent_ui` (see the line map at the end). |
-| Status | Findings and proposals only. The spec, the plan, and `open-question.md` are unchanged until the Human approves the changes. |
+| Status | The Human approved all 24 proposals (option A) on 2026-10-25. Tech spec v2.3, plan 1.2, `open-question.md` 1.1 and `spike-list.md` 1.1 apply them; this report keeps the evidence. |
 
 ## Summary
 
@@ -101,7 +101,7 @@ Sessions an adapter reports in `_meta.subagent_session_info` are loaded on the s
 
 ### D12 · DecisionCapture has no stable message id (medium)
 
-A new user message emits `NewEntry` with `AgentThreadEntry::UserMessage`, whose identity is `MessageIdentity::Legacy(None)` (`acp_thread.rs:6559-6566, 5160`); `SubmissionId` is an in-memory counter (`crates/acp_thread/src/submission.rs:20`). The composer and programmatic prompts both call `thread.send` (`thread_view.rs:2110`), so there is no origin flag. Crew assigns its own message ids, records the submission id of every prompt it sends, and treats the other user entries of the Orchestrator thread as the Human's. This answers item 3 of `open-question.md` section 3.
+A new user message emits `NewEntry` with `AgentThreadEntry::UserMessage`, whose identity is `MessageIdentity::Legacy(None)` (`acp_thread.rs:6559-6566, 5160`); `SubmissionId` is an in-memory counter (`crates/acp_thread/src/submission.rs:20`). The composer and programmatic prompts both call `thread.send` (`thread_view.rs:2110`), so there is no origin flag. Crew assigns its own message ids, records the submission id of every prompt it sends, and treats the other user entries of the Orchestrator thread as the Human's. This answers the DecisionCapture event question of `open-question.md` section 3.
 
 ### D13 · ModeGuard sees only agent-originated changes (medium)
 
@@ -109,7 +109,7 @@ A new user message emits `NewEntry` with `AgentThreadEntry::UserMessage`, whose 
 
 ### D14 · Dropped updates cannot be logged at the thread level (medium)
 
-The catch-all arm exists (`acp_thread.rs:4526`) and top-level usage `_meta` is dropped (`:4522`, `update_usage` `:5366-5379`), so H4(a) is right. But unknown session-update types already fail to parse inside the SDK (`agent-client-protocol-3.4.0 src/handlers.rs:272-279`), so H4(b) would only see known variants. Logging dropped updates (NEED 43) needs the SDK layer or `AcpConnection::subscribe_debug_messages()` (`v1.rs:488-495`), a debug facility whose format may change.
+The catch-all arm exists (`acp_thread.rs:4526`) and top-level usage `_meta` is dropped (`:4522`, `update_usage` `:5366-5379`), so H4(a) is right. But unknown session-update types already fail to parse inside the SDK (`agent-client-protocol-3.4.0 src/jsonrpc/handlers.rs:272-279`; the v1 `SessionUpdate` enum has no fallback variant), so H4(b) would only see known variants. Logging dropped updates (NEED 43) needs the SDK layer or `AcpConnection::subscribe_debug_messages()` (`v1.rs:488-495`), a debug facility whose format may change.
 
 ### D15 · Restricted Mode hides project settings (medium)
 
@@ -138,7 +138,7 @@ Once `enabled_for_all()` returns true, settings cannot switch Crew off (`crates/
 ### D21 · Side effects of the wrapper (low)
 
 - The only downcast of a wrapped connection is `agent_connection_store.rs:115`; Crew connections would disappear from the ACP Logs view (`crates/acp_tools/src/acp_tools.rs:133`).
-- The trait has 26 methods with default implementations (`crates/acp_thread/src/connection.rs:95-311`); a wrapper that forgets one still compiles. Add a test that checks forwarding.
+- The trait has 26 methods with default implementations (`crates/acp_thread/src/connection.rs:95-305`); a wrapper that forgets one still compiles. Add a test that checks forwarding.
 - Per-thread calls (prompt, cancel, modes, config options, close) go to the inner connection that `AcpThread` holds (re-checked, `v1.rs:919-923`); `CrewConnection` sees only new, load, resume, authentication, session lists, and elicitation routing. Spec 3.3's "the remaining methods forward to `inner`" should describe this.
 
 ### D22 · An inactive ACP v2 connection exists upstream (low)
@@ -176,8 +176,8 @@ See "Line numbers" above and the line map below. T0.2 should start from this rep
 
 ## Open items this report answers
 
-- `open-question.md` section 3, item 3 (event for DecisionCapture): D12.
-- `open-question.md` section 3, item 6 (Antigravity writing through a hidden worktree): yes, see D2.
+- The DecisionCapture event question (item 3 of `open-question.md` section 3 in version 1.0): D12.
+- Whether Antigravity can write through a hidden worktree (item 6 of the same list): yes, see D2.
 - Spike S6: the SDK API is identified (see "Claims that hold"); a running test against a fake agent is still needed.
 - Spike S7: framing is newline-delimited JSON-RPC and Crew must handle `initialize` (D9); running the three providers against the bridge is still needed.
 
@@ -224,4 +224,4 @@ Unchanged: `custom.rs:240-245`, `agent_server_store.rs:1055/1309/1456`, `worktre
 - How the Antigravity adapter routes reads, writes, and commands (its code was not available); the "Baseline" rows of spec 6.1 stand as they are.
 - Whether Claude's sandbox `denyWrite` constrains the Write and Edit tools, not only Bash; the spike measured Bash.
 - Whether Codex's `workspace-write` sandbox restricts reads (Codex core is not in the adapter package).
-- Spec 12's push through askpass with `-c credential.helper=` (open item 7) was not examined.
+- Spec 12's push through askpass with `-c credential.helper=` (still an open question in `open-question.md`) was not examined.
