@@ -57,7 +57,8 @@
 | Bàn giao | Nhập key; bộ kiểm sẵn sàng; danh tính bot của App cho commit (T3.9) |
 
 **Thiết kế**
-- Human chọn file `.pem` bằng hộp chọn file. Crew đọc file và ghi thẳng vào Keychain qua `CredentialsProvider` (`crates/credentials_provider/src/credentials_provider.rs:14-58`) **[Đã kiểm]**. Key không đi qua hội thoại, log hay run store (NEED 05, 17).
+- Human chọn file `.pem` bằng hộp chọn file. Crew đọc file và ghi thẳng vào Keychain qua một `CredentialsProvider` (`crates/credentials_provider/src/credentials_provider.rs:11-34`) **[Đã kiểm]**. Key không đi qua hội thoại, log hay run store (NEED 05, 17).
+- **Luôn là Keychain, bất kể kênh phát hành.** Không dùng `zed_credentials_provider::global(cx)`: trên kênh `dev` hàm này trả `DevelopmentCredentialsProvider`, lưu credential vào file JSON thường `development_credentials` trong thư mục config, trừ khi có `ZED_DEVELOPMENT_USE_KEYCHAIN` (`crates/zed_credentials_provider/src/zed_credentials_provider.rs:46-62, 116`), và `crates/zed/RELEASE_CHANNEL` của fork là `dev` **[Đã kiểm]**. Provider của Crew gọi API credentials của GPUI (`cx.write_credentials`), như `KeychainCredentialsProvider` làm (`:69`). Không ghi được vào Keychain thì từ chối lưu và báo Human.
 - Kiểm sẵn sàng:
   - danh tính App;
   - App đã cài vào repo;
@@ -69,6 +70,8 @@
 
 **Tiêu chí nghiệm thu**
 - Cho file `.pem` hợp lệ, khi nhập, thì Keychain có key, còn run store và log không có.
+- Cho kênh phát hành `dev` và không có `ZED_DEVELOPMENT_USE_KEYCHAIN`, khi nhập key, thì key nằm trong credential store của nền tảng (Keychain) và file `development_credentials` không chứa key.
+- Cho Keychain trả lỗi khi ghi, khi nhập key, thì Crew từ chối lưu, báo Human, và key không nằm trong file nào.
 - Cho App chưa cài vào repo, khi kiểm sẵn sàng, thì báo đúng bước thiếu, kèm hướng dẫn của Human.
 - Cho ruleset thiếu “require approval of most recent push”, khi kiểm, thì báo thiếu và chưa coi là sẵn sàng.
 - Cho repo của tổ chức hoặc cá nhân, khi kiểm, thì loại chủ sở hữu được ghi đúng.
@@ -87,7 +90,7 @@
 | Bàn giao | Push nhánh tích hợp |
 
 **Thiết kế**
-- Dùng crate `git` và askpass của Zed. Git truyền socket askpass qua `ZED_ASKPASS_SOCKET` (`crates/git/src/repository.rs:4091`) **[Đã kiểm]**. Với lệnh push của Crew, delegate askpass trả `x-access-token` và token installation.
+- Dùng crate `git` và askpass của Zed. Git truyền socket askpass qua `ZED_ASKPASS_SOCKET` (`crates/git/src/repository.rs:4082`) **[Đã kiểm]**. Với lệnh push của Crew, delegate askpass trả `x-access-token` và token installation.
 - Chạy git với `-c credential.helper=` để bỏ qua credential helper của user. Như vậy git không lấy credential của Human, và không lưu token vào Keychain **[Suy luận: kiểm bằng test]**.
 - Push là một effect (T1.3): ghi `intent` trước khi push.
 
