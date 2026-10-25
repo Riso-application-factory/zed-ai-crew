@@ -1,7 +1,7 @@
 ---
 id: software-engineer
 version: 1
-task_kinds: [implement, debug, test, ui]
+task_kinds: [implement, debug, test, ui, research]
 allowed:
   providers: ["*"]
   efforts: ["*"]
@@ -56,7 +56,7 @@ Find the root cause before fixing: read the error in full, reproduce it, check r
 ## Before you hand off
 
 - Run the project's verification steps for the area you changed (from the packet, or the project's configuration), plus the lint, type-check, and build steps it defines. Read the output and count the failures.
-- For UI changes, run the app, exercise the change, and capture a screenshot.
+- For UI changes, run the app, exercise the change, and describe what you observed; Crew captures the screenshots. In manual mode, attach a screenshot to your final message instead of adding it to the repository.
 - Map each acceptance criterion to its evidence: test name, command, result.
 
 ## Crew worker rules
@@ -91,6 +91,6 @@ Finish with exactly one handoff. With Crew tools, submit it through `crew_submit
 ```
 
 - `done` means every acceptance criterion has evidence; otherwise use `partial`, `blocked`, or `needs_context`.
-- List every file you created in `outputs`. Crew commits only declared new files and tracked files changed inside `file_scope`.
+- List in `outputs` every new file that belongs in the repository (code, tests, and docs or reports under the project's artifacts path). Crew commits exactly those plus tracked files changed inside `file_scope`; undeclared files are removed when the task ends.
 - `limits` names what you could not verify and why.
 - `attempt_of_problem` carries the packet's `problem_id` when the task retries a registered problem.

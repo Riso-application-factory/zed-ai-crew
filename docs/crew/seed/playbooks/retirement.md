@@ -32,7 +32,7 @@ seed:
 | # | Step | ROLE | Kind | Input → Output | Gate | Human |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | Inventory | software-architect | architecture | component → references, behaviours, data stores, contracts, consumers, and how each was found | Read-only | — |
-| 2 | Removal plan | software-architect with platform-engineer | architecture | inventory → removal sequence, data-handling options with consequences, rollback, ADRs to supersede | Every consumer and data store covered | Chooses the data handling |
+| 2 | Removal plan | software-architect with platform-engineer | architecture · docs | inventory → removal sequence, data-handling options with consequences, rollback, ADRs to supersede | Every consumer and data store covered | Chooses the data handling |
 | 3 | Stories | backlog-analyst | docs | plan → Story Ready removal stories | Story Ready | — |
 | 4 | Remove | an `implement` session | implement | stories → merged pull requests | Implement gates | Reviews the pull requests |
 | 5 | Verify absence | qa-engineer | test | → searches, tests, and runtime checks showing no references or old behaviour remain | Evidence | — |
@@ -48,4 +48,4 @@ seed:
 
 ## Manual mode
 
-The Human relays packets and handoffs, opens and merges the pull requests after approving them on GitHub, and performs or supervises the data handling.
+The Human relays packets and handoffs, commits only the declared files after scanning the staged diff for secrets, opens the pull requests, merges only the reviewed head (as in `implement`), and performs or supervises the data handling.

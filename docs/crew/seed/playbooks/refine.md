@@ -5,7 +5,7 @@ session_type: refine
 output: "Story Ready stories"
 done_when:
   - "Each story meets Story Ready: observable acceptance criteria, explicit scope_out, assumptions confirmed by the Human"
-  - "The readiness check by a different author returns PASS, or the Human accepted each concern"
+  - "The readiness check by a different author returns `pass`, or `concerns` the Human has decided"
 pr: none
 seed:
   - "Crew protocol: brief 4.3, NEED 11, 12, 19, 20, 21, 22, 39"
@@ -39,17 +39,17 @@ seed:
 | 4 | Design, when UI or flows change | ux-designer, ui-designer | ui | delta spec → experience and visual spec; prototype when one question needs it | Reference features mapped to real capabilities | Chooses among variations |
 | 5 | Threat model, when data, authentication, or a trust boundary is touched | security-engineer | review | delta spec → trust boundaries, threats, abuse cases, rollback | Every threat has a disposition | Accepts risks |
 | 6 | Stories | backlog-analyst | docs | spec, designs, threat model → stories, slices, dependencies | Story Ready fields present | — |
-| 7 | Readiness check | tech-lead (analysis mode) | review | stories and spec → PASS, CONCERNS, or FAIL with findings | Different author; read-only | Decides on concerns |
+| 7 | Readiness check | tech-lead (analysis mode) | review | stories and spec → verdict `pass`, `concerns`, or `fail` with findings | Different author; read-only | Decides every HIGH finding |
 | 8 | Publish | Crew | — | stories → GitHub Issues, hierarchy by owner type | Marker and hash on each issue | — |
 
 ## Step notes
 
 1. The map is an index of decisions, not a store: each decision lives in one place. Questions are asked in rounds, each with context, options, and a recommendation.
 2. On an existing system the change is described as a delta on top of what the survey verified, never as a rewrite of the whole system's specification.
-4. A prototype lives on a `crew/prototype/<name>` branch, answers one stated question, and is never merged; its verdict is recorded on the story.
+4. A prototype lives on a `crew/prototype/<name>` branch, answers one stated question, and is never merged; the Human's decision on it is recorded on the story.
 5. Accepting a risk is the Human's decision and is recorded with that decision.
 6. Stories depend only on earlier stories; data structures are created by the first story that needs them.
-7. FAIL sends the work back to the step that owns each finding.
+7. `fail` sends the work back to the step that owns each finding; `concerns` go to the Human.
 8. Organisation repos use issue types plus sub-issues; personal repos use labels plus sub-issues. Crew is the only automated writer to Issues.
 
 ## Manual mode

@@ -30,7 +30,7 @@ You define how the product behaves for the people who use it: who they are, the 
 - **Accessibility floor**: keyboard paths, focus order, labels, contrast targets, motion.
 - **Voice and tone** for copy that matters: errors, empty states, confirmations.
 - **References**: when another product is the model, map each borrowed feature to a real capability of this system (supported, needs a capability, not feasible) before designing around it.
-- When conversation cannot settle a question, propose a throwaway prototype on a `crew/prototype/*` branch that answers one stated question, and record the answer.
+- When conversation cannot settle a question, propose a throwaway prototype on a `crew/prototype/*` branch that answers one stated question, as evidence for the Human's decision.
 
 ## Output
 
@@ -68,6 +68,6 @@ Finish with exactly one handoff. With Crew tools, submit it through `crew_submit
 ```
 
 - `done` means every acceptance criterion has evidence; otherwise use `partial`, `blocked`, or `needs_context`.
-- List every file you created in `outputs`. Crew commits only declared new files and tracked files changed inside `file_scope`.
+- List in `outputs` every new file that belongs in the repository (code, tests, and docs or reports under the project's artifacts path). Crew commits exactly those plus tracked files changed inside `file_scope`; undeclared files are removed when the task ends.
 - `limits` names what you could not verify and why.
 - `attempt_of_problem` carries the packet's `problem_id` when the task retries a registered problem.

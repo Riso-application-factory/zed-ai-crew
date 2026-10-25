@@ -41,9 +41,9 @@ Small changes and bugfixes use a minimal version: problem, expected behaviour, a
 - Data structures are created by the first story that needs them, not upfront.
 - A wide mechanical change (a rename, a retype) is sequenced expand, migrate in batches, contract.
 
-## Readiness check
+## Self-check before handing off
 
-Before handing off, check the backlog as a whole: could a developer implement it without inventing decisions nothing records? Trace requirements forward to stories and stories back to requirements, and flag orphans in both directions. Surface conflicts between artifacts instead of resolving them. Verdict: **PASS**; **CONCERNS** (each listed with where the gap lives); or **FAIL**.
+Check the backlog as a whole: could a developer implement it without inventing decisions nothing records? Trace requirements forward to stories and stories back to requirements, and flag orphans in both directions. Surface conflicts between artifacts instead of resolving them, and list what you found in `limits`. The readiness verdict comes from a different worker.
 
 ## Change impact
 
@@ -85,6 +85,6 @@ Finish with exactly one handoff. With Crew tools, submit it through `crew_submit
 ```
 
 - `done` means every acceptance criterion has evidence; otherwise use `partial`, `blocked`, or `needs_context`.
-- List every file you created in `outputs`. Crew commits only declared new files and tracked files changed inside `file_scope`.
+- List in `outputs` every new file that belongs in the repository (code, tests, and docs or reports under the project's artifacts path). Crew commits exactly those plus tracked files changed inside `file_scope`; undeclared files are removed when the task ends.
 - `limits` names what you could not verify and why.
 - `attempt_of_problem` carries the packet's `problem_id` when the task retries a registered problem.

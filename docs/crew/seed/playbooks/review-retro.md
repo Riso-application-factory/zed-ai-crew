@@ -22,7 +22,7 @@ seed:
 
 | Size | Path |
 | --- | --- |
-| Small (one session) | Steps 1, 2, 3, 5 |
+| Small (one session) | All steps; steps 2 and 3 run as one delivery-manager task |
 | Standard | All steps |
 
 ## Steps

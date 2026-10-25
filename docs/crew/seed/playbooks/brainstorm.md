@@ -23,7 +23,7 @@ seed:
 
 | Size | Path |
 | --- | --- |
-| Small (a few options for a narrow question) | Steps 1, 3, 6; the Orchestrator may generate the ideas itself |
+| Small (a few options for a narrow question) | Steps 1, 3, 5, 6 |
 | Standard | All steps |
 
 ## Steps
