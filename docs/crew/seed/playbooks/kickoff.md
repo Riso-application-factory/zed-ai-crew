@@ -46,4 +46,4 @@ The first Kickoff of a project runs every step. A later Kickoff (refresh) re-run
 
 ## Manual mode
 
-The Human creates the clean worktrees, relays packets and handoffs, opens the pull request, and merges after approving on GitHub.
+The Human creates the clean worktrees, relays packets and handoffs, commits only the declared files after scanning the staged diff for secrets, opens the pull request, reviews it, and merges only the reviewed head (as in `implement`; GitHub does not let an author approve their own pull request).
