@@ -157,6 +157,11 @@ Release Notes:
 - N/A
 ```
 
+## PR Review and Scope
+
+- The PR creation and review workflow must use GitHub PR reviews (with review threads) instead of plain issue comments so that review items can be tracked and resolved using thread resolution.
+- Agent reviews must strictly stay within the scope of the PR and its underlying requirements; do not expand review feedback or request changes outside the requirement scope.
+
 # Crash Investigation
 
 ## Sentry Integration
@@ -173,7 +178,7 @@ Release Notes:
   - **Explanation** — why a human decision is needed and the trade-offs involved.
   - **Examples** — concrete scenarios showing how each path behaves in practice.
   - **Options** — clear, actionable choices to pick from (with a recommended option when appropriate).
-* Markdown files are working documents for agents; HTML files are for humans to read and review (e.g., `.zed-ai-crew/product-brief.md` vs `.zed-ai-crew/product-brief.html`). When a document exists in both formats, update both in the same session so their content stays in sync.
+* Markdown files are working documents for agents write in english; HTML files are for humans to read and review write in vietnamese (e.g., `.zed-ai-crew/product-brief.md` vs `.zed-ai-crew/product-brief.html`). When a document exists in both formats, update both in the same session so their content stays in sync.
 * HTML files follow the same discipline as human-facing responses: distill the content carefully to what a reviewer needs. Omit working notes, intermediate reasoning, and other agent-only detail.
 
 # Rules Hygiene
