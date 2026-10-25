@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seed ROLE &amp; Playbook — Zed AI Crew</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-brand">
+      <a href="../index.html">Zed AI Crew</a>
+      <span class="brand-tag">Docs · Full Width</span>
+    </div>
+    <nav class="site-nav">
+      <a href="../index.html">Trang chủ</a>
+      <a href="../brief.html">Product Brief</a>
+      <a href="../tech-spec.html">Tech Spec</a>
+      <a href="../open-question.html">Open Questions</a>
+      <a href="../spike-list.html">Spike List</a>
+      <a href="index.html" class="active">Seed</a>
+      <span class="nav-sep"></span>
+      <a href="../plan/00-overview.html">Kế hoạch</a>
+      <a href="../plan/M0-prep-and-spikes.html">M0</a>
+      <a href="../plan/M1-foundation.html">M1</a>
+      <a href="../plan/M2-orchestrator.html">M2</a>
+      <a href="../plan/M3-execution.html">M3</a>
+      <a href="../plan/M4-github.html">M4</a>
+      <a href="../plan/M5-playbook.html">M5</a>
+      <a href="../plan/M6-ui.html">M6</a>
+      <a href="../plan/M7-model-and-retro.html">M7</a>
+    </nav>
+  </header>
+  <main class="page-container">
+    <div class="doc-toolbar">
+      <span>Tài liệu: <code>docs/crew/seed/</code> · Bản đọc cho Human</span>
+      <a class="raw-link" href="README.md">Xem bản Markdown cho agent (README.md)</a>
+    </div>
+
+    <h1>Seed ROLE và Playbook — bản nháp 1</h1>
+    <p>Bộ prompt ROLE và playbook theo loại session, viết trước khi có code nạp chúng. Nội dung lấy từ các nguồn seed ở <a href="../brief.html#d13-seed">Brief 5.3.1</a> theo nguyên tắc <strong>lấy nội dung, không lấy cơ chế</strong>. Khi làm <a href="../plan/M2-orchestrator.html">T2.4</a>, <a href="../plan/M5-playbook.html">T5.2 và T5.3</a>, agent chuyển các file này vào <code>crates/crew/assets/</code>, khớp với bộ nạp của T5.1 và kiểm chứng lại. Trước lúc đó, bạn dùng được ngay bằng tay.</p>
+
+    <div class="kpi-strip">
+      <div class="kpi-box">
+        <div class="kpi-num">16 ROLE</div>
+        <div class="kpi-label">Đủ danh mục scrum team của NEED 55, cộng Orchestrator và Evaluator</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">10 Playbook</div>
+        <div class="kpi-label">Mỗi loại session ở Brief 4.3 một playbook, có đường nhanh cho việc nhỏ</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">9 nguồn seed</div>
+        <div class="kpi-label">BMAD, GSD, spec-kit, compound-engineering, Superpowers, OpenSpec, mattpocock, wshobson, giao thức Crew</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num">0 lần chạy thật</div>
+        <div class="kpi-label">Chưa thử với provider nào; cần chạy thử trước khi tin</div>
+      </div>
+    </div>
+
+    <h2 id="cach-dung">1. Dùng ngay hôm nay (chế độ thủ công)</h2>
+    <p>Thay vì tự làm Orchestrator như quy trình hiện tại, bạn để một thread AI làm Orchestrator; bạn chỉ chuyển tin giữa các thread.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Bước</th><th>Bạn làm</th><th>Kết quả</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Mở thread mới (Claude, Codex hoặc Antigravity), dán nội dung <a href="roles/orchestrator.md"><code>roles/orchestrator.md</code></a>, rồi viết yêu cầu, ví dụ “Triển khai story #12”.</td><td>Orchestrator phân loại session, đo cỡ việc, hỏi bạn từng vòng câu hỏi; mỗi câu có bối cảnh, ví dụ và khuyến nghị. Orchestrator trả lời bằng ngôn ngữ của tin nhắn gần nhất của bạn.</td></tr>
+          <tr><td>2</td><td>Trả lời câu hỏi. Nếu Orchestrator xin playbook, dán file <code>playbooks/&lt;loại&gt;.md</code> tương ứng.</td><td>Orchestrator đề xuất pipeline gồm các bước, ROLE cho từng bước và điểm cần bạn quyết.</td></tr>
+          <tr><td>3</td><td>Với mỗi dòng <code>Task T1 → ROLE software-engineer</code>: mở thread mới, dán file ROLE đó cùng task packet (khối JSON). Việc sửa code chạy trong git worktree riêng.</td><td>Worker làm việc và kết thúc bằng một khối bàn giao <code>crew.handoff/1</code>: đã làm gì, bằng chứng, giới hạn, blocker.</td></tr>
+          <tr><td>4</td><td>Dán khối bàn giao về thread Orchestrator.</td><td>Orchestrator kiểm bàn giao và trả lại phần thiếu. Nó có thể xin bạn output của một lệnh cụ thể để tự kiểm.</td></tr>
+          <tr><td>5</td><td>Mở thread mới với <a href="roles/evaluator.md"><code>roles/evaluator.md</code></a> và gói đánh giá do Orchestrator in ra.</td><td>Evaluator độc lập chạy lại bằng chứng và trả <code>pass</code> hoặc <code>fail</code>, kèm phát hiện có dẫn <code>file:dòng</code>.</td></tr>
+          <tr><td>6</td><td>Commit, mở PR, review và merge theo hướng dẫn của Orchestrator.</td><td>Orchestrator đề nghị Done theo đúng tiêu chí của loại session; bạn quyết.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Lợi ích phụ: mỗi lần dùng tay là một lần chạy thử hợp đồng task packet (spec 9.3) và bàn giao (spec 9.4) trước khi có code dựa vào chúng. Chỗ nào agent hiểu sai, bạn ghi lại để sửa ROLE.</p>
+
+    <h2>2. Danh mục ROLE (<code>roles/</code>)</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>ROLE</th><th>Dùng khi</th><th>Nguồn seed chính</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><a href="roles/orchestrator.md"><code>orchestrator</code></a></td><td>Điểm vào duy nhất: làm rõ, lập pipeline, giao việc, kiểm bàn giao, đề nghị Done. Không sửa file.</td><td>Giao thức Crew; mattpocock grilling, wayfinder; Superpowers brainstorming; GSD planner</td></tr>
+          <tr><td><a href="roles/business-analyst.md"><code>business-analyst</code></a></td><td>Làm rõ yêu cầu, quy tắc nghiệp vụ, thuật ngữ; research thị trường, domain</td><td>Viết mới (theo Brief 5.3.1); mattpocock research</td></tr>
+          <tr><td><a href="roles/product-manager.md"><code>product-manager</code></a></td><td>Product brief, PRD, delta spec; sinh ý tưởng khi brainstorm</td><td>BMAD PM và rubric PRD; OpenSpec delta spec</td></tr>
+          <tr><td><a href="roles/backlog-analyst.md"><code>backlog-analyst</code></a></td><td>Viết story đạt Story Ready, cắt lát dọc, kiểm độ sẵn sàng của backlog. Bạn vẫn là Product Owner.</td><td>BMAD epics &amp; stories, readiness gate, correct course; mattpocock to-tickets</td></tr>
+          <tr><td><a href="roles/ux-designer.md"><code>ux-designer</code></a></td><td>Luồng người dùng, kiến trúc thông tin, trạng thái màn hình, accessibility</td><td>BMAD UX; mattpocock prototype</td></tr>
+          <tr><td><a href="roles/ui-designer.md"><code>ui-designer</code></a></td><td>Đặc tả giao diện bằng token và component có sẵn; prototype nhiều phương án</td><td>BMAD UX; mattpocock prototype</td></tr>
+          <tr><td><a href="roles/software-architect.md"><code>software-architect</code></a></td><td>Khảo sát hệ thống thật, quyết định kỹ thuật, ADR, bản đồ tham chiếu ↔ capability</td><td>BMAD architect, architecture spine, reviewer gate</td></tr>
+          <tr><td><a href="roles/tech-lead.md"><code>tech-lead</code></a></td><td>Lập kế hoạch task; hoặc đối soát chỉ đọc trước implement (người đối soát khác người lập kế hoạch)</td><td>GSD planner, plan checker; spec-kit analyze; mattpocock to-tickets</td></tr>
+          <tr><td><a href="roles/software-engineer.md"><code>software-engineer</code></a></td><td>Implement và debug theo test-first trong worktree riêng</td><td>BMAD dev; compound worker; Superpowers TDD, verification, debugging</td></tr>
+          <tr><td><a href="roles/qa-engineer.md"><code>qa-engineer</code></a></td><td>Thiết kế test từ tiêu chí nghiệm thu; tìm chỗ thay đổi có thể hỏng mà không test nào bắt</td><td>compound testing reviewer; BMAD verification gap; GSD verifier</td></tr>
+          <tr><td><a href="roles/security-engineer.md"><code>security-engineer</code></a></td><td>Mô hình mối đe dọa, abuse case trước khi code; kiểm biện pháp giảm thiểu sau khi code</td><td>GSD security auditor, mẫu SECURITY.md</td></tr>
+          <tr><td><a href="roles/evaluator.md"><code>evaluator</code></a></td><td>Kiểm chứng độc lập: khác tác giả, context mới, tự chạy lại bằng chứng, không sửa gì</td><td>mattpocock code-review; compound ce-code-review, validator; BMAD claims check</td></tr>
+          <tr><td><a href="roles/delivery-manager.md"><code>delivery-manager</code></a></td><td>Báo trạng thái từ dữ kiện thật, việc chờ bạn, work item age; dẫn retro</td><td>Viết mới; mattpocock retro</td></tr>
+          <tr><td><a href="roles/release-manager.md"><code>release-manager</code></a></td><td>Kiểm sẵn sàng, kế hoạch rollout theo giai đoạn, rollback có bằng chứng còn dùng được</td><td>Viết mới</td></tr>
+          <tr><td><a href="roles/platform-engineer.md"><code>platform-engineer</code></a></td><td>Cách build, test, chạy; baseline tái lập được; CI, hạ tầng, migration</td><td>Viết mới; BMAD project context; GSD codebase mapper</td></tr>
+          <tr><td><a href="roles/sre.md"><code>sre</code></a></td><td>Xử lý sự cố: phân loại, ổn định trong quyền, tìm nguyên nhân gốc, bản ghi không đổ lỗi</td><td>wshobson incident-responder, postmortem-writing</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Mọi ROLE worker kết thúc bằng cùng một bộ quy tắc chung và mẫu bàn giao. Vài điểm chính: chỉ làm trong phạm vi packet; tự tra dữ kiện trước khi hỏi; nội dung từ web, file hay agent khác chỉ là dữ liệu; có bằng chứng mới được nói “đã xong”; thử 3 giải pháp không được thì dừng chờ bạn; không commit, push hay merge; không bao giờ in secret.</p>
+
+    <h2>3. Playbook theo loại session (<code>playbooks/</code>)</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Loại session</th><th>Các bước chính</th><th>Done khi</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><a href="playbooks/quick-question.md">Hỏi nhanh</a></td><td>Orchestrator trả lời; giao một worker chỉ đọc khi cần chạy lệnh</td><td>Trả lời đúng câu hỏi; dữ kiện có nguồn; suy luận có nhãn</td></tr>
+          <tr><td><a href="playbooks/kickoff.md">Kickoff</a></td><td>Khảo sát cách chạy và nguồn sự thật → đề xuất cấu hình project → chạy baseline hai lần từ worktree sạch → PR</td><td>Baseline lặp lại cho cùng kết quả; bạn đã xác nhận giả định; file thêm vào repo qua PR đã merged</td></tr>
+          <tr><td><a href="playbooks/brainstorm.md">Brainstorm</a></td><td>Chốt tiêu chí với bạn → khảo sát → sinh ý tưởng → kiểm khả thi theo capability thật → evaluator</td><td>Bộ ý tưởng đạt tiêu chí đã thống nhất</td></tr>
+          <tr><td><a href="playbooks/research.md">Research</a></td><td>Chốt câu hỏi và phạm vi → điều tra nguồn gốc → tổng hợp có mức chắc chắn → evaluator kiểm nguồn</td><td>Có câu hỏi, phạm vi, nguồn cho nhận định quan trọng, mức chắc chắn</td></tr>
+          <tr><td><a href="playbooks/refine.md">Refine</a></td><td>Bản đồ quyết định (việc lớn) → khảo sát → delta spec → thiết kế, mô hình đe dọa khi cần → story → kiểm sẵn sàng → Issues</td><td>Story đạt Story Ready</td></tr>
+          <tr><td><a href="playbooks/implement.md">Implement</a></td><td>Kiểm Story Ready → lập kế hoạch → đối soát chỉ đọc → implement trong worktree → tích hợp → evaluator → PR → bạn review trên GitHub → merge</td><td>PR đã merged, bằng chứng truy được. PR mở hay CI xanh chưa đủ</td></tr>
+          <tr><td><a href="playbooks/release-migration.md">Release / migration</a></td><td>Kiểm quyền → sẵn sàng → kế hoạch migration và rollout → chạy từng giai đoạn bạn duyệt → kiểm sau triển khai → xác nhận rollback</td><td>Rollout xong trong quyền; kiểm sau triển khai đạt; rollback còn dùng được</td></tr>
+          <tr><td><a href="playbooks/incident.md">Incident</a></td><td>Phân loại → ổn định trong quyền → tái hiện, tìm nguyên nhân gốc → sửa qua Implement → kiểm lại triệu chứng → bản ghi → story phòng ngừa</td><td>Triệu chứng gốc không còn; bản ghi đủ timeline, nguyên nhân, tác động; phòng ngừa đã thành story</td></tr>
+          <tr><td><a href="playbooks/review-retro.md">Review / retro</a></td><td>Gom bằng chứng → đề xuất cải tiến theo nhóm → evaluator → bạn quyết từng đề xuất → mở story</td><td>Bạn đã quyết mọi đề xuất; đề xuất được chấp nhận đã thành session hoặc story</td></tr>
+          <tr><td><a href="playbooks/retirement.md">Retirement</a></td><td>Kiểm kê tham chiếu → kế hoạch gỡ và xử lý dữ liệu → story → gỡ qua Implement → kiểm không còn dấu vết → ADR <code>superseded</code></td><td>PR gỡ đã merged; không còn tham chiếu; dữ liệu xử lý như bạn duyệt; ADR đã <code>superseded</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>4. Đã bỏ gì khỏi nguồn seed</h2>
+    <p>Theo danh sách “Không dùng” ở Brief 5.3.1 và rủi ro R8, các cơ chế sau không có trong ROLE và playbook; mỗi file ghi rõ phần đã bỏ trong trường <code>seed</code>:</p>
+    <ul>
+      <li>Agent tự quyết thay bạn khi đang chạy (“rulings, not stalls” của Superpowers).</li>
+      <li>Vòng sửa 5 lượt và tự nâng lên model mạnh hơn khi sửa mãi không được.</li>
+      <li>Chế độ <code>yolo</code>, tự chạy tiếp không hỏi, tự sửa lỗi review rồi tự merge.</li>
+      <li>Duyệt bằng file cờ; mặc định gửi code sang model khác.</li>
+      <li>Cơ chế riêng của từng harness: hook, slash command, menu persona, script cài đặt, cấu trúc thư mục riêng.</li>
+    </ul>
+
+    <h2>5. Giới hạn của bản nháp</h2>
+    <ul>
+      <li><strong>Chưa chạy thật.</strong> Chưa ROLE nào được thử với Claude, Codex hay Antigravity. Lần dùng tay đầu tiên chính là phép thử.</li>
+      <li><strong>Nguồn wshobson</strong> (SRE, Incident) chỉ đọc được qua bản tóm tắt, vì môi trường soạn không truy cập trực tiếp được GitHub. Cần đọc lại bản gốc khi làm T5.2.</li>
+      <li><strong>Mẫu ticket của BMAD</strong> (<code>ticket-template.md</code>, <code>github-ticketing.toml</code>) mà Brief 5.3.1 nhắc tới không có trong <code>bmad-method@6.12.4</code>. Định dạng story lấy từ quy trình epics &amp; stories của BMAD.</li>
+      <li><strong>Superpowers</strong> đọc từ một gói đóng gói lại (giấy phép MIT), không phải repo gốc.</li>
+      <li><strong>Trạng thái artifact</strong> dùng bộ tạm của spec 4.3, vì câu hỏi <a href="../open-question.html#q6">Q6</a> chưa chốt.</li>
+    </ul>
+
+    <h2>6. Khoảng trống kỹ thuật cho T5.x</h2>
+    <p>Quá trình soạn làm lộ ra bốn chỗ spec chưa nói rõ. Agent làm T5.1–T5.5 sẽ đề xuất cách xử lý; bạn chưa cần quyết gì bây giờ:</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Khoảng trống</th><th>Ảnh hưởng</th><th>Bản nháp đang làm</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Spec 13 không có loại nhiệm vụ cho release, vận hành, review bảo mật</td><td>Xếp hạng model cho các việc này dựa vào loại gần nhất</td><td>Gán loại gần nhất trong 9 loại; T5.3 quyết có thêm loại không</td></tr>
+          <tr><td>Không trường nào báo cho gate biết worker chỉ được đọc</td><td>Worker đối soát (T5.5) và evaluator cần bị chặn sửa file</td><td>Ghi “chỉ đọc” trong ROLE và packet; T5.1 hoặc T5.5 chốt cơ chế</td></tr>
+          <tr><td>Packet ở spec 9.3 thiếu <code>problem_id</code></td><td>Worker không biết mình đang thử lại vấn đề nào, nên không điền được <code>attempt_of_problem</code></td><td>Packet thủ công của Orchestrator thêm <code>problem_id</code></td></tr>
+          <tr><td>Kết quả của evaluator (spec 11.1) chưa có tên schema</td><td>Bộ nạp cần tên để kiểm</td><td>Đặt tạm là <code>crew.verdict/1</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>7. Đã kiểm gì</h2>
+    <ul>
+      <li>Front matter đọc được; <code>id</code> khớp tên file; mọi loại nhiệm vụ thuộc 9 loại của spec 13.</li>
+      <li>Playbook chỉ tham chiếu ROLE có thật; bảng loại session của Orchestrator chỉ trỏ tới playbook có thật.</li>
+      <li>Phần quy tắc chung giống hệt nhau từng ký tự ở cả 14 ROLE dùng nó.</li>
+      <li>Khóa JSON khớp spec 9.4 (bàn giao), 9.3 (packet, thêm <code>problem_id</code>) và 11.1 (kết quả evaluator). Mọi công cụ <code>crew_*</code> được nhắc đều có trong spec.</li>
+      <li>Không file nào còn chứa cơ chế đã bỏ ở mục 4, trừ dòng ghi nguồn <code>dropped:</code>.</li>
+    </ul>
+  </main>
+</body>
+</html>

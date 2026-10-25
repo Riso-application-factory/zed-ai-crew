@@ -140,7 +140,7 @@
 | Mục | Nội dung |
 | --- | -------- |
 | Mục tiêu | Orchestrator có định nghĩa ROLE đủ dùng cho M2–M4. Danh mục ROLE đầy đủ ở T5.2 |
-| Căn cứ | NEED 55; spec 5.4; brief 5.3.1 |
+| Căn cứ | NEED 55; spec 5.4; brief 5.3.1; bản nháp `docs/crew/seed/roles/orchestrator.md` |
 | Được sửa | `crates/crew/assets/roles/orchestrator.md` (mới); bộ cài seed tối thiểu trong `crates/crew/src/roles.rs` |
 | Bàn giao | File ROLE có front matter; bộ cài chép seed vào `crew/roles/` của user mà không ghi đè bản Human đã sửa |
 
