@@ -562,6 +562,7 @@ CREW_CONTRACT=1 cargo test -p crew_acp --test contract claude_options_ -- --igno
 </tbody></table></div>
 <p>Hiện <code>update_usage</code> chỉ giữ <code>cost.meta</code> <span class="tag tag-verified">[Đã kiểm]</span>. Giữ diff nhỏ nhất có thể, vì <code>acp_thread.rs</code> đổi thường xuyên ở upstream.</p>
 <p>H4b không đặt ở nhánh <code>_ =&gt; {}</code> của <code>handle_session_update</code> (<code>acp_thread.rs:4526</code>): update có loại lạ bị SDK từ chối ngay lúc parse (<code>agent-client-protocol-3.4.0 src/jsonrpc/handlers.rs:272-279</code>; enum <code>SessionUpdate</code> không có biến thể dự phòng) <span class="tag tag-verified">[Đã kiểm]</span>, nên nhánh đó chỉ thấy loại đã biết. Crew đọc <code>AcpConnection::subscribe_debug_messages()</code> (<code>v1.rs:488-495</code>) và ghi update có loại lạ hoặc loại Zed không xử lý. Đây là công cụ gỡ lỗi, định dạng có thể đổi, nên test của task này chạy lại mỗi lần đồng bộ upstream (T1.14). Chỉ ghi loại update, không ghi payload.</p>
+<p><strong>Hợp đồng fork đã kiểm ở T0.2:</strong> <code>TokenUsageUpdated</code> trên fork không có payload, khác upstream. T1.10 giữ nguyên event này và các API v1, thêm event chi tiết usage riêng mang <code>used</code>, <code>size</code>, <code>_meta</code>. Phép chuyển v1 sang v2 đã chuyển tiếp <code>update.meta</code>; cần giữ nguyên và lưu metadata trong <code>update_usage</code>. Tra dòng hiện tại trong <a href="../hook-points.html">bản đồ điểm nối</a>.</p>
 <p><strong>Tiêu chí nghiệm thu</strong></p>
 <ul>
 <li>Cho usage update có <code>_meta["_claude/rateLimit"]</code> ở cấp trên, khi thread xử lý, thì event phát ra mang nguyên <code>_meta</code>.</li>
@@ -570,7 +571,6 @@ CREW_CONTRACT=1 cargo test -p crew_acp --test contract claude_options_ -- --igno
 </ul>
 <p><strong>Kiểm chứng:</strong> <code>cargo test -p acp_thread</code>, <code>cargo test -p crew_acp dropped_updates</code></p>
 <hr>
-<p><strong>Hợp đồng fork đã kiểm ở T0.2:</strong> <code>TokenUsageUpdated</code> trên fork không có payload, khác upstream. T1.10 giữ nguyên event này và các API v1, thêm event chi tiết usage riêng mang <code>used</code>, <code>size</code>, <code>_meta</code>. Phép chuyển v1 sang v2 đã chuyển tiếp <code>update.meta</code>; cần giữ nguyên và lưu metadata trong <code>update_usage</code>. Tra dòng hiện tại trong <a href="../hook-points.html">bản đồ điểm nối</a>.</p>
 <h3>T1.11 · Spike S12: hạn mức của Claude</h3>
 <div class="table-wrap"><table>
 <thead><tr>
@@ -595,9 +595,9 @@ CREW_CONTRACT=1 cargo test -p crew_acp --test contract claude_options_ -- --igno
 </tr>
 </tbody></table></div>
 <p><strong>Các bước:</strong> dùng harness T0.9 gửi <code>/usage</code> trong session thăm dò, và ghi <code>_meta</code> của usage update sau một prompt ngắn. Che email và id tài khoản trước khi lưu.</p>
+<p>S12 ghi <code>_meta</code> cấp trên từ traffic ACP. Khi kiểm đường tích hợp sau T1.10, đọc event chi tiết usage mới; event <code>TokenUsageUpdated</code> cũ không mang metadata hạn mức.</p>
 <p><strong>Tiêu chí xong:</strong> fixture cho cả hai nguồn; báo cáo nêu các cửa sổ (5 giờ, 7 ngày), đơn vị và định dạng giờ reset.</p>
 <hr>
-<p>S12 ghi <code>_meta</code> cấp trên từ traffic ACP. Khi kiểm đường tích hợp sau T1.10, đọc event chi tiết usage mới; event <code>TokenUsageUpdated</code> cũ không mang metadata hạn mức.</p>
 <h3>T1.12 · Đọc hạn mức</h3>
 <div class="table-wrap"><table>
 <thead><tr>
