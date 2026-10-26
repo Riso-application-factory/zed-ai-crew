@@ -187,7 +187,7 @@
 agent_ui ──► agent_servers   (agent_ui và agent_servers không phụ thuộc crate Crew)</code></pre>
 <p>Quy tắc:</p>
 <ul>
-<li><strong><code>agent_ui</code> và <code>agent_servers</code> không phụ thuộc crate Crew.</strong> Mọi chỗ core cần “biết” về Crew (H5b, H5d, H5e, H5f, H12) đi qua một registry trong <code>agent_servers</code>, do Crew điền lúc khởi tạo. Nhờ vậy điểm nối nhỏ và không kéo crate Crew vào core. <code>acp_thread</code> nằm dưới <code>agent_servers</code> nên không tra registry được; chỗ nào trong <code>acp_thread</code> cần biết session thuộc Crew (H12) thì nhận một cờ do <code>agent_servers</code> đặt lúc tạo thread.</li>
+<li><strong><code>agent_ui</code>, <code>sidebar</code> và <code>agent_servers</code> không phụ thuộc crate Crew.</strong> Mọi chỗ core cần “biết” về Crew (H5b, H5c, H5d, H5e, H5f, H12) đi qua một registry trong <code>agent_servers</code>, do Crew điền lúc khởi tạo. Nhờ vậy điểm nối nhỏ và không kéo crate Crew vào core. <code>acp_thread</code> nằm dưới <code>agent_servers</code> nên không tra registry được; chỗ nào trong <code>acp_thread</code> cần biết session thuộc Crew (H12) thì nhận một cờ do <code>agent_servers</code> đặt lúc tạo thread.</li>
 <li><strong><code>crew_acp</code> không phụ thuộc <code>crew</code>.</strong> CrewConnection cần đọc bản ghi session; <code>crew_acp</code> khai trait truy cập bản ghi, <code>crew</code> hiện thực trait đó trên run store và đăng ký lúc khởi tạo.</li>
 <li><strong><code>crew_mcp</code> chỉ là khung</strong>: MCP server theo session, đăng ký tool, kiểm schema, cầu nối. Công cụ cụ thể (<code>crew_spawn_worker</code>…) nằm trong <code>crew</code>, vì cần truy cập lõi.</li>
 </ul>

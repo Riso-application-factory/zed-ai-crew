@@ -50,7 +50,7 @@ agent_ui ──► agent_servers   (agent_ui và agent_servers không phụ thu�
 ```
 
 Quy tắc:
-- **`agent_ui` và `agent_servers` không phụ thuộc crate Crew.** Mọi chỗ core cần “biết” về Crew (H5b, H5d, H5e, H5f, H12) đi qua một registry trong `agent_servers`, do Crew điền lúc khởi tạo. Nhờ vậy điểm nối nhỏ và không kéo crate Crew vào core. `acp_thread` nằm dưới `agent_servers` nên không tra registry được; chỗ nào trong `acp_thread` cần biết session thuộc Crew (H12) thì nhận một cờ do `agent_servers` đặt lúc tạo thread.
+- **`agent_ui`, `sidebar` và `agent_servers` không phụ thuộc crate Crew.** Mọi chỗ core cần “biết” về Crew (H5b, H5c, H5d, H5e, H5f, H12) đi qua một registry trong `agent_servers`, do Crew điền lúc khởi tạo. Nhờ vậy điểm nối nhỏ và không kéo crate Crew vào core. `acp_thread` nằm dưới `agent_servers` nên không tra registry được; chỗ nào trong `acp_thread` cần biết session thuộc Crew (H12) thì nhận một cờ do `agent_servers` đặt lúc tạo thread.
 - **`crew_acp` không phụ thuộc `crew`.** CrewConnection cần đọc bản ghi session; `crew_acp` khai trait truy cập bản ghi, `crew` hiện thực trait đó trên run store và đăng ký lúc khởi tạo.
 - **`crew_mcp` chỉ là khung**: MCP server theo session, đăng ký tool, kiểm schema, cầu nối. Công cụ cụ thể (`crew_spawn_worker`…) nằm trong `crew`, vì cần truy cập lõi.
 

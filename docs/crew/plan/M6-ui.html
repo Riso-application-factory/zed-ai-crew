@@ -84,8 +84,8 @@
 </tr>
 <tr>
 <td>T6.3</td>
-<td>Việc chờ Human: prototype rồi hiện thực</td>
-<td>T5.9</td>
+<td>Việc chờ Human trên status bar</td>
+<td>T2.7, T6.4</td>
 <td>12, 52</td>
 </tr>
 <tr>
@@ -108,7 +108,7 @@
 </tr>
 <tr>
 <td>T6.7</td>
-<td>Onboarding (H6)</td>
+<td>Onboarding (H6, H7)</td>
 <td>T4.2</td>
 <td>04, 05, 17</td>
 </tr>
@@ -194,7 +194,7 @@
 </ul>
 <p><strong>Kiểm chứng:</strong> <code>cargo test -p agent_ui</code>; chạy app, chụp thread worker.</p>
 <hr>
-<h3>T6.3 · Việc chờ Human: prototype rồi hiện thực</h3>
+<h3>T6.3 · Việc chờ Human trên status bar</h3>
 <div class="table-wrap"><table>
 <thead><tr>
 <th>Mục</th>
@@ -206,30 +206,34 @@
 </tr>
 <tr>
 <td>Căn cứ</td>
-<td>NEED 12, 52; spec 15 (Việc chờ Human)</td>
+<td>NEED 12, 15, 52; spec 15 (Việc chờ Human)</td>
 </tr>
 <tr>
 <td>Được sửa</td>
-<td><code>crates/crew_ui/src/pending.rs</code></td>
+<td><code>crates/crew_ui/src/pending.rs</code>; mục “N chờ bạn” của status bar trong <code>crates/crew_ui/src/status_bar.rs</code> (T6.4)</td>
 </tr>
 <tr>
 <td>Bàn giao</td>
-<td>Prototype để Human chọn bề mặt; bản hiện thực theo lựa chọn</td>
+<td>Badge trên status bar và danh sách việc chờ của mọi session</td>
 </tr>
 </tbody></table></div>
-<p><strong>Các bước</strong></p>
-<ol>
-<li>Làm prototype theo T5.9, nhánh <code>crew/prototype/pending-human</code>, với hai hoặc ba phương án bề mặt. Ví dụ: panel riêng, mục trong Tổng quan, badge trên status bar.</li>
-<li>Human chọn phương án trong hội thoại; quyết định được ghi qua T2.6.</li>
-<li>Hiện thực phương án đã chọn trên nhánh task, đọc từ projection “việc chờ Human” của run store.</li>
-</ol>
+<p><strong>Bề mặt đã chốt.</strong> Human so hai phương án trên bản vẽ <a href="../ui-design.html"><code>ui-design.html</code></a> (A: danh sách trong Tổng quan; B: badge trên status bar) và chọn B ngày 2026-10-26 (brief 3.6). Bản vẽ là prototype của NEED 12 cho câu hỏi này, nên task không dựng lại prototype.</p>
+<p><strong>Thiết kế</strong></p>
+<ul>
+<li>Status bar luôn có mục “N chờ bạn”; bấm vào thì mở danh sách. N đếm mọi việc chờ của mọi session đang mở trong project.</li>
+<li>Mỗi mục có: nội dung, session và loại session, thời gian đã chờ (work item age), ảnh hưởng tới nhánh phụ thuộc, và nút tới đúng hội thoại Orchestrator hoặc PR trên GitHub.</li>
+<li>Đọc từ projection “việc chờ Human” của run store: câu hỏi của <code>crew_ask_human</code>, giả định chờ duyệt, quyền còn thiếu, bước chỉ Human làm được (T2.7), PR chờ review.</li>
+<li>Mục đã xử lý, hết hiệu lực hoặc thuộc session đã đóng không còn trong danh sách. Không có timeout (NEED 15), không có nút Approve hay Re-run (NEED 13).</li>
+</ul>
 <p><strong>Tiêu chí nghiệm thu</strong></p>
 <ul>
-<li>Cho prototype, khi xong, thì có artifact ghi câu hỏi thiết kế, các phương án, quyết định của Human.</li>
-<li>Cho câu hỏi đang mở từ <code>crew_ask_human</code>, khi xem bề mặt đã chọn, thì thấy câu hỏi kèm bối cảnh và đường tới thread Orchestrator.</li>
+<li>Cho hai session cùng có việc chờ, khi xem status bar, thì thấy “2 chờ bạn”; bấm vào thì danh sách có cả hai mục, mỗi mục có thời gian chờ và ảnh hưởng.</li>
+<li>Cho câu hỏi đang mở từ <code>crew_ask_human</code>, khi bấm mục đó, thì tới đúng thread Orchestrator.</li>
+<li>Cho PR đang chờ review, khi bấm mục đó, thì mở PR trên GitHub.</li>
 <li>Cho bước chỉ Human làm được (T2.7), khi xem, thì thấy hướng dẫn thực hiện.</li>
+<li>Cho mục đã được Human trả lời, khi xem lại, thì không còn trong danh sách và số đếm giảm.</li>
 </ul>
-<p><strong>Kiểm chứng:</strong> chạy app, chụp từng phương án của prototype và bản hiện thực.</p>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_ui pending</code>; chạy app, chụp status bar và danh sách.</p>
 <hr>
 <h3>T6.4 · Status bar</h3>
 <div class="table-wrap"><table>
@@ -278,7 +282,7 @@
 </tr>
 <tr>
 <td>Được sửa</td>
-<td><code>crates/agent_ui</code> (nhóm thread Crew trong sidebar, qua registry của <code>agent_servers</code>); <code>crates/crew_ui</code></td>
+<td><code>crates/sidebar</code> (H5c: nhóm thread Crew theo session trong Threads Sidebar, qua predicate trong registry của <code>agent_servers</code>); <code>crates/agent_ui</code> (nhãn Crew trong Thread History, <code>threads_archive_view.rs</code>); <code>crates/crew_ui</code></td>
 </tr>
 <tr>
 <td>Bàn giao</td>
@@ -292,7 +296,7 @@
 <li>Cho thread Crew mở từ History, khi load, thì đi qua CrewConnection (test bất biến của T1.7 vẫn đạt).</li>
 <li>Cho session thăm dò, khi xem sidebar và History, thì không hiện.</li>
 </ul>
-<p><strong>Kiểm chứng:</strong> <code>cargo test -p agent_ui -p crew_ui</code>; chạy app, chụp sidebar.</p>
+<p><strong>Kiểm chứng:</strong> <code>cargo test -p sidebar -p agent_ui -p crew_ui</code>; chạy app, chụp sidebar.</p>
 <hr>
 <h3>T6.6 · Trang Settings (H7, phần UI)</h3>
 <div class="table-wrap"><table>
@@ -331,7 +335,7 @@
 </ul>
 <p><strong>Kiểm chứng:</strong> <code>cargo test -p settings_ui -p crew_ui</code>; chạy app, chụp trang Settings.</p>
 <hr>
-<h3>T6.7 · Onboarding (H6)</h3>
+<h3>T6.7 · Onboarding (H6, H7)</h3>
 <div class="table-wrap"><table>
 <thead><tr>
 <th>Mục</th>
@@ -339,35 +343,43 @@
 </tr></thead><tbody>
 <tr>
 <td>Mục tiêu</td>
-<td>Thiết lập Crew cho một project từ đầu tới lúc sẵn sàng</td>
+<td>Thiết lập Crew trên máy và cho một project, từ đầu tới lúc sẵn sàng</td>
 </tr>
 <tr>
 <td>Căn cứ</td>
-<td>NEED 04, 05, 17; brief 4.3 (Onboarding); spec 3.2 (H6)</td>
+<td>NEED 04, 05, 17, 25, 56; brief 4.3 (Onboarding), 5.4.5; spec 3.2 (H6), 12</td>
 </tr>
 <tr>
 <td>Được sửa</td>
-<td><code>crates/onboarding</code> (H6); <code>crates/crew_ui</code></td>
+<td><code>crates/onboarding</code> (H6: registry mục và chỗ dựng mục trong <code>basics_page.rs</code>); <code>crates/settings_ui</code> (phần project-onboarding trong trang Crew của T6.6, H7); <code>crates/crew_ui</code></td>
 </tr>
 <tr>
 <td>Bàn giao</td>
-<td>Trang onboarding</td>
+<td>Agent Setup đã sửa và mục Crew cho GitHub App trong trang Onboarding của Zed; project-onboarding trong Settings phạm vi project</td>
 </tr>
 </tbody></table></div>
-<p>Onboarding của Zed chỉ có một trang và không có registry trang (<code>crates/onboarding/src/onboarding.rs:299-301</code>) <span class="tag tag-verified">[Đã kiểm]</span>. H6 hoặc thêm một mục Crew vào trang đó, hoặc mở một item Crew riêng từ đó; cách đã chọn ghi vào <code>docs/crew/hook-points.md</code>.</p>
-<p><strong>Các bước trên trang</strong></p>
+<p>NEED 04 chia onboarding làm hai phần do code điều khiển, không dùng LLM. Onboarding của Zed chỉ có một trang và không có registry trang (<code>crates/onboarding/src/onboarding.rs:299-301</code>); <code>render_basics_page</code> dựng các mục Theme, Base Keymap, Agent Setup, Import Settings, telemetry (<code>crates/onboarding/src/basics_page.rs:715-729</code>) <span class="tag tag-verified">[Đã kiểm]</span>. Theo brief 3.6, crew-onboarding nằm ngay trong trang này, dùng bố cục và component của trang, không mở trang, tab hay item riêng. H6 thêm một registry mục trong <code>onboarding</code>; <code>crew_ui</code> đăng ký mục Crew lúc khởi tạo, nên <code>onboarding</code> không phụ thuộc crate Crew.</p>
+<p><strong>Crew-onboarding, trong trang Onboarding của Zed, một lần cho máy</strong></p>
 <ol>
-<li>Trạng thái đăng nhập từng provider; chưa đăng nhập thì chỉ dẫn tới luồng của Zed.</li>
-<li>Kết nối GitHub App: hướng dẫn (T4.1), nhập key (T4.2), kiểm sẵn sàng (T4.2).</li>
+<li>Mục Agent Setup có sẵn (<code>render_ai_section</code>, <code>basics_page.rs:673</code>): khi Crew bật, ẩn nút Zed Agent, thêm Antigravity cạnh Claude và Codex. Nút giữ hành vi của Zed (cài adapter, mở thread, đăng nhập theo luồng của Zed) và hiện thêm trạng thái đăng nhập Crew (T1.8).</li>
+<li>Mục Crew cho GitHub App: hướng dẫn tạo mới hoặc chọn App có sẵn (T4.1), nhập key (T4.2), kiểm danh tính App (T4.2). Mọi project dùng chung App này.</li>
+</ol>
+<p><strong>Project-onboarding, trong Settings phạm vi project</strong></p>
+<ol start="3">
+<li>Chọn repo, cài App đã kết nối lên repo theo hướng dẫn (T4.1), kiểm sẵn sàng (T4.2).</li>
 <li>Mở session Kickoff đầu tiên (T5.8).</li>
 </ol>
 <p>Mỗi bước chỉ Human làm được có hướng dẫn thực hiện theo mẫu T2.7.</p>
 <p><strong>Tiêu chí nghiệm thu</strong></p>
 <ul>
-<li>Cho project chưa kết nối App, khi mở onboarding, thì bước 2 hiện “chưa sẵn sàng” kèm việc còn thiếu.</li>
-<li>Cho mọi bước đạt, khi xem, thì onboarding báo sẵn sàng theo NEED 05 và mở được Kickoff.</li>
+<li>Cho flag tắt, khi mở trang Onboarding, thì Agent Setup vẫn có Zed Agent, không có mục Crew, và trang giống upstream.</li>
+<li>Cho flag bật, khi mở trang Onboarding ở lần mở Zed đầu tiên hoặc bằng action <code>OpenOnboarding</code>, thì Agent Setup không có Zed Agent, có Antigravity, và mục Crew nằm cùng trang với các mục có sẵn, không mở tab hay item riêng.</li>
+<li>Cho Claude ở <code>not_logged_in</code>, khi xem Agent Setup, thì nút Claude hiện trạng thái bằng chữ hoặc icon, và bấm vào thì đi theo luồng đăng nhập của Zed.</li>
+<li>Cho App đã kết nối ở crew-onboarding, khi mở project-onboarding của project thứ hai, thì không phải tạo App hay nhập lại key.</li>
+<li>Cho project chưa cài App lên repo, khi mở project-onboarding, thì bước 3 hiện “chưa sẵn sàng” kèm việc còn thiếu.</li>
+<li>Cho mọi bước đạt, khi xem, thì project-onboarding báo sẵn sàng theo NEED 05 và mở được Kickoff.</li>
 </ul>
-<p><strong>Kiểm chứng:</strong> chạy app, chụp từng bước.</p>
+<p><strong>Kiểm chứng:</strong> chạy app, chụp mục Agent Setup và mục Crew trong trang Onboarding, và từng bước project-onboarding.</p>
 <hr>
 <h3>T6.8 · Tài liệu quyết định; rà soát tuân thủ Zed UI</h3>
 <div class="table-wrap"><table>

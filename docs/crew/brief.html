@@ -43,7 +43,7 @@
 </tr></thead><tbody>
 <tr>
 <td>Version</td>
-<td>Version: 3.5 · Source 0 · 2026-10-25 · Dành cho AI làm việc trên project này.</td>
+<td>Version: 3.6 · Source 0 · 2026-10-26 · Dành cho AI làm việc trên project này.</td>
 </tr>
 <tr>
 <td>Source</td>
@@ -51,7 +51,7 @@
 </tr>
 <tr>
 <td>Trạng thái</td>
-<td>61 NEED (<a href="#phu-luc-b">Phụ lục B</a>) và mọi mục của brief đã được Human đồng ý đến 2026-10-25. Trạng thái duyệt không đồng nghĩa tính năng đã được triển khai. Câu hỏi còn mở ở <a href="#muc-7">mục 7</a>.</td>
+<td>61 NEED (<a href="#phu-luc-b">Phụ lục B</a>) và mọi mục của brief đã được Human đồng ý đến 2026-10-26. Trạng thái duyệt không đồng nghĩa tính năng đã được triển khai. Câu hỏi còn mở ở <a href="#muc-7">mục 7</a>.</td>
 </tr>
 <tr>
 <td>Cấu trúc</td>
@@ -978,7 +978,7 @@
 </tr>
 </tbody></table></div>
 <a id="luong-onboarding"></a>
-<h4>5.4.5 Onboarding project và Kickoff</h4>
+<h4>5.4.5 Onboarding và Kickoff</h4>
 <div class="table-wrap"><table>
 <thead><tr>
 <th>Item</th>
@@ -990,11 +990,11 @@
 </tr>
 <tr>
 <td>Step 1</td>
-<td>Human mở project-onboarding trong Settings phạm vi project. Đây là UI do code điều khiển, không qua LLM.</td>
+<td>Một lần cho máy, trong trang Onboarding của Zed (crew-onboarding): Human thiết lập Claude, Codex, Antigravity ở mục Agent Setup (Zed Agent được ẩn, thay bằng Antigravity); Crew hướng dẫn tạo mới hoặc kết nối GitHub App, Human nhập private key của App, Crew xác minh danh tính App. Đây là UI do code điều khiển, không qua LLM.</td>
 </tr>
 <tr>
 <td>Step 2</td>
-<td>Crew hướng dẫn Human tạo mới hoặc kết nối GitHub App và cài App lên đúng repo với quyền tối thiểu; Human thao tác trên github.com theo hướng dẫn.</td>
+<td>Với từng project, Human mở project-onboarding trong Settings phạm vi project. Crew hướng dẫn cài App đã kết nối lên đúng repo với quyền tối thiểu; Human thao tác trên github.com theo hướng dẫn.</td>
 </tr>
 <tr>
 <td>Step 3</td>
@@ -1155,7 +1155,7 @@
 <td>Crew user-scope</td>
 <td>Cấu hình Crew của Human, dùng chung mọi project</td>
 <td>Human</td>
-<td>SDLC playbook, workflow, sườn OUTPUT, ROLE, profile, tiêu chí chung, tập provider/model/effort được phép, ngưỡng hạn mức, chính sách chọn model (<a href="#need-60">#60</a>)</td>
+<td>SDLC playbook, workflow, sườn OUTPUT, ROLE, profile, tiêu chí chung, tập provider/model/effort được phép, ngưỡng hạn mức, chính sách chọn model (<a href="#need-60">#60</a>), GitHub App của Crew dùng chung mọi project, private key trong Keychain (<a href="#need-05">#05</a>)</td>
 <td>Một bộ cho mọi project, có phiên bản (<a href="#need-28">#28</a>)</td>
 <td>Human (2026-10-25)</td>
 </tr>
@@ -1163,7 +1163,7 @@
 <td>Crew project-scope</td>
 <td>Settings phạm vi project (<a href="#need-04">#04</a>), không nằm trong repo Crew (<a href="#need-02">#02</a>)</td>
 <td>Human, thiết lập ở Kickoff</td>
-<td>Bước verification: lệnh build, test, lint, chạy app, baseline health check (<a href="#need-19">#19</a>/<a href="#need-23">#23</a>); quyền môi trường (<a href="#need-06">#06</a>); GitHub App và repo (<a href="#need-05">#05</a>); loại chủ sở hữu repo (<a href="#need-39">#39</a>); thu hẹp tập provider được nhận context của project (<a href="#need-02">#02</a>)</td>
+<td>Bước verification: lệnh build, test, lint, chạy app, baseline health check (<a href="#need-19">#19</a>/<a href="#need-23">#23</a>); quyền môi trường (<a href="#need-06">#06</a>); repo và bản cài GitHub App trên repo (<a href="#need-05">#05</a>); loại chủ sở hữu repo (<a href="#need-39">#39</a>); thu hẹp tập provider được nhận context của project (<a href="#need-02">#02</a>)</td>
 <td>Kickoff khảo sát và đề xuất; Human duyệt</td>
 <td>Human cho verification và quy tắc chỉ thu hẹp (2026-10-25); <a href="#need-05">#05</a>/<a href="#need-06">#06</a> vốn theo project</td>
 </tr>
@@ -1643,7 +1643,7 @@
 </tr>
 <tr>
 <td>Việc đang chờ Human</td>
-<td>Chưa chọn bề mặt; chốt bằng prototype</td>
+<td>Badge “N chờ bạn” trên status bar, bấm để mở danh sách gom việc chờ của mọi session; Human chọn qua bản vẽ giao diện ngày 2026-10-26</td>
 <td><a href="#need-12">12</a>, <a href="#need-52">52</a></td>
 </tr>
 <tr>
@@ -1652,9 +1652,9 @@
 <td><a href="#need-43">43</a>, <a href="#need-50">50</a></td>
 </tr>
 <tr>
-<td>Onboarding Crew</td>
-<td>Trang Onboarding của Zed</td>
-<td><a href="#need-04">04</a></td>
+<td>Onboarding Crew: provider, GitHub App</td>
+<td>Trang Onboarding có sẵn của Zed: mục Agent Setup (ẩn Zed Agent, thêm Antigravity) và một mục Crew cho GitHub App; không mở trang riêng</td>
+<td><a href="#need-04">04</a>, <a href="#need-05">05</a></td>
 </tr>
 <tr>
 <td>Onboarding project, cấu hình user-scope và project-scope</td>
@@ -2157,13 +2157,13 @@
 </tr>
 <tr>
 <td><a id="need-04"></a> <strong>NEED 04 — Một Crew theo được toàn vòng đời project</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
-<td>Human dùng cùng một Crew cho onboarding, kickoff, brainstorm, research, refine, implement, release/migration, incident, review/retro và retirement. Onboarding là UI thiết lập do code điều khiển, không dùng LLM: crew-onboarding nằm trong trang Onboarding của Zed, project-onboarding nằm trong Settings ở phạm vi project. Onboarding chỉ làm các thao tác tất định: kết nối GitHub App (#05), chọn repo, nhận diện loại chủ sở hữu repo (#39) và kiểm quyền. Các công việc còn lại, kể cả kickoff, đi qua hội thoại với Orchestrator. Session Kickoff đầu tiên của project đóng vai trò Initializer thiết lập nền tảng Outer Harness (khảo sát và chuẩn hóa quy trình khởi chạy môi trường/check cơ sở tái lập được #19/#23, nguồn sự thật #39) để các session tiếp theo kế thừa mà không phải dò lại từ đầu. Mỗi session có INPUT, OUTPUT chính, tiêu chí hoàn thành và quyền phù hợp loại việc theo <a href="#session-types">bảng Loại session</a>; khi session đạt Done, hồ sơ kết quả được khóa theo dòng chảy tiến về phía trước (flow-forward #41) và OUTPUT có thể trở thành INPUT của session tiếp theo.</td>
+<td>Human dùng cùng một Crew cho onboarding, kickoff, brainstorm, research, refine, implement, release/migration, incident, review/retro và retirement. Onboarding là UI thiết lập do code điều khiển, không dùng LLM, gồm hai phần. Crew-onboarding làm một lần cho máy, nằm ngay trong trang Onboarding có sẵn của Zed, dùng bố cục và component của trang đó, không mở trang, tab hay item riêng: ba provider (#25) được thiết lập ở mục Agent Setup có sẵn, trong đó Zed Agent được ẩn và thay bằng Antigravity; GitHub App của Crew được tạo mới hoặc kết nối ở một mục Crew cùng trang, dùng chung cho mọi project (#05). Project-onboarding làm cho từng project, nằm trong Settings ở phạm vi project: chọn repo, cài App lên repo, nhận diện loại chủ sở hữu repo (#39) và kiểm quyền. Onboarding chỉ làm các thao tác tất định. Các công việc còn lại, kể cả kickoff, đi qua hội thoại với Orchestrator. Session Kickoff đầu tiên của project đóng vai trò Initializer thiết lập nền tảng Outer Harness (khảo sát và chuẩn hóa quy trình khởi chạy môi trường/check cơ sở tái lập được #19/#23, nguồn sự thật #39) để các session tiếp theo kế thừa mà không phải dò lại từ đầu. Mỗi session có INPUT, OUTPUT chính, tiêu chí hoàn thành và quyền phù hợp loại việc theo <a href="#session-types">bảng Loại session</a>; khi session đạt Done, hồ sơ kết quả được khóa theo dòng chảy tiến về phía trước (flow-forward #41) và OUTPUT có thể trở thành INPUT của session tiếp theo.</td>
 <td>Crew hỗ trợ các công việc xuyên vòng đời project bằng hợp đồng session nhất quán, lịch sử bàn giao bất biến và nền tảng khởi tạo tái lập được, không chỉ luồng story → PR.</td>
 <td>Phạm vi vòng đời không tự cấp quyền môi trường, buộc mọi loại session dùng cùng pipeline hoặc mở rộng sang nhiều Human/remote.</td>
 </tr>
 <tr>
 <td><a id="need-05"></a> <strong>NEED 05 — Kết nối GitHub App của Crew ngay trong onboarding</strong><br><br><strong>Topic:</strong> Ranh giới bất biến, bảo mật &amp; kết nối nền tảng<br><strong>Status:</strong> Đã đồng ý.</td>
-<td>Trong project-onboarding, Crew hướng dẫn Human tạo mới hoặc kết nối một GitHub App có sẵn làm danh tính GitHub riêng của Crew, rồi cài App lên đúng repo của target-project với quyền tối thiểu cho Issues, pull request, nội dung repo và trạng thái check; quyền <code>workflows</code> chỉ xin khi project cần Crew sửa file trong <code>.github/workflows/</code>. Thao tác trên github.com do Human thực hiện theo hướng dẫn của #17; Crew chuẩn bị sẵn những gì tự làm được. Credential của App được lưu trong macOS Keychain. Trước khi báo sẵn sàng, Crew xác minh danh tính App, repo đã cài, quyền đủ dùng, tạo được token truy cập, loại chủ sở hữu repo (tổ chức hay tài khoản cá nhân, #39) và ruleset của nhánh đích: bỏ duyệt cũ khi có commit mới (dismiss stale approvals) và yêu cầu duyệt lần push mới nhất (require approval of the most recent push) cho #14; thiếu thì báo để Human bật. Một App có thể dùng lại cho nhiều project; mỗi project chỉ dùng token giới hạn trong repo của project đó. GitHub App là thông tin xác thực GitHub duy nhất của Crew; Crew không dùng PAT.</td>
+<td>Trong crew-onboarding, một lần cho máy, Crew hướng dẫn Human tạo mới hoặc kết nối một GitHub App có sẵn làm danh tính GitHub riêng của Crew, nhập private key của App và xác minh danh tính App; mọi project dùng chung App này, không tạo App riêng cho từng project. Trong project-onboarding, Crew hướng dẫn Human cài App lên đúng repo của target-project với quyền tối thiểu cho Issues, pull request, nội dung repo và trạng thái check; quyền <code>workflows</code> chỉ xin khi project cần Crew sửa file trong <code>.github/workflows/</code>. Thao tác trên github.com do Human thực hiện theo hướng dẫn của #17; Crew chuẩn bị sẵn những gì tự làm được. Credential của App được lưu trong macOS Keychain. Trước khi báo sẵn sàng, Crew xác minh danh tính App, repo đã cài, quyền đủ dùng, tạo được token truy cập, loại chủ sở hữu repo (tổ chức hay tài khoản cá nhân, #39) và ruleset của nhánh đích: bỏ duyệt cũ khi có commit mới (dismiss stale approvals) và yêu cầu duyệt lần push mới nhất (require approval of the most recent push) cho #14; thiếu thì báo để Human bật. Một App dùng chung cho mọi project; mỗi project chỉ dùng token giới hạn trong repo của project đó. App không cài được lên tài khoản sở hữu repo (ví dụ App private chỉ cài được trên tài khoản sở hữu App) thì kiểm tra sẵn sàng của project báo blocker để Human quyết định. GitHub App là thông tin xác thực GitHub duy nhất của Crew; Crew không dùng PAT.</td>
 <td>Sau onboarding, Human biết App nào đại diện Crew, đã cài vào repo nào, có quyền gì và còn thiếu gì. PR/Issue do Crew tạo mang danh tính App, nên review Approve của Human trên GitHub hợp lệ và phân biệt được với thao tác của Crew theo #14, #40 và #35.</td>
 <td>Không yêu cầu dán private key, client secret hay token vào hội thoại/log/artifact, và không lưu chúng trong project hoặc repo Crew. Không tự cài App lên repo ngoài lựa chọn của Human, không xin quyền vượt nhu cầu đã nêu, không dùng PAT hay token cá nhân của Human, kể cả khi App thiếu quyền hoặc lỗi. Nhu cầu mà App không đáp ứng được (ví dụ API notifications, Projects thuộc tài khoản cá nhân) được báo thành blocker để Human quyết định. Khi chưa kết nối, việc cần ghi lên GitHub giữ trạng thái chờ Human; session không cần GitHub như brainstorm/research vẫn chạy. Quyền App bị đổi hoặc App bị gỡ cài được phát hiện và báo theo #23/#42; quyền môi trường khác vẫn theo #06.</td>
 </tr>
@@ -2662,6 +2662,10 @@
 <tr>
 <td>Review v3.5</td>
 <td>Bản 3.5 (2026-10-25): đưa kết quả spike về ROLE sau compaction của Antigravity và về chặn đọc đường dẫn bí mật, <code>$TMPDIR</code> của Claude vào NEED 07, 31, 55, rủi ro R12 và Phụ lục C; bỏ hai câu hỏi đã trả lời khỏi mục 7. Chặn ghi <code>$TMPDIR</code> suy ra từ NEED 02 vì thư mục này dùng chung cho mọi worker Claude trên máy.</td>
+</tr>
+<tr>
+<td>Review v3.6</td>
+<td>Bản 3.6 (2026-10-26): Human review bản vẽ giao diện <a href="ui-design.html"><code>ui-design.html</code></a> và chốt: (1) crew-onboarding nằm ngay trong trang Onboarding có sẵn của Zed, không mở trang, tab hay item riêng; (2) provider được thiết lập ở mục Agent Setup có sẵn, Zed Agent ẩn và thay bằng Antigravity; (3) GitHub App được tạo hoặc kết nối một lần ở crew-onboarding và dùng chung cho mọi project, project-onboarding chỉ cài App lên repo và kiểm sẵn sàng; (4) việc chờ Human hiện bằng badge trên status bar, bấm để mở danh sách gom mọi session (<a href="#need-52">NEED 52</a>, <a href="#need-04">NEED 04</a>, <a href="#need-05">NEED 05</a>, <a href="#luong-onboarding">5.4.5</a>, <a href="#config-layers">5.6.2</a>, <a href="#muc-8">mục 8</a>).</td>
 </tr>
 </tbody></table></div>
   </main>

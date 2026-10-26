@@ -14,11 +14,11 @@
 | ---- | --- | --------- | ---- |
 | T6.1 | Tổng quan session | M5 | 43, 49, 50 |
 | T6.2 | Thread worker chỉ đọc (H5b) | M3 | 50 |
-| T6.3 | Việc chờ Human: prototype rồi hiện thực | T5.9 | 12, 52 |
+| T6.3 | Việc chờ Human trên status bar | T2.7, T6.4 | 12, 52 |
 | T6.4 | Status bar | M1 | 50, 56, 60 |
 | T6.5 | Sidebar và History (H5c) | M2 | 53 |
 | T6.6 | Trang Settings (H7, phần UI) | T1.2 | 27 |
-| T6.7 | Onboarding (H6) | T4.2 | 04, 05, 17 |
+| T6.7 | Onboarding (H6, H7) | T4.2 | 04, 05, 17 |
 | T6.8 | Tài liệu quyết định; rà soát tuân thủ Zed UI | T6.1–T6.7 | 13, 51, 57 |
 
 ---
@@ -72,26 +72,31 @@ Mọi dữ liệu đọc từ projection của run store, không suy từ lời 
 
 ---
 
-### T6.3 · Việc chờ Human: prototype rồi hiện thực
+### T6.3 · Việc chờ Human trên status bar
 
 | Mục | Nội dung |
 | --- | -------- |
 | Mục tiêu | Human biết ngay việc nào đang cần mình, ở đâu, vì sao |
-| Căn cứ | NEED 12, 52; spec 15 (Việc chờ Human) |
-| Được sửa | `crates/crew_ui/src/pending.rs` |
-| Bàn giao | Prototype để Human chọn bề mặt; bản hiện thực theo lựa chọn |
+| Căn cứ | NEED 12, 15, 52; spec 15 (Việc chờ Human) |
+| Được sửa | `crates/crew_ui/src/pending.rs`; mục “N chờ bạn” của status bar trong `crates/crew_ui/src/status_bar.rs` (T6.4) |
+| Bàn giao | Badge trên status bar và danh sách việc chờ của mọi session |
 
-**Các bước**
-1. Làm prototype theo T5.9, nhánh `crew/prototype/pending-human`, với hai hoặc ba phương án bề mặt. Ví dụ: panel riêng, mục trong Tổng quan, badge trên status bar.
-2. Human chọn phương án trong hội thoại; quyết định được ghi qua T2.6.
-3. Hiện thực phương án đã chọn trên nhánh task, đọc từ projection “việc chờ Human” của run store.
+**Bề mặt đã chốt.** Human so hai phương án trên bản vẽ [`ui-design.html`](../ui-design.html) (A: danh sách trong Tổng quan; B: badge trên status bar) và chọn B ngày 2026-10-26 (brief 3.6). Bản vẽ là prototype của NEED 12 cho câu hỏi này, nên task không dựng lại prototype.
+
+**Thiết kế**
+- Status bar luôn có mục “N chờ bạn”; bấm vào thì mở danh sách. N đếm mọi việc chờ của mọi session đang mở trong project.
+- Mỗi mục có: nội dung, session và loại session, thời gian đã chờ (work item age), ảnh hưởng tới nhánh phụ thuộc, và nút tới đúng hội thoại Orchestrator hoặc PR trên GitHub.
+- Đọc từ projection “việc chờ Human” của run store: câu hỏi của `crew_ask_human`, giả định chờ duyệt, quyền còn thiếu, bước chỉ Human làm được (T2.7), PR chờ review.
+- Mục đã xử lý, hết hiệu lực hoặc thuộc session đã đóng không còn trong danh sách. Không có timeout (NEED 15), không có nút Approve hay Re-run (NEED 13).
 
 **Tiêu chí nghiệm thu**
-- Cho prototype, khi xong, thì có artifact ghi câu hỏi thiết kế, các phương án, quyết định của Human.
-- Cho câu hỏi đang mở từ `crew_ask_human`, khi xem bề mặt đã chọn, thì thấy câu hỏi kèm bối cảnh và đường tới thread Orchestrator.
+- Cho hai session cùng có việc chờ, khi xem status bar, thì thấy “2 chờ bạn”; bấm vào thì danh sách có cả hai mục, mỗi mục có thời gian chờ và ảnh hưởng.
+- Cho câu hỏi đang mở từ `crew_ask_human`, khi bấm mục đó, thì tới đúng thread Orchestrator.
+- Cho PR đang chờ review, khi bấm mục đó, thì mở PR trên GitHub.
 - Cho bước chỉ Human làm được (T2.7), khi xem, thì thấy hướng dẫn thực hiện.
+- Cho mục đã được Human trả lời, khi xem lại, thì không còn trong danh sách và số đếm giảm.
 
-**Kiểm chứng:** chạy app, chụp từng phương án của prototype và bản hiện thực.
+**Kiểm chứng:** `cargo test -p crew_ui pending`; chạy app, chụp status bar và danh sách.
 
 ---
 
@@ -120,7 +125,7 @@ Mọi dữ liệu đọc từ projection của run store, không suy từ lời 
 | --- | -------- |
 | Mục tiêu | Tìm và quay lại đúng session hoặc OUTPUT |
 | Căn cứ | NEED 53; spec 3.2 (H5c), 15 (Tìm và lưu trữ) |
-| Được sửa | `crates/agent_ui` (nhóm thread Crew trong sidebar, qua registry của `agent_servers`); `crates/crew_ui` |
+| Được sửa | `crates/sidebar` (H5c: nhóm thread Crew theo session trong Threads Sidebar, qua predicate trong registry của `agent_servers`); `crates/agent_ui` (nhãn Crew trong Thread History, `threads_archive_view.rs`); `crates/crew_ui` |
 | Bàn giao | Thread Crew có nhãn và được nhóm theo session trong Threads Sidebar và Thread History |
 
 Thread import đã lọc session Crew và session thăm dò từ T2.3.
@@ -130,7 +135,7 @@ Thread import đã lọc session Crew và session thăm dò từ T2.3.
 - Cho thread Crew mở từ History, khi load, thì đi qua CrewConnection (test bất biến của T1.7 vẫn đạt).
 - Cho session thăm dò, khi xem sidebar và History, thì không hiện.
 
-**Kiểm chứng:** `cargo test -p agent_ui -p crew_ui`; chạy app, chụp sidebar.
+**Kiểm chứng:** `cargo test -p sidebar -p agent_ui -p crew_ui`; chạy app, chụp sidebar.
 
 ---
 
@@ -157,29 +162,36 @@ Thread import đã lọc session Crew và session thăm dò từ T2.3.
 
 ---
 
-### T6.7 · Onboarding (H6)
+### T6.7 · Onboarding (H6, H7)
 
 | Mục | Nội dung |
 | --- | -------- |
-| Mục tiêu | Thiết lập Crew cho một project từ đầu tới lúc sẵn sàng |
-| Căn cứ | NEED 04, 05, 17; brief 4.3 (Onboarding); spec 3.2 (H6) |
-| Được sửa | `crates/onboarding` (H6); `crates/crew_ui` |
-| Bàn giao | Trang onboarding |
+| Mục tiêu | Thiết lập Crew trên máy và cho một project, từ đầu tới lúc sẵn sàng |
+| Căn cứ | NEED 04, 05, 17, 25, 56; brief 4.3 (Onboarding), 5.4.5; spec 3.2 (H6), 12 |
+| Được sửa | `crates/onboarding` (H6: registry mục và chỗ dựng mục trong `basics_page.rs`); `crates/settings_ui` (phần project-onboarding trong trang Crew của T6.6, H7); `crates/crew_ui` |
+| Bàn giao | Agent Setup đã sửa và mục Crew cho GitHub App trong trang Onboarding của Zed; project-onboarding trong Settings phạm vi project |
 
-Onboarding của Zed chỉ có một trang và không có registry trang (`crates/onboarding/src/onboarding.rs:299-301`) **[Đã kiểm]**. H6 hoặc thêm một mục Crew vào trang đó, hoặc mở một item Crew riêng từ đó; cách đã chọn ghi vào `docs/crew/hook-points.md`.
+NEED 04 chia onboarding làm hai phần do code điều khiển, không dùng LLM. Onboarding của Zed chỉ có một trang và không có registry trang (`crates/onboarding/src/onboarding.rs:299-301`); `render_basics_page` dựng các mục Theme, Base Keymap, Agent Setup, Import Settings, telemetry (`crates/onboarding/src/basics_page.rs:715-729`) **[Đã kiểm]**. Theo brief 3.6, crew-onboarding nằm ngay trong trang này, dùng bố cục và component của trang, không mở trang, tab hay item riêng. H6 thêm một registry mục trong `onboarding`; `crew_ui` đăng ký mục Crew lúc khởi tạo, nên `onboarding` không phụ thuộc crate Crew.
 
-**Các bước trên trang**
-1. Trạng thái đăng nhập từng provider; chưa đăng nhập thì chỉ dẫn tới luồng của Zed.
-2. Kết nối GitHub App: hướng dẫn (T4.1), nhập key (T4.2), kiểm sẵn sàng (T4.2).
-3. Mở session Kickoff đầu tiên (T5.8).
+**Crew-onboarding, trong trang Onboarding của Zed, một lần cho máy**
+1. Mục Agent Setup có sẵn (`render_ai_section`, `basics_page.rs:673`): khi Crew bật, ẩn nút Zed Agent, thêm Antigravity cạnh Claude và Codex. Nút giữ hành vi của Zed (cài adapter, mở thread, đăng nhập theo luồng của Zed) và hiện thêm trạng thái đăng nhập Crew (T1.8).
+2. Mục Crew cho GitHub App: hướng dẫn tạo mới hoặc chọn App có sẵn (T4.1), nhập key (T4.2), kiểm danh tính App (T4.2). Mọi project dùng chung App này.
+
+**Project-onboarding, trong Settings phạm vi project**
+3. Chọn repo, cài App đã kết nối lên repo theo hướng dẫn (T4.1), kiểm sẵn sàng (T4.2).
+4. Mở session Kickoff đầu tiên (T5.8).
 
 Mỗi bước chỉ Human làm được có hướng dẫn thực hiện theo mẫu T2.7.
 
 **Tiêu chí nghiệm thu**
-- Cho project chưa kết nối App, khi mở onboarding, thì bước 2 hiện “chưa sẵn sàng” kèm việc còn thiếu.
-- Cho mọi bước đạt, khi xem, thì onboarding báo sẵn sàng theo NEED 05 và mở được Kickoff.
+- Cho flag tắt, khi mở trang Onboarding, thì Agent Setup vẫn có Zed Agent, không có mục Crew, và trang giống upstream.
+- Cho flag bật, khi mở trang Onboarding ở lần mở Zed đầu tiên hoặc bằng action `OpenOnboarding`, thì Agent Setup không có Zed Agent, có Antigravity, và mục Crew nằm cùng trang với các mục có sẵn, không mở tab hay item riêng.
+- Cho Claude ở `not_logged_in`, khi xem Agent Setup, thì nút Claude hiện trạng thái bằng chữ hoặc icon, và bấm vào thì đi theo luồng đăng nhập của Zed.
+- Cho App đã kết nối ở crew-onboarding, khi mở project-onboarding của project thứ hai, thì không phải tạo App hay nhập lại key.
+- Cho project chưa cài App lên repo, khi mở project-onboarding, thì bước 3 hiện “chưa sẵn sàng” kèm việc còn thiếu.
+- Cho mọi bước đạt, khi xem, thì project-onboarding báo sẵn sàng theo NEED 05 và mở được Kickoff.
 
-**Kiểm chứng:** chạy app, chụp từng bước.
+**Kiểm chứng:** chạy app, chụp mục Agent Setup và mục Crew trong trang Onboarding, và từng bước project-onboarding.
 
 ---
 
