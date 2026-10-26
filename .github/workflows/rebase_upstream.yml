@@ -1,0 +1,80 @@
+name: Rebase Fork onto Upstream Zed
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Daily at 00:00 UTC
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Target branch to rebase onto upstream/main"
+        required: false
+        default: "main"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rebase-upstream-${{ inputs.branch || 'main' }}
+  cancel-in-progress: false
+
+jobs:
+  rebase:
+    name: Fetch and Rebase onto upstream/main
+    runs-on: ubuntu-latest
+    if: github.repository != 'zed-industries/zed'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+        with:
+          ref: ${{ inputs.branch || 'main' }}
+          fetch-depth: 0
+
+      - name: Fetch and rebase onto upstream/main
+        env:
+          TARGET_BRANCH: ${{ inputs.branch || 'main' }}
+          UPSTREAM_URL: https://github.com/zed-industries/zed.git
+          UPSTREAM_BRANCH: main
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if ! git remote get-url upstream >/dev/null 2>&1; then
+            git remote add upstream "$UPSTREAM_URL"
+          else
+            git remote set-url upstream "$UPSTREAM_URL"
+          fi
+          git remote set-url --push upstream DISABLE
+
+          echo "Fetching upstream/$UPSTREAM_BRANCH and origin/$TARGET_BRANCH..."
+          git fetch upstream "$UPSTREAM_BRANCH"
+          git fetch origin "$TARGET_BRANCH"
+
+          git checkout -B "$TARGET_BRANCH" "origin/$TARGET_BRANCH"
+
+          INCOMING_COUNT=$(git rev-list --count "origin/$TARGET_BRANCH..upstream/$UPSTREAM_BRANCH")
+          FORK_COMMITS=$(git rev-list --count "upstream/$UPSTREAM_BRANCH..origin/$TARGET_BRANCH")
+
+          echo "Incoming commits from upstream/$UPSTREAM_BRANCH: $INCOMING_COUNT"
+          echo "Fork-only commits to replay: $FORK_COMMITS"
+
+          if [ "$INCOMING_COUNT" -eq 0 ]; then
+            echo "Branch '$TARGET_BRANCH' is already up to date with upstream/$UPSTREAM_BRANCH. Nothing to rebase."
+            exit 0
+          fi
+
+          echo "Rebasing '$TARGET_BRANCH' onto upstream/$UPSTREAM_BRANCH..."
+          if ! git rebase "upstream/$UPSTREAM_BRANCH"; then
+            echo "::error::Merge conflict encountered while rebasing '$TARGET_BRANCH' onto 'upstream/$UPSTREAM_BRANCH'."
+            echo "Conflicting files:"
+            git diff --name-only --diff-filter=U || true
+            git rebase --abort
+            exit 1
+          fi
+
+          echo "Rebase succeeded. Pushing to origin/$TARGET_BRANCH with --force-with-lease..."
+          git push --force-with-lease origin "HEAD:refs/heads/$TARGET_BRANCH"
