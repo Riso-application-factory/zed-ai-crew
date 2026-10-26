@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S6 · Extension ACP — Zed AI Crew</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="site-header"><div class="site-brand"><a href="../index.html">Zed AI Crew</a></div><nav class="site-nav"><a href="../plan/M0-prep-and-spikes.html">M0</a><a href="../plan/M1-foundation.html">M1</a><a href="../plan/M5-playbook.html">M5</a></nav></header>
+<main class="page-container">
+<div class="doc-toolbar"><span>S6 · Đã kiểm ngày 25/10/2026</span><a class="raw-link" href="S6.md">Bản Markdown</a></div>
+<h1>S6 · Nhận thông báo đăng nhập và gọi steering</h1>
+<p>ACP 3.4.0 hỗ trợ cả hai đường truyền. Test với agent giả đạt: <strong>1 đạt, 0 lỗi</strong>. Mã thử nằm riêng trên nhánh <code>spike/S6-acp-ext</code>, commit <code>2fdbd33f34</code>; không merge mã thử vào nhánh M0.</p>
+<div class="table-wrap"><table><thead><tr><th>Nhu cầu</th><th>API dùng</th><th>Dữ liệu</th></tr></thead><tbody>
+<tr><td>Nhận <code>_auth/status_update</code></td><td>Kiểu có <code>#[derive(JsonRpcNotification)]</code> và <code>#[notification(method = "_auth/status_update")]</code>, đăng ký qua <code>Client.builder().on_receive_notification(..., on_receive_notification!())</code> cạnh handler chuẩn</td><td>Wrapper <code>#[serde(transparent)]</code> chứa <code>serde_json::Value</code>; giữ toàn bộ payload</td></tr>
+<tr><td>Gọi <code>_session/steering</code></td><td><code>connection.send_request(UntypedMessage::new("_session/steering", payload)?).block_task().await</code></td><td>Payload và kết quả đều là JSON; giữ dấu gạch dưới ở đầu method</td></tr>
+</tbody></table></div>
+<h2>Giới hạn cần biết khi triển khai</h2>
+<p><code>ExtNotification</code>, <code>ExtRequest</code> và <code>ExtResponse</code> chứa <code>Arc&lt;RawValue&gt;</code> nhưng không tự triển khai các trait cần cho builder và request. Truyền trực tiếp các kiểu này sẽ không biên dịch. Enum fallback của ACP 3.4.0 bỏ dấu gạch dưới đầu method khi nhận extension; nên dùng kiểu gắn đúng tên method cho thông báo đăng nhập. Tránh handler bắt mọi method vì có thể nhận cả thông báo chuẩn.</p>
+<p>Handler thông báo chỉ đọc và đưa dữ liệu vào hàng đợi của entity sở hữu; không chờ RPC khác trong vòng dispatch. Extension không cần feature <code>unstable</code>; workspace vẫn giữ các feature hiện có và dùng protocol v1.</p>
+<h2>Bằng chứng và phạm vi</h2>
+<p>Agent giả trả lời initialize, gửi ngay <code>_auth/status_update</code> với <code>{"kind":"account"}</code>, kiểm đúng method và payload steering rồi trả <code>{"accepted":true}</code>. Client xác nhận đã nhận thông báo và kết quả. Test có hạn chờ 5 giây, không dùng provider thật hay hạn mức.</p>
+<pre><code>cargo test --manifest-path /tmp/zed-s6-acp-ext/spikes/s6/Cargo.toml</code></pre>
+<p><strong>T1.8 và T5.6 đã cập nhật API.</strong> S6 chỉ chứng minh đường truyền và xử lý kết quả. T5.6 còn phải kiểm payload cụ thể và hành vi steering khi prompt đang chạy trên từng adapter ghim; T1.8 còn phải kiểm ngữ nghĩa đăng nhập. Payload giả gồm <code>sessionId</code> và mảng <code>prompt</code>, chưa phải xác nhận contract của adapter thật.</p>
+<p>Đối chiếu mã nguồn cục bộ của ACP 3.4.0, schema 1.12.0 và builder hiện có trong <code>crates/agent_servers/src/acp/v1.rs</code>. Lockfile độc lập của spike dùng derive 3.4.0.</p>
+</main></body></html>

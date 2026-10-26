@@ -175,7 +175,7 @@ cargo run      # chụp Command Palette khi tắt và khi bật flag
 | --- | -------- |
 | Mục tiêu | Một test chặn mọi đoạn mã Crew điều khiển provider ngoài ACP |
 | Căn cứ | NEED 61; spec 17 (dòng NEED 61) |
-| Được sửa | `crates/crew/src/need61_check.rs` (chỉ test) |
+| Được sửa | `crates/crew/src/acp_only_boundary_tests.rs` (chỉ test) |
 | Bàn giao | Test quét mã nguồn các crate `crew*` |
 
 **Thiết kế**
@@ -283,3 +283,28 @@ cargo test -p crew_acp
 - [ ] T0.1–T0.9 đạt theo Định nghĩa Xong chung.
 - [ ] `docs/crew/hook-points.md` không còn dòng `đổi API` chưa xử lý.
 - [ ] Báo cáo S6 và S7 đã merge, và các task bị ảnh hưởng đã cập nhật.
+
+
+## Execution record — 2026-10-25
+
+Implementation branch: `m0/prep-and-spikes`, started from `11caaae9f7` and rebased onto `fef581d` (tech spec v2.3, plan 1.2). This records evidence, not acceptance of unmet completion gates. Rows marked 2026-10-26 were revised after independent review against spec v2.3.
+
+| Task | Evidence |
+| --- | --- |
+| T0.1 | Brief v3.5, spec v2.3, plans 1.2 and [S1–S5 report](../spikes/S1-S5.md) exist. Explicit fork visibility check returned PUBLIC; NEED 58 remains blocked pending Human's decision. |
+| T0.2 | [Hook map](../hook-points.md) covers H1–H12 and the existing APIs of spec v2.3 (refreshed 2026-10-26); the B.1 audit follows the v2.2 list and notes where v2.3 changed a conclusion. Independent reviewer reopened five rows. H4 fork drift is reflected in spec and T1.10/T1.11; ACP remains deliberately pinned to 3.4.0. |
+| T0.3 | [Agent instructions](../AGENTS.md) plus one four-line tail section in `.rules`. Independent reviewer answered contract command and core scope using only AGENTS. |
+| T0.4 | Six crate skeletons passed `cargo check`; normal dependency trees contain no Crew dependency from agent_ui, agent_servers or acp_thread, nor crew from crew_acp. |
+| T0.5 | Default-off flag, H9 startup integration and guarded NewSession action implemented. 2026-10-26: H9 moved from `zed::initialize_workspace` to `main.rs` right after `agent_ui::init` (gated by `#[cfg(not(test))]` so `zed::tests::test_action_namespaces` stays unaffected), as spec v2.3 and this task require, and the palette hides the whole `crew` namespace. GPUI test passed for staff default off and settings on→off transitions. Real-app evidence recaptured on macOS after the H9 move on the dev build with an isolated `--user-data-dir` (`/tmp/crew-ui-evidence/01-flag-off.png` through `04-flag-off-again.png`): flag off hides every `crew` action in the Command Palette (`No matches`); `"crew": "on"` surfaces `crew: new session`, which prompts `Crew sessions are not supported yet`; switching the setting to `"off"` while running hides the action again. |
+| T0.6 | Static ACP-only boundary scanner (`crates/crew/src/acp_only_boundary_tests.rs`) matches per line, skips comment lines, catches provider CLIs spawned through any command helper, matches provider home folders only as path segments, and scopes exceptions to one file and line. Four tests pass (`cargo test -p crew need61`), and a violation injected into `crew_mcp` was reported with its file and line. |
+| T0.7 | [S6](../spikes/S6.md): fake-agent notification/steering roundtrip passed on local spike branch `spike/S6-acp-ext` (`2fdbd33f34`); T1.8/T5.6 updated. |
+| T0.8 | [S7](../spikes/S7.md): actual app/McpServer framing and all three pinned providers passed crew_ping on local spike branch `spike/S7-mcp-bridge` (`ec6efc014d`); exactly three prompts. T2.1 updated. |
+| T0.9 | Harness implements this task's v1.2 design: it advertises Zed's `client_capabilities_for_agent`, serves `fs/*` only inside the test workspace, declines elicitations, refuses terminals, fails Claude and Codex on any `fs/*` or `terminal/*` request, writes fixtures from the raw initialize result, and keeps the private traffic directory when a test fails. Four offline tests pass (`cargo test -p crew_acp`), and live initialize (`CREW_CONTRACT=1 CREW_CONTRACT_WRITE_FIXTURES=1 cargo test -p crew_acp --test contract -- --ignored --test-threads=1`) passed all three pinned adapters in 3.18s on macOS, refreshing the three sanitized fixtures from the raw initialize responses. |
+
+The changed-crate test command passed 17 tests, with three real-adapter tests ignored by default:
+
+```sh
+cargo test -p crew_ui -p feature_flags -p crew -p crew_acp -p crew_mcp -p crew_github -p crew_models
+```
+
+`./script/clippy` (full-workspace release clippy, cargo-shear, typos), `cargo test -p zed test_action_namespaces`, full-workspace formatting (`cargo fmt --all -- --check`), live contract initialize for all three providers, and real-app UI evidence after the H9 move all pass on macOS. Human decided to proceed while the fork stays PUBLIC, so NEED 58 remains formally unmet. Spike source remains isolated on local branches `spike/S6-acp-ext` (`2fdbd33f34`) and `spike/S7-mcp-bridge` (`ec6efc014d`); only reports belong in the product branch.

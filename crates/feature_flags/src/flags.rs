@@ -119,3 +119,15 @@ impl FeatureFlag for SandboxingFeatureFlag {
     }
 }
 register_feature_flag!(SandboxingFeatureFlag);
+
+pub struct CrewFeatureFlag;
+
+impl FeatureFlag for CrewFeatureFlag {
+    const NAME: &'static str = "crew";
+    type Value = PresenceFlag;
+
+    fn enabled_for_staff() -> bool {
+        false
+    }
+}
+register_feature_flag!(CrewFeatureFlag);

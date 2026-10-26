@@ -128,7 +128,7 @@
 </tr>
 </tbody></table></div>
 <hr>
-<h3>T2.1 · Cầu nối MCP và khung MCP server (H1)</h3>
+<h3>T2.1 · Cầu nối MCP và khung MCP server (H1)</h3><p><strong>S7 đã kiểm:</strong> cả ba adapter ghim gọi được crew_ping qua app thật. McpServer dùng JSON theo dòng; cầu nối sao chép byte nguyên vẹn. Host phải đăng ký initialize với capability tools; listener chỉ có sẵn tools/list và tools/call. Chỉ dùng mẫu dispatch sớm của askpass, không dùng hàm một lượt thêm NUL. Xem <a href="../spikes/S7.html">báo cáo S7</a>.</p>
 <div class="table-wrap"><table>
 <thead><tr>
 <th>Mục</th>
