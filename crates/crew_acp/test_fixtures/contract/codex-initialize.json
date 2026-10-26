@@ -2,28 +2,28 @@
   "provider": "codex",
   "protocolVersion": 1,
   "agentCapabilities": {
-    "loadSession": true,
-    "promptCapabilities": {
-      "image": true,
-      "audio": false,
-      "embeddedContext": true
-    },
-    "mcpCapabilities": {
-      "http": true,
-      "sse": false,
-      "acp": false
-    },
-    "sessionCapabilities": {
-      "list": {},
-      "delete": {},
-      "additionalDirectories": {},
-      "fork": {},
-      "resume": {},
-      "close": {}
-    },
     "auth": {
       "logout": {}
     },
-    "providers": {}
+    "providers": {},
+    "loadSession": true,
+    "promptCapabilities": {
+      "embeddedContext": true,
+      "image": true
+    },
+    "sessionCapabilities": {
+      "resume": {},
+      "list": {},
+      "close": {},
+      "delete": {},
+      "fork": {},
+      "additionalDirectories": {},
+      "subagents": {}
+    },
+    "mcpCapabilities": {
+      "acp": false,
+      "http": true,
+      "sse": false
+    }
   }
 }

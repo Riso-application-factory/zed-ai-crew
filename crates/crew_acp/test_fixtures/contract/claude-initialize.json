@@ -2,33 +2,31 @@
   "provider": "claude",
   "protocolVersion": 1,
   "agentCapabilities": {
-    "loadSession": true,
     "promptCapabilities": {
       "image": true,
-      "audio": false,
       "embeddedContext": true
     },
     "mcpCapabilities": {
       "http": true,
-      "sse": true,
-      "acp": false
-    },
-    "sessionCapabilities": {
-      "list": {},
-      "delete": {},
-      "additionalDirectories": {},
-      "systemPrompt": {
-        "mode": {
-          "override": {}
-        }
-      },
-      "fork": {},
-      "resume": {},
-      "close": {}
+      "sse": true
     },
     "auth": {
       "logout": {}
     },
-    "providers": {}
+    "providers": {},
+    "loadSession": true,
+    "sessionCapabilities": {
+      "additionalDirectories": {},
+      "close": {},
+      "delete": {},
+      "fork": {},
+      "list": {},
+      "resume": {},
+      "systemPrompt": {
+        "mode": {
+          "override": {}
+        }
+      }
+    }
   }
 }

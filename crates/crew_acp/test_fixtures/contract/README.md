@@ -21,10 +21,8 @@ Commands inherit the invoking shell environment; supply authentication there. Ne
 
 Set `CREW_CONTRACT_WRITE_FIXTURES=1` for an explicit refresh of the sanitized initialize fixtures. Review the diff before committing. This switch never exports raw traffic. Every future prompt test must choose its permission policy and its `FileAccess` explicitly; the initialize tests cancel every permission request.
 
-## Verification on 2026-10-25
+## Verification on 2026-10-25 and refresh on 2026-10-26
 
-`cargo test -p crew_acp --target-dir /tmp/crew-acp-contract-target` passed: one fixture-redaction test passed and three adapter tests were ignored. The redaction test was observed failing before implementation with synthetic email and token strings.
+`cargo test -p crew_acp` passed: four offline tests passed (fixture redaction, Zed client capabilities advertisement, forbidden `fs/*`/`terminal/*` check, and workspace path confinement) and three live adapter tests were ignored.
 
-With the documented command variables set in the shell, the ignored initialize tests passed for Antigravity, Claude, and Codex in 5.37 seconds. All negotiated ACP protocol version 1. Claude advertised `sessionCapabilities.systemPrompt.mode.override`, which the test checks before exporting its fixture. The three JSON fixtures here are from that run; they contain no raw messages, account identities, or credentials. This initializes adapters only and does not establish that their authentication or prompt execution succeeds.
-
-That run used an earlier harness that advertised no client capabilities and re-serialized the typed response. Refresh the three fixtures with `CREW_CONTRACT_WRITE_FIXTURES=1` on the next live run; expect differences such as defaulted fields (for example `mcpCapabilities.acp`) disappearing.
+On 2026-10-26, with the documented command variables set in the shell on macOS, `CREW_CONTRACT=1 CREW_CONTRACT_WRITE_FIXTURES=1 cargo test -p crew_acp --test contract -- --ignored --test-threads=1` passed for Antigravity (1.4.3), Claude (`claude-agent-acp` 0.95.0), and Codex (`codex-acp` 2.2.2) in 3.18 seconds using the revised v1.2 harness. All negotiated ACP protocol version 1. Claude advertised `sessionCapabilities.systemPrompt.mode.override`, which the test checks before exporting its fixture; Codex's raw response also includes `sessionCapabilities.subagents`, and schema-defaulted booleans absent on the wire (`audio: false` on Claude/Codex, `acp: false` on Antigravity/Claude) are no longer injected. The three JSON fixtures here are from that refreshed run; they contain no raw messages, account identities, or credentials. This initializes adapters only and does not establish that their authentication or prompt execution succeeds.
