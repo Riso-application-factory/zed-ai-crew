@@ -1,6 +1,6 @@
 # Crew agent instructions
 
-Read this before implementing a Crew task. The [brief v3.5](brief.md) is the requirement authority; the [tech spec v2.3](tech-spec.md) defines implementation decisions. The [overview](plan/00-overview.md) defines workflow, crate boundaries and completion gates. Read your task in `plan/M0-prep-and-spikes.md` through `plan/M7-model-and-retro.md`, then only the spec sections it cites. Do not invent requirements.
+Read this before implementing a Crew task. The [brief v3.6](brief.md) is the requirement authority; the [tech spec v2.4](tech-spec.md) defines implementation decisions. The [overview](plan/00-overview.md) defines workflow, crate boundaries and completion gates. Read your task in `plan/M0-prep-and-spikes.md` through `plan/M7-model-and-retro.md`, then only the spec sections it cites. Do not invent requirements.
 
 ## Commands
 
@@ -22,7 +22,7 @@ Contract tests invoke real ACP adapters and consume provider quota. Run them onl
 
 ## Boundaries
 
-- Core edits are limited to [the verified hook map](hook-points.md): H1 and H9 `crates/zed/src/main.rs`; H2/H3 `crates/agent_servers/src/acp/v1.rs`; H4 `crates/acp_thread/src/acp_thread.rs` (H4b may need `v1.rs`); H5 `crates/agent_ui`; H6 `crates/onboarding`; H7 `crates/settings_content` and `crates/settings_ui`; H8 `crates/feature_flags/src/flags.rs`; H10 `crates/project/src/agent_server_store.rs`; H11 `crates/agent_servers/src/custom.rs` and the Zed authentication flow; H12 the `fs/*` handlers in `crates/agent_servers/src/acp/v1.rs` and tool-call locations in `crates/acp_thread/src/acp_thread.rs`. Your task's allowed-file list further narrows these paths. New hooks require a map and spec update in the same PR.
+- Core edits are limited to [the verified hook map](hook-points.md): H1 and H9 `crates/zed/src/main.rs`; H2/H3 `crates/agent_servers/src/acp/v1.rs`; H4 `crates/acp_thread/src/acp_thread.rs` (H4b may need `v1.rs`); H5 `crates/agent_ui` (H5c also `crates/sidebar`); H6 `crates/onboarding`; H7 `crates/settings_content` and `crates/settings_ui`; H8 `crates/feature_flags/src/flags.rs`; H10 `crates/project/src/agent_server_store.rs`; H11 `crates/agent_servers/src/custom.rs` and the Zed authentication flow; H12 the `fs/*` handlers in `crates/agent_servers/src/acp/v1.rs` and tool-call locations in `crates/acp_thread/src/acp_thread.rs`. Your task's allowed-file list further narrows these paths. New hooks require a map and spec update in the same PR.
 - NEED 61: interact with providers only through ACP. Do not read or write provider home folders, invoke their private APIs, or control their CLI outside an ACP adapter. Zed's adapter registry manages adapter installation. Crew must not inspect provider session storage or delete it outside ACP.
 - Never put experimental code on `main`. Use a task branch `crew/<task-id>-<short-name>`. Spike code belongs on `spike/<id>-<short-name>` and is never merged into `main`; merge only its report and affected documentation.
 - Never put secrets, emails, account IDs or raw provider logs in code, fixtures or PRs. Use fake secret files for sandbox experiments and redact provider output before saving it.
@@ -41,7 +41,7 @@ zed -> crew_mcp (H1 bridge only)
 agent_ui -> agent_servers
 ```
 
-`agent_ui`, `agent_servers` and `acp_thread` must not depend on Crew crates. Core integration uses a registry in `agent_servers` populated by Crew. `crew_acp` must not depend on `crew`; define store-access traits in `crew_acp` and implement them in `crew`. `crew_mcp` owns the server, schemas and bridge; concrete Crew tools belong in `crew`.
+`agent_ui`, `sidebar`, `agent_servers` and `acp_thread` must not depend on Crew crates. Core integration uses a registry in `agent_servers` populated by Crew. `crew_acp` must not depend on `crew`; define store-access traits in `crew_acp` and implement them in `crew`. `crew_mcp` owns the server, schemas and bridge; concrete Crew tools belong in `crew`.
 
 ## Task workflow and completion
 

@@ -2,8 +2,8 @@
 
 | Mục | Nội dung |
 | --- | -------- |
-| Phiên bản | 1.2 · 2026-10-25 |
-| Nguồn | Product brief v3.5 và tech spec v2.3. Kế hoạch không thêm yêu cầu. Spec 2.3 đã khớp với kế hoạch này; các thay đổi của bản 2.3 và số dòng theo fork lấy từ báo cáo [`docs/crew/design-check.md`](../design-check.md). |
+| Phiên bản | 1.3 · 2026-10-26 |
+| Nguồn | Product brief v3.6 và tech spec v2.4. Kế hoạch không thêm yêu cầu. Spec 2.4 đã khớp với kế hoạch này; các thay đổi của bản 2.3 và số dòng theo fork lấy từ báo cáo [`docs/crew/design-check.md`](../design-check.md). |
 | Người dùng | Agent AI implementer, agent AI kiểm chứng độc lập, và Human (theo dõi tiến độ, trả lời câu hỏi, manual test cuối) |
 | Cách dùng | Mỗi task là một gói việc tự đủ dùng. Giao **một task cho một agent**; agent đọc `docs/crew/AGENTS.md`, phần task và các mục spec được dẫn, không cần lịch sử hội thoại |
 | Nhãn | Như spec: **[Đã kiểm]** đọc trong mã nguồn hoặc tài liệu gốc · **[Spike]** kết quả spike 2026-10-25 · **[Baseline]** theo baseline provider của Human · **[Nhớ]** kiến thức đáng tin, chưa kiểm lại · **[Suy luận]** cần kiểm |
@@ -50,7 +50,7 @@ agent_ui ──► agent_servers   (agent_ui và agent_servers không phụ thu�
 ```
 
 Quy tắc:
-- **`agent_ui` và `agent_servers` không phụ thuộc crate Crew.** Mọi chỗ core cần “biết” về Crew (H5b, H5d, H5e, H5f, H12) đi qua một registry trong `agent_servers`, do Crew điền lúc khởi tạo. Nhờ vậy điểm nối nhỏ và không kéo crate Crew vào core. `acp_thread` nằm dưới `agent_servers` nên không tra registry được; chỗ nào trong `acp_thread` cần biết session thuộc Crew (H12) thì nhận một cờ do `agent_servers` đặt lúc tạo thread.
+- **`agent_ui`, `sidebar` và `agent_servers` không phụ thuộc crate Crew.** Mọi chỗ core cần “biết” về Crew (H5b, H5c, H5d, H5e, H5f, H12) đi qua một registry trong `agent_servers`, do Crew điền lúc khởi tạo. Nhờ vậy điểm nối nhỏ và không kéo crate Crew vào core. `acp_thread` nằm dưới `agent_servers` nên không tra registry được; chỗ nào trong `acp_thread` cần biết session thuộc Crew (H12) thì nhận một cờ do `agent_servers` đặt lúc tạo thread.
 - **`crew_acp` không phụ thuộc `crew`.** CrewConnection cần đọc bản ghi session; `crew_acp` khai trait truy cập bản ghi, `crew` hiện thực trait đó trên run store và đăng ký lúc khởi tạo.
 - **`crew_mcp` chỉ là khung**: MCP server theo session, đăng ký tool, kiểm schema, cầu nối. Công cụ cụ thể (`crew_spawn_worker`…) nằm trong `crew`, vì cần truy cập lõi.
 

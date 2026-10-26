@@ -2,8 +2,8 @@
 
 | Mục | Nội dung |
 | --- | -------- |
-| Phiên bản | 1.1 · 2026-10-25 |
-| Nguồn | Tổng hợp từ [Product Brief v3.5](brief.md) ([mục 7](brief.md#muc-7)), [Tech Spec v2.3](tech-spec.md) ([mục 20.2](tech-spec.md#muc-20)) và [Kế hoạch triển khai v1.2](plan/00-overview.md) ([mục 9](plan/00-overview.md)). |
+| Phiên bản | 1.2 · 2026-10-26 |
+| Nguồn | Tổng hợp từ [Product Brief v3.6](brief.md) ([mục 7](brief.md#muc-7)), [Tech Spec v2.4](tech-spec.md) ([mục 20.2](tech-spec.md#muc-20)) và [Kế hoạch triển khai v1.3](plan/00-overview.md) ([mục 9](plan/00-overview.md)). |
 | Nguyên tắc | Chỉ giữ các câu hỏi và quyết định chưa có câu trả lời tại thời điểm hiện tại. Câu hỏi nào đã có câu trả lời (như Q1–Q5, Q1b, Q3b, D1–D21 và các điểm do [báo cáo kiểm thiết kế](design-check.md) trả lời) đã được đưa thẳng vào nội dung liên quan trong Brief và Tech Spec, không giữ danh sách hỏi đáp lịch sử. |
 | Nhãn | **[Đã kiểm]** đọc trong mã nguồn hoặc tài liệu gốc · **[Spike]** kết quả spike 2026-10-25 · **[Baseline]** theo baseline provider của Human · **[Nhớ]** kiến thức đáng tin, chưa kiểm lại · **[Suy luận]** cần spike hoặc test để xác nhận |
 
@@ -51,7 +51,7 @@ Tổng hợp từ [Brief mục 7.2](brief.md#muc-7). Nếu một giả định k
 
 ## 3. Các điểm `[Suy luận]` trong Tech Spec & Kế hoạch cần xác nhận khi triển khai
 
-Các điểm dưới đây được gắn nhãn **[Suy luận]** hoặc **[Nhớ]** trong [Tech Spec v2.3](tech-spec.md) và các file milestone, cần được xác nhận bằng spike hoặc unit/integration test trong quá trình thực hiện task:
+Các điểm dưới đây được gắn nhãn **[Suy luận]** hoặc **[Nhớ]** trong [Tech Spec v2.4](tech-spec.md) và các file milestone, cần được xác nhận bằng spike hoặc unit/integration test trong quá trình thực hiện task:
 
 | # | Điểm cần xác nhận | Vị trí trong Spec / Plan | Cách xác nhận |
 | - | ----------------- | ------------------------ | ------------- |
@@ -62,9 +62,8 @@ Các điểm dưới đây được gắn nhãn **[Suy luận]** hoặc **[Nhớ
 | 5 | Gate trả lời yêu cầu xin quyền của worker ngay trong handler của event, không qua tác vụ async: như vậy có đủ để yêu cầu không kịp hiện trong view của worker không? | [Tech Spec 10.1](tech-spec.md#muc-10), [T3.5](plan/M3-execution.md) | Test GPUI ở [T3.5](plan/M3-execution.md): sau khi event được xử lý, thread không còn yêu cầu đang chờ và view không có nút trả lời. |
 | 6 | Sandbox `workspace-write` của Codex có giới hạn đọc file không, và có tùy chọn ACP nào loại bỏ `$TMPDIR` cùng `/tmp` khỏi vùng ghi không? | [Tech Spec 10.4](tech-spec.md#muc-10-4), [T3.1 (S8)](plan/M3-execution.md) | Xác nhận thực nghiệm trong [Spike S8](spike-list.md#s8); nếu không có thì ghi vào `residual_risks_json` ở [T3.5](plan/M3-execution.md). |
 | 7 | Chạy `git` với `-c credential.helper=` kết hợp `ZED_ASKPASS_SOCKET` có đảm bảo bỏ qua hoàn toàn credential của Human và không lưu token installation vào Keychain không? | [Tech Spec 12](tech-spec.md#muc-12), [T4.3](plan/M4-github.md) | Kiểm bằng unit test với repo bare cục bộ và credential helper giả ở [T4.3](plan/M4-github.md). |
-| 8 | Bề mặt UI hiển thị “Việc chờ Human” (panel riêng, mục trong Tổng quan session, hay badge trên status bar) dùng phương án nào? | [Brief mục 8](brief.md#muc-8), [Tech Spec 15](tech-spec.md#muc-15), [T6.3](plan/M6-ui.md) | Dựng prototype trên nhánh `crew/prototype/pending-human` ở [T6.3](plan/M6-ui.md) để **Human chọn**. |
-| 9 | Điều khoản sử dụng API miễn phí của Artificial Analysis yêu cầu ghi nguồn (attribution) cụ thể ra sao trên UI? | [T7.3](plan/M7-model-and-retro.md) | Đọc trang điều khoản gốc khi hiện thực bộ nạp ở [T7.3](plan/M7-model-and-retro.md). |
-| 10 | Khác biệt định dạng lưu trữ session giữa bản adapter Zed tự cập nhật và bản ghim của Crew có gây lỗi khi load chéo không? | [Tech Spec 19 (T14)](tech-spec.md#muc-19) | Crew chỉ load session thuộc `crew_acp_sessions`; kiểm thêm bằng contract test load chéo. |
+| 8 | Điều khoản sử dụng API miễn phí của Artificial Analysis yêu cầu ghi nguồn (attribution) cụ thể ra sao trên UI? | [T7.3](plan/M7-model-and-retro.md) | Đọc trang điều khoản gốc khi hiện thực bộ nạp ở [T7.3](plan/M7-model-and-retro.md). |
+| 9 | Khác biệt định dạng lưu trữ session giữa bản adapter Zed tự cập nhật và bản ghim của Crew có gây lỗi khi load chéo không? | [Tech Spec 19 (T14)](tech-spec.md#muc-19) | Crew chỉ load session thuộc `crew_acp_sessions`; kiểm thêm bằng contract test load chéo. |
 
 ---
 
@@ -78,9 +77,8 @@ Tổng hợp từ [Kế hoạch triển khai — mục 9](plan/00-overview.md) v
 | --- | ------------------- | -------------- | --------------- |
 | **M0** | Xác nhận repo fork trên GitHub có visibility là `PRIVATE`. | [T0.1](plan/M0-prep-and-spikes.md) | `gh repo view --json visibility -q .visibility` trả về `PRIVATE` ([NEED 58](brief.md#need-58)). |
 | **M0–M3** | Có mặt trên máy macOS đã đăng nhập thật cả 3 provider khi agent chạy contract test hoặc các spike tốn hạn mức. | [T0.9](plan/M0-prep-and-spikes.md), [S6–S12](spike-list.md#phan-2) | Các báo cáo spike `docs/crew/spikes/S6..S12.md` và fixture contract test hoàn tất. |
-| **M4** | Tạo GitHub App trên `github.com` theo hướng dẫn, cài vào repo thử với quyền tối thiểu, tải file `.pem` và chọn file qua hộp thoại onboarding. | [T4.1](plan/M4-github.md), [T4.2](plan/M4-github.md) | Private key lưu vào macOS Keychain; bộ kiểm sẵn sàng ([NEED 05](brief.md#need-05)) báo đạt. |
+| **M4** | Tạo GitHub App trên `github.com` theo hướng dẫn, cài vào repo thử với quyền tối thiểu, tải file `.pem` và chọn file ở mục Crew của trang Onboarding (một lần cho máy; mọi project dùng chung App). | [T4.1](plan/M4-github.md), [T4.2](plan/M4-github.md) | Private key lưu vào macOS Keychain; bộ kiểm sẵn sàng ([NEED 05](brief.md#need-05)) báo đạt. |
 | **M5** | Duyệt danh mục artifact và state machine SDLC do agent đề xuất từ seed (**Q6**). | [T5.3](plan/M5-playbook.md), [T5.10](plan/M5-playbook.md) | Chốt state machine cho từng loại artifact/workflow. |
-| **M6** | Xem các phương án prototype của bề mặt “Việc chờ Human” và chọn phương án chính thức trong hội thoại. | [T6.3](plan/M6-ui.md) | Quyết định được ghi nhận qua `DecisionCapture` và hiện thực vào `crates/crew_ui/src/pending.rs`. |
 | **M7 (Trước manual test)** | Đặt giá trị cấu hình cho **Q7** (ngưỡng hạn mức, tuổi snapshot, trần song song) dựa trên báo cáo S10 & S13; chọn target repo thử nghiệm ít rủi ro (**Q9**). | [T7.8](plan/M7-model-and-retro.md) | Cấu hình user-scope hoàn chỉnh; bản build release bật `CrewFeatureFlag::enabled_for_all() = true` sẵn sàng chạy thử. |
 | **M7 (Sau baseline)** | Ghi lại vài session làm theo quy trình hiện tại ([Brief 3.4](brief.md#baseline)) và đặt ngưỡng cho các chỉ số ở **Q8**. | [T7.8](plan/M7-model-and-retro.md) | Có mốc so sánh định lượng cho đợt manual test. |
 

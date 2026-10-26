@@ -43,11 +43,11 @@
 </tr></thead><tbody>
 <tr>
 <td>Version</td>
-<td>2.3 · bản nháp · 2026-10-25</td>
+<td>2.4 · bản nháp · 2026-10-26</td>
 </tr>
 <tr>
 <td>Nguồn</td>
-<td>Product brief v3.5 (Source 0). Kế hoạch triển khai nằm ở <code>docs/crew/plan/</code> (bản 1.2). Báo cáo kiểm thiết kế với mã fork: <a href="design-check.html"><code>design-check.md</code></a>. Brief là nguồn chính về yêu cầu; spec này mô tả cách đáp ứng, không thêm hay bớt yêu cầu. Chỗ nào khác NEED thì theo NEED.</td>
+<td>Product brief v3.6 (Source 0). Kế hoạch triển khai nằm ở <code>docs/crew/plan/</code> (bản 1.3). Báo cáo kiểm thiết kế với mã fork: <a href="design-check.html"><code>design-check.md</code></a>. Brief là nguồn chính về yêu cầu; spec này mô tả cách đáp ứng, không thêm hay bớt yêu cầu. Chỗ nào khác NEED thì theo NEED.</td>
 </tr>
 <tr>
 <td>Viết và duyệt</td>
@@ -115,7 +115,7 @@
 <a id="muc-1"></a>
 <h2>1. Phạm vi kỹ thuật</h2>
 <h3>1.1 Mục tiêu</h3>
-<p>Hiện thực 61 NEED của brief v3.5 theo thứ tự xây ở brief 4.4. Mục 18 chỉnh một điểm, có ghi lý do. Phụ lục A truy vết từng NEED tới thành phần và cách kiểm.</p>
+<p>Hiện thực 61 NEED của brief v3.6 theo thứ tự xây ở brief 4.4. Mục 18 chỉnh một điểm, có ghi lý do. Phụ lục A truy vết từng NEED tới thành phần và cách kiểm.</p>
 <h3>1.2 Ngoài phạm vi</h3>
 <div class="table-wrap"><table>
 <thead><tr>
@@ -335,16 +335,16 @@
 </tr>
 <tr>
 <td>H5</td>
-<td><code>crates/agent_ui</code></td>
-<td>(a) Action “Crew: New Session”. (b) Cờ chỉ đọc tường minh cho thread hoặc view: không composer, không hiện option <code>allow_always</code>. (c) Nhóm session Crew trong sidebar. (d) <code>Agent::server()</code> (<code>agent_ui.rs:578</code>) tra một registry factory đặt trong <code>agent_servers</code> trước khi tạo <code>CustomAgentServer</code>; Crew đăng ký factory cho agent id của Crew, trả về <code>CrewAgentServer</code>, trước khi panel khôi phục thread; agent id của Crew ẩn khỏi bộ chọn agent. (e) Thread import bỏ qua session Crew sở hữu và session có cwd là thư mục thăm dò. (f) Agent id của Crew không bao giờ thành agent đang chọn của panel</td>
+<td><code>crates/agent_ui</code>; với (c) cả <code>crates/sidebar</code></td>
+<td>(a) Action “Crew: New Session”. (b) Cờ chỉ đọc tường minh cho thread hoặc view: không composer, không hiện option <code>allow_always</code>. (c) Nhóm session Crew trong Threads Sidebar: Threads Sidebar là crate <code>sidebar</code> (<code>render_thread</code>, <code>crates/sidebar/src/sidebar.rs:6284</code>; crate này phụ thuộc <code>agent_ui</code>), còn Thread History là <code>ThreadsArchiveView</code> (<code>crates/agent_ui/src/threads_archive_view.rs</code>) hiện trong sidebar <span class="tag tag-verified">[Đã kiểm]</span>. Thread của cùng một session Crew nằm chung một nhóm có nhãn Crew; <code>sidebar</code> tra predicate trong registry của <code>agent_servers</code> như (d), nên không phụ thuộc crate Crew. (d) <code>Agent::server()</code> (<code>agent_ui.rs:578</code>) tra một registry factory đặt trong <code>agent_servers</code> trước khi tạo <code>CustomAgentServer</code>; Crew đăng ký factory cho agent id của Crew, trả về <code>CrewAgentServer</code>, trước khi panel khôi phục thread; agent id của Crew ẩn khỏi bộ chọn agent. (e) Thread import bỏ qua session Crew sở hữu và session có cwd là thư mục thăm dò. (f) Agent id của Crew không bao giờ thành agent đang chọn của panel</td>
 <td>Zed tự load lại thread ở nhiều đường: mở thread có session id (<code>conversation_view.rs:1358-1371</code>), kết nối lại (<code>:1211-1218</code>), thread rảnh bị giải phóng (<code>agent_panel.rs:4300-4313</code>) rồi nạp lại khi Human mở. Thread import liệt kê session của mọi cwd (<code>thread_import.rs:803-807</code>). (b) không tái dùng được nhánh subagent: <code>is_subagent</code> chỉ là <code>parent_session_id.is_some()</code> (<code>thread_view.rs:1268</code>), không có setter, và giả parent id thì sidebar không lưu thread (<code>conversation_view.rs:1850</code>). (f): <code>set_base_view</code> gán agent đang chọn theo thread vừa hiện và lưu lại (<code>agent_panel.rs:4354</code>) <span class="tag tag-verified">[Đã kiểm]</span></td>
 <td>09, 50, 53, 55, 56</td>
 </tr>
 <tr>
 <td>H6</td>
 <td><code>crates/onboarding</code></td>
-<td>Phần onboarding của Crew: sửa trang onboarding của Zed hoặc mở một item Crew riêng</td>
-<td>Onboarding chỉ có một trang, không có registry trang (<code>onboarding.rs:299-301</code>) <span class="tag tag-verified">[Đã kiểm]</span>; NEED 04</td>
+<td>Crew-onboarding nằm trong trang Onboarding có sẵn, không mở item riêng (brief 3.6, NEED 04). (a) Mục Agent Setup (<code>render_ai_section</code>, <code>basics_page.rs:673</code>): khi Crew bật, ẩn nút Zed Agent và thêm Antigravity vào lưới cạnh Claude, Codex (<code>FEATURED_AGENT_IDS</code>, <code>:539-540</code>); nút của ba provider giữ hành vi của Zed (cài adapter của Zed, mở thread, đăng nhập theo luồng của Zed) và hiện thêm trạng thái đăng nhập Crew đọc từ <code>crew_health</code> (6.5). (b) Thêm mục Crew cho GitHub App (mục 12) vào danh sách mục mà <code>render_basics_page</code> dựng (<code>:715-729</code>). <code>onboarding</code> không phụ thuộc crate Crew: trang dựng thêm các mục đăng ký qua một registry trong <code>onboarding</code>, do <code>crew_ui</code> điền lúc khởi tạo; flag tắt thì Agent Setup giữ Zed Agent, không có mục Crew và trang giống upstream</td>
+<td>Onboarding chỉ có một trang, không có registry trang (<code>onboarding.rs:299-301</code>); trang gồm các mục Theme, Base Keymap, Agent Setup, Import Settings, telemetry (<code>basics_page.rs:715-729</code>), lưới Agent Setup gồm Zed Agent và <code>claude-acp</code>, <code>codex-acp</code>, <code>github-copilot-cli</code>, <code>cursor</code> (<code>:539-540, 673-713</code>); trang hiện ở lần mở Zed đầu tiên và mở lại được bằng action <code>OpenOnboarding</code> (<code>onboarding.rs:79</code>) <span class="tag tag-verified">[Đã kiểm]</span></td>
 <td>04</td>
 </tr>
 <tr>
@@ -654,12 +654,12 @@ impl AgentConnection for CrewConnection {
 <tr>
 <td>Crew user-scope</td>
 <td>Khóa <code>crew</code> trong <code>settings.json</code> của user; thư mục <code>crew/</code> trong thư mục cấu hình Zed cho ROLE và playbook</td>
-<td>Provider và model được phép, ngưỡng, chính sách hạn mức, danh sách đường dẫn bí mật, <strong>trần allowlist mạng</strong>, ROLE, playbook</td>
+<td>Provider và model được phép, ngưỡng, chính sách hạn mức, GitHub App của Crew (App id; private key trong Keychain), danh sách đường dẫn bí mật, <strong>trần allowlist mạng</strong>, ROLE, playbook</td>
 </tr>
 <tr>
 <td>Crew project-scope</td>
 <td>Khóa <code>crew</code> trong <code>.zed/settings.json</code> của checkout chính</td>
-<td>Bước verification, quyền môi trường, GitHub, loại chủ sở hữu repo, allowlist mạng của project, thu hẹp provider</td>
+<td>Bước verification, quyền môi trường, repo GitHub (App dùng chung từ user-scope), loại chủ sở hữu repo, allowlist mạng của project, thu hẹp provider</td>
 </tr>
 <tr>
 <td>Quy ước trong target repo</td>
@@ -673,6 +673,7 @@ impl AgentConnection for CrewConnection {
   "crew": {
     "enabled_providers": ["claude-acp", "codex-acp", "antigravity-acp"],
     "orchestrator_default_provider": "claude-acp",
+    "github_app": { "app_id": null },  // tạo hoặc kết nối ở crew-onboarding; private key chỉ nằm trong Keychain
     "allowed": { "codex-acp": { "models": ["*"], "efforts": ["*"] } },
     "pinned_adapters": { "claude-acp": "0.95.0", "codex-acp": "2.2.2", "antigravity-acp": "1.4.3" },
     "quota": {
@@ -1507,7 +1508,7 @@ ghi crew_health; readiness (NEED 23) và UI đọc từ đây</code></pre>
 </tr></thead><tbody>
 <tr>
 <td>Private key của App</td>
-<td>Nhập từ file <code>.pem</code> qua UI onboarding, ghi thẳng vào Keychain của macOS; không qua hội thoại, log, run store (NEED 05, 17)</td>
+<td>Một App dùng chung cho mọi project (brief 3.6). Nhập từ file <code>.pem</code> ở mục Crew của trang Onboarding (crew-onboarding), một lần cho máy, ghi thẳng vào Keychain của macOS; không qua hội thoại, log, run store (NEED 05, 17)</td>
 </tr>
 <tr>
 <td>Keychain trên mọi kênh build</td>
@@ -1527,7 +1528,7 @@ ghi crew_health; readiness (NEED 23) và UI đọc từ đây</code></pre>
 </tr>
 <tr>
 <td>Kiểm tra onboarding</td>
-<td>Danh tính App, repo đã cài, quyền, tạo thử token, loại chủ sở hữu repo, ruleset (dismiss stale approvals, require approval of most recent push)</td>
+<td>Crew-onboarding: danh tính App (JWT lấy được thông tin App). Project-onboarding: App đã cài lên repo, quyền, tạo thử token, loại chủ sở hữu repo, ruleset (dismiss stale approvals, require approval of most recent push). App không cài được lên tài khoản sở hữu repo (App private chỉ cài được trên tài khoản sở hữu App <span class="tag tag-memory">[Nhớ]</span>) thì báo blocker</td>
 </tr>
 <tr>
 <td>Issues</td>
@@ -1652,7 +1653,7 @@ ghi crew_health; readiness (NEED 23) và UI đọc từ đây</code></pre>
 </tr>
 <tr>
 <td>Việc chờ Human</td>
-<td>Projection từ run store; bề mặt chốt bằng prototype</td>
+<td>Projection từ run store. Badge “N chờ bạn” trên status bar, bấm để mở danh sách gom việc chờ của mọi session, mỗi mục có thời gian đã chờ, ảnh hưởng tới nhánh phụ thuộc và đường tới đúng hội thoại hoặc GitHub. Human chọn phương án này qua bản vẽ giao diện ngày 2026-10-26 (brief 3.6)</td>
 <td>12, 52</td>
 </tr>
 <tr>
@@ -1672,7 +1673,7 @@ ghi crew_health; readiness (NEED 23) và UI đọc từ đây</code></pre>
 </tr>
 <tr>
 <td>Onboarding, Settings</td>
-<td>H6 (trang onboarding của Zed hoặc item Crew riêng), H7; ô nhập API key Codex ở tầng Zed (H11)</td>
+<td>H6 (Agent Setup ẩn Zed Agent, thêm Antigravity; mục Crew cho GitHub App, trong trang Onboarding có sẵn của Zed), H7; ô nhập API key Codex ở tầng Zed (H11)</td>
 <td>04, 05, 27, 56</td>
 </tr>
 </tbody></table></div>
@@ -2676,6 +2677,10 @@ ghi crew_health; readiness (NEED 23) và UI đọc từ đây</code></pre>
 <tr>
 <td>2.3</td>
 <td>Áp 24 đề xuất của báo cáo kiểm thiết kế với mã fork (<a href="design-check.html"><code>design-check.md</code></a>), Human duyệt 2026-10-25. Thêm H12: chính sách của Crew cho <code>fs/*</code> và không tạo worktree ẩn, vì Zed nhận ghi ra ngoài project mà không xin quyền. Từ chối elicitation và chặn <code>AskUserQuestion</code>; gate quyết định theo <code>rawInput</code>; không hiện <code>allow_always</code>. H5b thành cờ chỉ đọc thật; thêm H5f (agent đang chọn). Agent id của Crew đăng ký vào agent server store, <code>inner</code> mang id Crew, chép xử lý riêng theo agent id gốc, bỏ qua settings <code>agent_servers</code>, nhận session con. Run store là file riêng qua <code>open_db</code>, chặn khi không bền. Restricted Mode. <code>settingSources: ["project"]</code>; không gửi <code>additionalDirectories</code>. Worktree của worker qua <code>GitStore</code> và Project không cửa sổ. <code>McpServer</code> cần handler <code>initialize</code>, thư mục socket 0700, công cụ kiểm trạng thái khi Stop. Id tin nhắn do Crew cấp. ModeGuard đọc lại trạng thái. API <code>Sandbox</code> với <code>TMPDIR</code> riêng. Secret luôn vào Keychain. Rollback feature flag cần build lại. H9 ở <code>main.rs</code>. Số dòng theo fork <code>11caaae</code></td>
+</tr>
+<tr>
+<td>2.4</td>
+<td>Theo brief 3.6 (Human, 2026-10-26): crew-onboarding nằm trong trang Onboarding có sẵn của Zed, không mở item riêng; mục Agent Setup ẩn Zed Agent, thêm Antigravity và hiện trạng thái đăng nhập Crew; mục Crew cho GitHub App đăng ký qua registry mục trong <code>onboarding</code> do <code>crew_ui</code> điền (3.2, 15). GitHub App dùng chung cho mọi project, cấu hình ở user-scope (<code>github_app</code>), nhập key ở crew-onboarding; project-onboarding chỉ cài App lên repo và kiểm sẵn sàng (5.1, 5.2, 12). Việc chờ Human hiện bằng badge trên status bar (15). H5c mở rộng sang <code>crates/sidebar</code>, nơi Threads Sidebar thật sự nằm (3.2)</td>
 </tr>
 </tbody></table></div>
   </main>

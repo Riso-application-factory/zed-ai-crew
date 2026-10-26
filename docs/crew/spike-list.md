@@ -3,7 +3,7 @@
 | Mục | Nội dung |
 | --- | -------- |
 | Phiên bản | 1.1 · 2026-10-25 |
-| Nguồn | Tổng hợp từ [Product Brief v3.5](brief.md) ([Phụ lục C](brief.md#ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them)), [Tech Spec v2.3](tech-spec.md) ([mục 20.1](tech-spec.md#muc-20), [Phụ lục B.3](tech-spec.md#phu-luc-b)) và [Kế hoạch triển khai v1.1](plan/00-overview.md) ([M0](plan/M0-prep-and-spikes.md)–[M7](plan/M7-model-and-retro.md)). |
+| Nguồn | Tổng hợp từ [Product Brief v3.6](brief.md) ([Phụ lục C](brief.md#ranh-gioi-nen-tang-zed-co-san-va-phan-crew-can-xay-them)), [Tech Spec v2.4](tech-spec.md) ([mục 20.1](tech-spec.md#muc-20), [Phụ lục B.3](tech-spec.md#phu-luc-b)) và [Kế hoạch triển khai v1.1](plan/00-overview.md) ([M0](plan/M0-prep-and-spikes.md)–[M7](plan/M7-model-and-retro.md)). |
 | Quy tắc Spike | Code spike nằm trên nhánh `spike/<id>-<tên>` và **không bao giờ merge vào `main`** ([NEED 03](brief.md#need-03)). Kết quả là báo cáo `docs/crew/spikes/<id>.md` merge qua PR tài liệu, kèm cập nhật các task/spec bị ảnh hưởng. Không bao giờ đọc hay in nội dung file bí mật thật; luôn che email/token trước khi lưu fixture. |
 | Nhãn | **[Đã kiểm]** đọc trong mã nguồn hoặc tài liệu gốc · **[Spike]** kết quả spike 2026-10-25 · **[Baseline]** theo baseline provider của Human · **[Nhớ]** kiến thức đáng tin, chưa kiểm lại · **[Suy luận]** cần kiểm |
 
