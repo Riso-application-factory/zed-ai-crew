@@ -2,8 +2,8 @@
 
 | Mục | Nội dung |
 | --- | -------- |
-| Phiên bản | 1.2 · 2026-10-25 |
-| Nguồn | Product brief v3.5 và tech spec v2.3. Kế hoạch không thêm yêu cầu. Spec 2.3 đã khớp với kế hoạch này; các thay đổi của bản 2.3 và số dòng theo fork lấy từ báo cáo [`docs/crew/design-check.md`](../design-check.md). |
+| Phiên bản | 1.3 · 2026-10-26 |
+| Nguồn | Product brief v3.6 và tech spec v2.4. Kế hoạch không thêm yêu cầu. Spec 2.4 đã khớp với kế hoạch này; các thay đổi của bản 2.3 và số dòng theo fork lấy từ báo cáo [`docs/crew/design-check.md`](../design-check.md). |
 | Người dùng | Agent AI implementer, agent AI kiểm chứng độc lập, và Human (theo dõi tiến độ, trả lời câu hỏi, manual test cuối) |
 | Cách dùng | Mỗi task là một gói việc tự đủ dùng. Giao **một task cho một agent**; agent đọc `docs/crew/AGENTS.md`, phần task và các mục spec được dẫn, không cần lịch sử hội thoại |
 | Nhãn | Như spec: **[Đã kiểm]** đọc trong mã nguồn hoặc tài liệu gốc · **[Spike]** kết quả spike 2026-10-25 · **[Baseline]** theo baseline provider của Human · **[Nhớ]** kiến thức đáng tin, chưa kiểm lại · **[Suy luận]** cần kiểm |

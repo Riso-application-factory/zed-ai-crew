@@ -1938,7 +1938,7 @@
         <nav class="step-list" id="step-list"></nav>
         <div class="journey-note">
           Chọn một bước để xem màn hình tương ứng. Mọi dữ liệu và kết quả trong
-          khung Zed là minh hoạ.<a href="brief.html">Product brief v3.5 ↗</a
+          khung Zed là minh hoạ.<a href="brief.html">Product brief v3.6 ↗</a
           ><a href="tech-spec.html#muc-15">Tech spec · Giao diện ↗</a>
         </div>
       </aside>
@@ -4782,7 +4782,7 @@
               .join("")}</ul>`;
           })
           .join("");
-        return `<div class="stack">${note(specGeneralNote, "amber")}<div class="spec-legend">${specLegend()}</div><p class="lead">Tổng ${specFindings.length} điểm đối chiếu với brief v3.5, tech spec v2.3 và kế hoạch M2–M6: <span class="spec-counts" style="display:inline-flex">${specCounts(specFindings.map((finding) => finding.status))}</span></p>${groups}</div>`;
+        return `<div class="stack">${note(specGeneralNote, "amber")}<div class="spec-legend">${specLegend()}</div><p class="lead">Tổng ${specFindings.length} điểm đối chiếu với brief v3.6, tech spec v2.4 và kế hoạch 1.3: <span class="spec-counts" style="display:inline-flex">${specCounts(specFindings.map((finding) => finding.status))}</span></p>${groups}</div>`;
       }
       function render() {
         const flow = flows[state.flow],
@@ -5099,7 +5099,7 @@
           case "help":
             showDialog(
               "Cách xem bản thiết kế",
-              `<div class="stack"><p>Chọn Crew onboarding, Project onboarding, Settings hoặc chu trình công việc, rồi chuyển từng bước ở thanh bên hoặc dùng nút mũi tên. Có thể nhảy đến bất kỳ màn hình nào để review.</p>${note("Điều hướng bên ngoài cửa sổ Zed chỉ đổi màn hình minh hoạ, không đại diện cho việc đã thực hiện hay đã được phê duyệt.")}<p><strong>Thử tương tác:</strong> kết nối bằng dữ liệu mẫu, bật/tắt provider, đổi ROLE/playbook, xem worker, mở PR mẫu và gửi một tin nhắn vào hội thoại.</p><p><strong>Thử tình huống:</strong> các bước readiness, kế hoạch, thực thi, kiểm chứng, PR và release có bộ chọn trạng thái dưới cửa sổ Zed.</p><p>Đây là HTML độc lập, dùng màu và icon từ Zed. Không gọi provider, không đọc khóa, không ghi Settings hoặc thao tác GitHub. Mọi chỉnh sửa chỉ ở bộ nhớ của trang.</p><p><strong>Việc chờ Human:</strong> badge “N chờ bạn” trên status bar, bấm để mở danh sách gom mọi session (Human chọn ngày 2026-10-26). Danh mục artifact/state còn chờ Q6.</p><p>Luồng full cycle minh hoạ nhiều session nối tiếp, không bắt mọi công việc đi qua tất cả bước. Hỏi nhanh, brainstorm hoặc research có thể kết thúc riêng.</p><p>Điều hướng bằng Tab; Enter mở nút; Escape đóng chi tiết. Mũi tên trái/phải chuyển bước khi không nhập liệu.</p><p><strong>Đối chiếu spec:</strong> viền màu trên phần tử cho biết nó khớp brief v3.5 và tech spec v2.3 tới đâu. Viền xanh liền: khớp; vàng gạch: khớp một phần hoặc còn thiếu; tím chấm: ngoài spec (tự thêm); đỏ đôi: không khớp. Chi tiết và nguồn nằm dưới cửa sổ Zed. Nút “Đối chiếu spec” trên thanh trên cùng bật hoặc tắt lớp này để xem lại thiết kế gốc.</p></div>`,
+              `<div class="stack"><p>Chọn Crew onboarding, Project onboarding, Settings hoặc chu trình công việc, rồi chuyển từng bước ở thanh bên hoặc dùng nút mũi tên. Có thể nhảy đến bất kỳ màn hình nào để review.</p>${note("Điều hướng bên ngoài cửa sổ Zed chỉ đổi màn hình minh hoạ, không đại diện cho việc đã thực hiện hay đã được phê duyệt.")}<p><strong>Thử tương tác:</strong> kết nối bằng dữ liệu mẫu, bật/tắt provider, đổi ROLE/playbook, xem worker, mở PR mẫu và gửi một tin nhắn vào hội thoại.</p><p><strong>Thử tình huống:</strong> các bước readiness, kế hoạch, thực thi, kiểm chứng, PR và release có bộ chọn trạng thái dưới cửa sổ Zed.</p><p>Đây là HTML độc lập, dùng màu và icon từ Zed. Không gọi provider, không đọc khóa, không ghi Settings hoặc thao tác GitHub. Mọi chỉnh sửa chỉ ở bộ nhớ của trang.</p><p><strong>Việc chờ Human:</strong> badge “N chờ bạn” trên status bar, bấm để mở danh sách gom mọi session (Human chọn ngày 2026-10-26). Danh mục artifact/state còn chờ Q6.</p><p>Luồng full cycle minh hoạ nhiều session nối tiếp, không bắt mọi công việc đi qua tất cả bước. Hỏi nhanh, brainstorm hoặc research có thể kết thúc riêng.</p><p>Điều hướng bằng Tab; Enter mở nút; Escape đóng chi tiết. Mũi tên trái/phải chuyển bước khi không nhập liệu.</p><p><strong>Đối chiếu spec:</strong> viền màu trên phần tử cho biết nó khớp brief v3.6 và tech spec v2.4 tới đâu. Viền xanh liền: khớp; vàng gạch: khớp một phần hoặc còn thiếu; tím chấm: ngoài spec (tự thêm); đỏ đôi: không khớp. Chi tiết và nguồn nằm dưới cửa sổ Zed. Nút “Đối chiếu spec” trên thanh trên cùng bật hoặc tắt lớp này để xem lại thiết kế gốc.</p></div>`,
             );
             break;
           case "login": {

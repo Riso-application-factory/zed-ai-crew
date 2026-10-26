@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Quy tắc làm việc với Crew — Zed AI Crew</title><link rel="stylesheet" href="style.css"></head>
-<body><header class="site-header"><div class="site-brand"><a href="index.html">Zed AI Crew</a></div><nav class="site-nav"><a href="brief.html">Yêu cầu</a><a href="tech-spec.html">Thiết kế</a><a href="plan/M0-prep-and-spikes.html">M0</a><a href="hook-points.html">Điểm nối</a><a href="AGENTS.html">Quy tắc agent</a></nav></header><main class="page-container"><h1>Quy tắc làm việc với Crew</h1><p>Đọc brief, task và các mục spec được task dẫn. Brief v3.5 là nguồn yêu cầu, tech spec v2.3 là nguồn quyết định thiết kế; không tự thêm yêu cầu. Tài liệu làm việc cho agent nằm ở <a href="AGENTS.md">AGENTS.md</a>.</p><h2>Lệnh kiểm chứng</h2><pre><code>cargo check -p crew -p crew_acp -p crew_mcp -p crew_github -p crew_models -p crew_ui
+<body><header class="site-header"><div class="site-brand"><a href="index.html">Zed AI Crew</a></div><nav class="site-nav"><a href="brief.html">Yêu cầu</a><a href="tech-spec.html">Thiết kế</a><a href="plan/M0-prep-and-spikes.html">M0</a><a href="hook-points.html">Điểm nối</a><a href="AGENTS.html">Quy tắc agent</a></nav></header><main class="page-container"><h1>Quy tắc làm việc với Crew</h1><p>Đọc brief, task và các mục spec được task dẫn. Brief v3.6 là nguồn yêu cầu, tech spec v2.4 là nguồn quyết định thiết kế; không tự thêm yêu cầu. Tài liệu làm việc cho agent nằm ở <a href="AGENTS.md">AGENTS.md</a>.</p><h2>Lệnh kiểm chứng</h2><pre><code>cargo check -p crew -p crew_acp -p crew_mcp -p crew_github -p crew_models -p crew_ui
 cargo test -p &lt;crate_bị_sửa&gt;
 ./script/clippy
 cargo fmt --all -- --check

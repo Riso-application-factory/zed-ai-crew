@@ -3,7 +3,7 @@
 | Field | Content |
 | ----- | ------- |
 | Version | 2.4 · bản nháp · 2026-10-26 |
-| Nguồn | Product brief v3.6 (Source 0). Kế hoạch triển khai nằm ở `docs/crew/plan/` (bản 1.2). Báo cáo kiểm thiết kế với mã fork: [`design-check.md`](design-check.md). Brief là nguồn chính về yêu cầu; spec này mô tả cách đáp ứng, không thêm hay bớt yêu cầu. Chỗ nào khác NEED thì theo NEED. |
+| Nguồn | Product brief v3.6 (Source 0). Kế hoạch triển khai nằm ở `docs/crew/plan/` (bản 1.3). Báo cáo kiểm thiết kế với mã fork: [`design-check.md`](design-check.md). Brief là nguồn chính về yêu cầu; spec này mô tả cách đáp ứng, không thêm hay bớt yêu cầu. Chỗ nào khác NEED thì theo NEED. |
 | Viết và duyệt | Tech lead (agent AI) viết theo brief mục 11.1. Human đã duyệt mọi quyết định thiết kế lớn của spec ngày 2026-10-25; các quyết định nằm thẳng trong mục liên quan. Bản 2.3 áp 24 đề xuất của báo cáo kiểm thiết kế, Human duyệt cùng ngày. |
 | Cách trình bày | Thông tin đã kiểm chứng nằm thẳng trong mục liên quan. Mục 20 chỉ liệt kê việc còn mở; câu hỏi nào có câu trả lời thì đưa vào nội dung và bỏ khỏi danh sách. |
 | Cơ sở đối chiếu | Mã nguồn fork `11caaae` (mã Rust giống commit spike `20ea81ef29`; nền upstream khoảng 2026-10-17), đọc ngày 2026-10-25. Bản 2.2 trở về trước đọc upstream `347f171` (2026-10-24), commit này không có trong fork. Mã adapter `claude-agent-acp@0.95.0` và `codex-acp@2.2.2` đọc từ gói npm; crate `agent-client-protocol` 3.4.0 và `agent-client-protocol-schema` 1.12.0 đọc từ crates.io. Spike ngày 2026-10-25 trên máy macOS của Human (fork `20ea81ef29`; ba adapter `claude-agent-acp@0.95.0`, `codex-acp@2.2.2`, `antigravity-acp` 1.4.3; crate `agent-client-protocol` 3.4.0). |
@@ -56,7 +56,7 @@
 
 ### 1.1 Mục tiêu
 
-Hiện thực 61 NEED của brief v3.5 theo thứ tự xây ở brief 4.4. Mục 18 chỉnh một điểm, có ghi lý do. Phụ lục A truy vết từng NEED tới thành phần và cách kiểm.
+Hiện thực 61 NEED của brief v3.6 theo thứ tự xây ở brief 4.4. Mục 18 chỉnh một điểm, có ghi lý do. Phụ lục A truy vết từng NEED tới thành phần và cách kiểm.
 
 ### 1.2 Ngoài phạm vi
 

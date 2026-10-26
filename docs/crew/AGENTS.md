@@ -1,6 +1,6 @@
 # Crew agent instructions
 
-Read this before implementing a Crew task. The [brief v3.5](brief.md) is the requirement authority; the [tech spec v2.3](tech-spec.md) defines implementation decisions. The [overview](plan/00-overview.md) defines workflow, crate boundaries and completion gates. Read your task in `plan/M0-prep-and-spikes.md` through `plan/M7-model-and-retro.md`, then only the spec sections it cites. Do not invent requirements.
+Read this before implementing a Crew task. The [brief v3.6](brief.md) is the requirement authority; the [tech spec v2.4](tech-spec.md) defines implementation decisions. The [overview](plan/00-overview.md) defines workflow, crate boundaries and completion gates. Read your task in `plan/M0-prep-and-spikes.md` through `plan/M7-model-and-retro.md`, then only the spec sections it cites. Do not invent requirements.
 
 ## Commands
 

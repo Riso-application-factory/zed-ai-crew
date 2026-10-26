@@ -1,6 +1,6 @@
 # Crew hook points verified on the fork
 
-Verified on 2026-10-25 against fork HEAD `11caaae9f733f9a8ae242dd18305d36f244fcb56` and upstream `347f171a3fd00a3b672382d78348b37bd969d17c`. Locations describe the current fork after M0 additions, compared with upstream; later milestone changes must refresh this map. `[Đã kiểm]` means inspected source, not a completed Crew implementation. Refreshed on 2026-10-26 for [tech spec v2.3](tech-spec.md), which applies the [design check](design-check.md): H12 added, H9 moved to `main.rs`, and the existing-API list replaced; rows added then are fork-only (`not rechecked` upstream).
+Verified on 2026-10-25 against fork HEAD `11caaae9f733f9a8ae242dd18305d36f244fcb56` and upstream `347f171a3fd00a3b672382d78348b37bd969d17c`. Locations describe the current fork after M0 additions, compared with upstream; later milestone changes must refresh this map. `[Đã kiểm]` means inspected source, not a completed Crew implementation. Refreshed on 2026-10-26 for [tech spec v2.3](tech-spec.md) and then for [tech spec v2.4](tech-spec.md) (H5c, H6), which applies the [design check](design-check.md): H12 added, H9 moved to `main.rs`, and the existing-API list replaced; rows added then are fork-only (`not rechecked` upstream).
 
 Scope: [spec 3.2](tech-spec.md#muc-3-2), [appendix B.1](tech-spec.md#phu-luc-b), and [T0.2](plan/M0-prep-and-spikes.md). Statuses: `khớp` = same location and interface, `dời dòng` = moved location with usable interface, `đổi API` = interface/dependency drift that the consuming task must account for.
 

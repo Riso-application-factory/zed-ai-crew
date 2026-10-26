@@ -2,8 +2,8 @@
 
 | Mục | Nội dung |
 | --- | -------- |
-| Phiên bản | 1.1 · 2026-10-25 |
-| Nguồn | Tổng hợp từ [Product Brief v3.5](brief.md) ([mục 7](brief.md#muc-7)), [Tech Spec v2.3](tech-spec.md) ([mục 20.2](tech-spec.md#muc-20)) và [Kế hoạch triển khai v1.2](plan/00-overview.md) ([mục 9](plan/00-overview.md)). |
+| Phiên bản | 1.2 · 2026-10-26 |
+| Nguồn | Tổng hợp từ [Product Brief v3.6](brief.md) ([mục 7](brief.md#muc-7)), [Tech Spec v2.4](tech-spec.md) ([mục 20.2](tech-spec.md#muc-20)) và [Kế hoạch triển khai v1.3](plan/00-overview.md) ([mục 9](plan/00-overview.md)). |
 | Nguyên tắc | Chỉ giữ các câu hỏi và quyết định chưa có câu trả lời tại thời điểm hiện tại. Câu hỏi nào đã có câu trả lời (như Q1–Q5, Q1b, Q3b, D1–D21 và các điểm do [báo cáo kiểm thiết kế](design-check.md) trả lời) đã được đưa thẳng vào nội dung liên quan trong Brief và Tech Spec, không giữ danh sách hỏi đáp lịch sử. |
 | Nhãn | **[Đã kiểm]** đọc trong mã nguồn hoặc tài liệu gốc · **[Spike]** kết quả spike 2026-10-25 · **[Baseline]** theo baseline provider của Human · **[Nhớ]** kiến thức đáng tin, chưa kiểm lại · **[Suy luận]** cần spike hoặc test để xác nhận |
 
@@ -51,7 +51,7 @@ Tổng hợp từ [Brief mục 7.2](brief.md#muc-7). Nếu một giả định k
 
 ## 3. Các điểm `[Suy luận]` trong Tech Spec & Kế hoạch cần xác nhận khi triển khai
 
-Các điểm dưới đây được gắn nhãn **[Suy luận]** hoặc **[Nhớ]** trong [Tech Spec v2.3](tech-spec.md) và các file milestone, cần được xác nhận bằng spike hoặc unit/integration test trong quá trình thực hiện task:
+Các điểm dưới đây được gắn nhãn **[Suy luận]** hoặc **[Nhớ]** trong [Tech Spec v2.4](tech-spec.md) và các file milestone, cần được xác nhận bằng spike hoặc unit/integration test trong quá trình thực hiện task:
 
 | # | Điểm cần xác nhận | Vị trí trong Spec / Plan | Cách xác nhận |
 | - | ----------------- | ------------------------ | ------------- |
