@@ -428,8 +428,6 @@ pub fn build_window_options(display_uuid: Option<Uuid>, cx: &mut App) -> WindowO
 }
 
 pub fn initialize_workspace(app_state: Arc<AppState>, cx: &mut App) {
-    // Command-palette initialization resets its filter, so register Crew afterwards.
-    crew_ui::init(cx);
     let mut _on_close_subscription = bind_on_window_closed(cx);
     cx.observe_global::<SettingsStore>(move |cx| {
         // A 1.92 regression causes unused-assignment to trigger on this variable.

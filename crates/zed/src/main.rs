@@ -718,6 +718,8 @@ fn main() {
             false,
             cx,
         );
+        // After `command_palette::init`, which resets the palette filter Crew uses to hide its actions.
+        crew_ui::init(cx);
         zed::watch_user_agents_md(app_state.fs.clone(), cx);
 
         repl::init(app_state.fs.clone(), cx);

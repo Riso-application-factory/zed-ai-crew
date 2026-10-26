@@ -48,8 +48,8 @@ members = [
     "crates/credentials_provider",
     "crates/crew",
     "crates/crew_acp",
-    "crates/crew_mcp",
     "crates/crew_github",
+    "crates/crew_mcp",
     "crates/crew_models",
     "crates/crew_ui",
     "crates/dap",
@@ -332,6 +332,12 @@ copilot_chat = { path = "crates/copilot_chat" }
 copilot_ui = { path = "crates/copilot_ui" }
 crashes = { path = "crates/crashes" }
 credentials_provider = { path = "crates/credentials_provider" }
+crew = { path = "crates/crew" }
+crew_acp = { path = "crates/crew_acp" }
+crew_github = { path = "crates/crew_github" }
+crew_mcp = { path = "crates/crew_mcp" }
+crew_models = { path = "crates/crew_models" }
+crew_ui = { path = "crates/crew_ui" }
 dap = { path = "crates/dap" }
 dap_adapters = { path = "crates/dap_adapters" }
 db = { path = "crates/db" }
@@ -356,12 +362,6 @@ extension = { path = "crates/extension" }
 extension_host = { path = "crates/extension_host" }
 extension_suggest = { path = "crates/extension_suggest" }
 extensions_ui = { path = "crates/extensions_ui" }
-crew = { path = "crates/crew" }
-crew_acp = { path = "crates/crew_acp" }
-crew_mcp = { path = "crates/crew_mcp" }
-crew_github = { path = "crates/crew_github" }
-crew_models = { path = "crates/crew_models" }
-crew_ui = { path = "crates/crew_ui" }
 feature_flags = { path = "crates/feature_flags" }
 feature_flags_macros = { path = "crates/feature_flags_macros" }
 feedback = { path = "crates/feedback" }
@@ -1198,9 +1198,9 @@ nonminimal_bool = "allow"
 # runs them without a `--path` argument. The `lints` package pins its own
 # nightly toolchain (see `tooling/lints/rust-toolchain.toml`) and is kept out of
 # this workspace on purpose.
-# M0 declares these empty crates before later milestones introduce their consumers.
-[workspace.metadata.cargo-shear]
-ignored = ["crew", "crew_acp", "crew_mcp", "crew_github", "crew_models"]
-
 [workspace.metadata.dylint]
 libraries = [{ path = "tooling/lints" }]
+
+# M0 declares these empty crates before later milestones introduce their consumers.
+[workspace.metadata.cargo-shear]
+ignored = ["crew", "crew_acp", "crew_github", "crew_mcp", "crew_models"]

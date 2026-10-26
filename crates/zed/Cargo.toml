@@ -98,6 +98,7 @@ copilot.workspace = true
 copilot_chat.workspace = true
 copilot_ui.workspace = true
 crashes.workspace = true
+crew_ui.workspace = true
 dap_adapters.workspace = true
 db.workspace = true
 debug_adapter_extension.workspace = true
@@ -111,7 +112,6 @@ env_logger = { workspace = true, optional = true }
 extension.workspace = true
 extension_host.workspace = true
 extensions_ui.workspace = true
-crew_ui.workspace = true
 feature_flags.workspace = true
 feedback.workspace = true
 file_finder.workspace = true

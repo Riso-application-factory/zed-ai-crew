@@ -1,7 +1,6 @@
 use command_palette_hooks::CommandPaletteFilter;
 use feature_flags::{CrewFeatureFlag, FeatureFlagAppExt};
 use gpui::{App, PromptLevel, actions};
-use std::any::TypeId;
 use util::ResultExt;
 
 actions!(crew, [NewSession]);
@@ -39,11 +38,10 @@ pub fn init(cx: &mut App) {
 fn update_action_visibility(cx: &mut App) {
     let enabled = cx.has_flag::<CrewFeatureFlag>();
     CommandPaletteFilter::update_global(cx, |filter, _| {
-        let action_types = [TypeId::of::<NewSession>()];
         if enabled {
-            filter.show_action_types(&action_types);
+            filter.show_namespace("crew");
         } else {
-            filter.hide_action_types(&action_types);
+            filter.hide_namespace("crew");
         }
     });
 }
