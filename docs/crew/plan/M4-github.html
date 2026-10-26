@@ -139,7 +139,7 @@
 </tbody></table></div>
 <p><strong>Thiết kế</strong></p>
 <ul>
-<li><strong>Hướng dẫn</strong> theo mẫu bước của Human (T2.7): quyền tối thiểu (contents, issues, pull requests, checks; <code>workflows</code> chỉ khi cần), cách cài vào repo thử, cách tải <code>.pem</code>, và Crew sẽ kiểm gì sau đó (T4.2).</li>
+<li><strong>Hướng dẫn</strong> theo mẫu bước của Human (T2.7), chia theo hai phần onboarding (brief 3.6). Crew-onboarding, một lần cho máy: tạo mới hoặc chọn App có sẵn, quyền tối thiểu (contents, issues, pull requests, checks; <code>workflows</code> chỉ khi cần), cách tải <code>.pem</code>. Project-onboarding: cách cài App đã có lên repo của project. Mỗi phần nêu Crew sẽ kiểm gì sau đó (T4.2). Mọi project dùng chung một App.</li>
 <li><strong>Client REST</strong> tự viết trên <code>http_client</code> của Zed, không dùng <code>octocrab</code>. <code>octocrab</code> dựa vào tokio <span class="tag tag-memory">[Nhớ]</span>; quyết định đã duyệt ở spec 12.</li>
 <li><strong>JWT RS256</strong> bằng <code>jsonwebtoken</code>. Workspace khai <code>jsonwebtoken = { version = "10.0", default-features = false }</code> và hiện chưa crate nào dùng <span class="tag tag-verified">[Đã kiểm]</span>. Bản 10 cần bật một backend crypto để ký RS256 <span class="tag tag-memory">[Nhớ]</span>; chọn feature trong <code>crew_github/Cargo.toml</code> và ghi lý do.</li>
 <li><strong>Token installation</strong> xin cho đúng một repo (<code>repositories: [&lt;tên&gt;]</code>) với quyền tối thiểu. Cache tới gần lúc hết hạn; token hết hạn sau khoảng 1 giờ <span class="tag tag-memory">[Nhớ]</span>. Không bao giờ log token hay header <code>Authorization</code>.</li>
@@ -165,7 +165,7 @@
 </tr>
 <tr>
 <td>Căn cứ</td>
-<td>NEED 05, 39; spec 12 (Private key của App, Kiểm tra onboarding); brief 4.3 (Onboarding)</td>
+<td>NEED 04, 05, 39; spec 5.2 (<code>github_app</code>), 12 (Private key của App, Kiểm tra onboarding); brief 4.3 (Onboarding), 5.4.5</td>
 </tr>
 <tr>
 <td>Được sửa</td>
@@ -178,9 +178,11 @@
 </tbody></table></div>
 <p><strong>Thiết kế</strong></p>
 <ul>
+<li><strong>Một App cho mọi project</strong> (brief 3.6). App id lưu ở khóa user-scope <code>crew.github_app</code>; private key nhập một lần ở crew-onboarding. Project-onboarding không hỏi lại key hay tạo App mới.</li>
 <li>Human chọn file <code>.pem</code> bằng hộp chọn file. Crew đọc file và ghi thẳng vào Keychain qua một <code>CredentialsProvider</code> (<code>crates/credentials_provider/src/credentials_provider.rs:11-34</code>) <span class="tag tag-verified">[Đã kiểm]</span>. Key không đi qua hội thoại, log hay run store (NEED 05, 17).</li>
 <li><strong>Luôn là Keychain, bất kể kênh phát hành.</strong> Không dùng <code>zed_credentials_provider::global(cx)</code>: trên kênh <code>dev</code> hàm này trả <code>DevelopmentCredentialsProvider</code>, lưu credential vào file JSON thường <code>development_credentials</code> trong thư mục config, trừ khi có <code>ZED_DEVELOPMENT_USE_KEYCHAIN</code> (<code>crates/zed_credentials_provider/src/zed_credentials_provider.rs:46-62, 116</code>), và <code>crates/zed/RELEASE_CHANNEL</code> của fork là <code>dev</code> <span class="tag tag-verified">[Đã kiểm]</span>. Provider của Crew gọi API credentials của GPUI (<code>cx.write_credentials</code>), như <code>KeychainCredentialsProvider</code> làm (<code>:69</code>). Không ghi được vào Keychain thì từ chối lưu và báo Human.</li>
-<li>Kiểm sẵn sàng:<ul><li>danh tính App;</li><li>App đã cài vào repo;</li><li>quyền đủ;</li><li>tạo thử được token;</li><li>loại chủ sở hữu repo (tổ chức hay cá nhân), dùng cho hierarchy ở T4.4;</li><li>ruleset có “dismiss stale approvals” và “require approval of most recent push”.</li></ul></li>
+<li>Kiểm sẵn sàng ở crew-onboarding:<ul><li>danh tính App.</li></ul></li>
+<li>Kiểm sẵn sàng ở project-onboarding:<ul><li>App đã cài vào repo; App không cài được lên tài khoản sở hữu repo (App private chỉ cài được trên tài khoản sở hữu App <span class="tag tag-memory">[Nhớ]</span>) thì báo blocker;</li><li>quyền đủ;</li><li>tạo thử được token;</li><li>loại chủ sở hữu repo (tổ chức hay cá nhân), dùng cho hierarchy ở T4.4;</li><li>ruleset có “dismiss stale approvals” và “require approval of most recent push”.</li></ul></li>
 <li>Lấy danh tính bot của App để T3.9 dùng làm author của commit.</li>
 </ul>
 <p><strong>Tiêu chí nghiệm thu</strong></p>
@@ -191,6 +193,7 @@
 <li>Cho App chưa cài vào repo, khi kiểm sẵn sàng, thì báo đúng bước thiếu, kèm hướng dẫn của Human.</li>
 <li>Cho ruleset thiếu “require approval of most recent push”, khi kiểm, thì báo thiếu và chưa coi là sẵn sàng.</li>
 <li>Cho repo của tổ chức hoặc cá nhân, khi kiểm, thì loại chủ sở hữu được ghi đúng.</li>
+<li>Cho App đã kết nối ở crew-onboarding, khi mở project-onboarding của một project mới, thì không phải nhập lại key hay tạo App; chỉ còn bước cài App lên repo và kiểm sẵn sàng.</li>
 </ul>
 <p><strong>Kiểm chứng:</strong> <code>cargo test -p crew_github onboarding</code> (Keychain giả); chạy app, chụp bước nhập key.</p>
 <hr>

@@ -32,7 +32,7 @@
 | Bàn giao | Hướng dẫn cho Human; client REST; token installation có cache |
 
 **Thiết kế**
-- **Hướng dẫn** theo mẫu bước của Human (T2.7): quyền tối thiểu (contents, issues, pull requests, checks; `workflows` chỉ khi cần), cách cài vào repo thử, cách tải `.pem`, và Crew sẽ kiểm gì sau đó (T4.2).
+- **Hướng dẫn** theo mẫu bước của Human (T2.7), chia theo hai phần onboarding (brief 3.6). Crew-onboarding, một lần cho máy: tạo mới hoặc chọn App có sẵn, quyền tối thiểu (contents, issues, pull requests, checks; `workflows` chỉ khi cần), cách tải `.pem`. Project-onboarding: cách cài App đã có lên repo của project. Mỗi phần nêu Crew sẽ kiểm gì sau đó (T4.2). Mọi project dùng chung một App.
 - **Client REST** tự viết trên `http_client` của Zed, không dùng `octocrab`. `octocrab` dựa vào tokio **[Nhớ]**; quyết định đã duyệt ở spec 12.
 - **JWT RS256** bằng `jsonwebtoken`. Workspace khai `jsonwebtoken = { version = "10.0", default-features = false }` và hiện chưa crate nào dùng **[Đã kiểm]**. Bản 10 cần bật một backend crypto để ký RS256 **[Nhớ]**; chọn feature trong `crew_github/Cargo.toml` và ghi lý do.
 - **Token installation** xin cho đúng một repo (`repositories: [<tên>]`) với quyền tối thiểu. Cache tới gần lúc hết hạn; token hết hạn sau khoảng 1 giờ **[Nhớ]**. Không bao giờ log token hay header `Authorization`.
@@ -52,16 +52,18 @@
 | Mục | Nội dung |
 | --- | -------- |
 | Mục tiêu | Private key đi thẳng vào Keychain; Crew kiểm App đã sẵn sàng trước khi dùng |
-| Căn cứ | NEED 05, 39; spec 12 (Private key của App, Kiểm tra onboarding); brief 4.3 (Onboarding) |
+| Căn cứ | NEED 04, 05, 39; spec 5.2 (`github_app`), 12 (Private key của App, Kiểm tra onboarding); brief 4.3 (Onboarding), 5.4.5 |
 | Được sửa | `crates/crew_github/src/onboarding.rs`; action tối thiểu trong `crates/crew_ui`. Trang onboarding hoàn chỉnh ở T6.7 |
 | Bàn giao | Nhập key; bộ kiểm sẵn sàng; danh tính bot của App cho commit (T3.9) |
 
 **Thiết kế**
+- **Một App cho mọi project** (brief 3.6). App id lưu ở khóa user-scope `crew.github_app`; private key nhập một lần ở crew-onboarding. Project-onboarding không hỏi lại key hay tạo App mới.
 - Human chọn file `.pem` bằng hộp chọn file. Crew đọc file và ghi thẳng vào Keychain qua một `CredentialsProvider` (`crates/credentials_provider/src/credentials_provider.rs:11-34`) **[Đã kiểm]**. Key không đi qua hội thoại, log hay run store (NEED 05, 17).
 - **Luôn là Keychain, bất kể kênh phát hành.** Không dùng `zed_credentials_provider::global(cx)`: trên kênh `dev` hàm này trả `DevelopmentCredentialsProvider`, lưu credential vào file JSON thường `development_credentials` trong thư mục config, trừ khi có `ZED_DEVELOPMENT_USE_KEYCHAIN` (`crates/zed_credentials_provider/src/zed_credentials_provider.rs:46-62, 116`), và `crates/zed/RELEASE_CHANNEL` của fork là `dev` **[Đã kiểm]**. Provider của Crew gọi API credentials của GPUI (`cx.write_credentials`), như `KeychainCredentialsProvider` làm (`:69`). Không ghi được vào Keychain thì từ chối lưu và báo Human.
-- Kiểm sẵn sàng:
-  - danh tính App;
-  - App đã cài vào repo;
+- Kiểm sẵn sàng ở crew-onboarding:
+  - danh tính App.
+- Kiểm sẵn sàng ở project-onboarding:
+  - App đã cài vào repo; App không cài được lên tài khoản sở hữu repo (App private chỉ cài được trên tài khoản sở hữu App **[Nhớ]**) thì báo blocker;
   - quyền đủ;
   - tạo thử được token;
   - loại chủ sở hữu repo (tổ chức hay cá nhân), dùng cho hierarchy ở T4.4;
@@ -75,6 +77,7 @@
 - Cho App chưa cài vào repo, khi kiểm sẵn sàng, thì báo đúng bước thiếu, kèm hướng dẫn của Human.
 - Cho ruleset thiếu “require approval of most recent push”, khi kiểm, thì báo thiếu và chưa coi là sẵn sàng.
 - Cho repo của tổ chức hoặc cá nhân, khi kiểm, thì loại chủ sở hữu được ghi đúng.
+- Cho App đã kết nối ở crew-onboarding, khi mở project-onboarding của một project mới, thì không phải nhập lại key hay tạo App; chỉ còn bước cài App lên repo và kiểm sẵn sàng.
 
 **Kiểm chứng:** `cargo test -p crew_github onboarding` (Keychain giả); chạy app, chụp bước nhập key.
 

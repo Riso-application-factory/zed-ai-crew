@@ -43,11 +43,11 @@
 </tr></thead><tbody>
 <tr>
 <td>Phiên bản</td>
-<td>1.1 · 2026-10-25</td>
+<td>1.2 · 2026-10-26</td>
 </tr>
 <tr>
 <td>Nguồn</td>
-<td>Tổng hợp từ <a href="brief.html">Product Brief v3.5</a> (<a href="brief.html#muc-7">mục 7</a>), <a href="tech-spec.html">Tech Spec v2.3</a> (<a href="tech-spec.html#muc-20">mục 20.2</a>) và <a href="plan/00-overview.html">Kế hoạch triển khai v1.2</a> (<a href="plan/00-overview.html">mục 9</a>).</td>
+<td>Tổng hợp từ <a href="brief.html">Product Brief v3.6</a> (<a href="brief.html#muc-7">mục 7</a>), <a href="tech-spec.html">Tech Spec v2.4</a> (<a href="tech-spec.html#muc-20">mục 20.2</a>) và <a href="plan/00-overview.html">Kế hoạch triển khai v1.3</a> (<a href="plan/00-overview.html">mục 9</a>).</td>
 </tr>
 <tr>
 <td>Nguyên tắc</td>
@@ -164,7 +164,7 @@
 <hr>
 <a id="muc-3"></a>
 <h2>3. Các điểm <code>[Suy luận]</code> trong Tech Spec &amp; Kế hoạch cần xác nhận khi triển khai</h2>
-<p>Các điểm dưới đây được gắn nhãn <span class="tag tag-inferred">[Suy luận]</span> hoặc <span class="tag tag-memory">[Nhớ]</span> trong <a href="tech-spec.html">Tech Spec v2.3</a> và các file milestone, cần được xác nhận bằng spike hoặc unit/integration test trong quá trình thực hiện task:</p>
+<p>Các điểm dưới đây được gắn nhãn <span class="tag tag-inferred">[Suy luận]</span> hoặc <span class="tag tag-memory">[Nhớ]</span> trong <a href="tech-spec.html">Tech Spec v2.4</a> và các file milestone, cần được xác nhận bằng spike hoặc unit/integration test trong quá trình thực hiện task:</p>
 <div class="table-wrap"><table>
 <thead><tr>
 <th>#</th>
@@ -216,18 +216,12 @@
 </tr>
 <tr>
 <td>8</td>
-<td>Bề mặt UI hiển thị “Việc chờ Human” (panel riêng, mục trong Tổng quan session, hay badge trên status bar) dùng phương án nào?</td>
-<td><a href="brief.html#muc-8">Brief mục 8</a>, <a href="tech-spec.html#muc-15">Tech Spec 15</a>, <a href="plan/M6-ui.html">T6.3</a></td>
-<td>Dựng prototype trên nhánh <code>crew/prototype/pending-human</code> ở <a href="plan/M6-ui.html">T6.3</a> để <strong>Human chọn</strong>.</td>
-</tr>
-<tr>
-<td>9</td>
 <td>Điều khoản sử dụng API miễn phí của Artificial Analysis yêu cầu ghi nguồn (attribution) cụ thể ra sao trên UI?</td>
 <td><a href="plan/M7-model-and-retro.html">T7.3</a></td>
 <td>Đọc trang điều khoản gốc khi hiện thực bộ nạp ở <a href="plan/M7-model-and-retro.html">T7.3</a>.</td>
 </tr>
 <tr>
-<td>10</td>
+<td>9</td>
 <td>Khác biệt định dạng lưu trữ session giữa bản adapter Zed tự cập nhật và bản ghim của Crew có gây lỗi khi load chéo không?</td>
 <td><a href="tech-spec.html#muc-19">Tech Spec 19 (T14)</a></td>
 <td>Crew chỉ load session thuộc <code>crew_acp_sessions</code>; kiểm thêm bằng contract test load chéo.</td>
@@ -258,7 +252,7 @@
 </tr>
 <tr>
 <td><strong>M4</strong></td>
-<td>Tạo GitHub App trên <code>github.com</code> theo hướng dẫn, cài vào repo thử với quyền tối thiểu, tải file <code>.pem</code> và chọn file qua hộp thoại onboarding.</td>
+<td>Tạo GitHub App trên <code>github.com</code> theo hướng dẫn, cài vào repo thử với quyền tối thiểu, tải file <code>.pem</code> và chọn file ở mục Crew của trang Onboarding (một lần cho máy; mọi project dùng chung App).</td>
 <td><a href="plan/M4-github.html">T4.1</a>, <a href="plan/M4-github.html">T4.2</a></td>
 <td>Private key lưu vào macOS Keychain; bộ kiểm sẵn sàng (<a href="brief.html#need-05">NEED 05</a>) báo đạt.</td>
 </tr>
@@ -267,12 +261,6 @@
 <td>Duyệt danh mục artifact và state machine SDLC do agent đề xuất từ seed (<strong>Q6</strong>).</td>
 <td><a href="plan/M5-playbook.html">T5.3</a>, <a href="plan/M5-playbook.html">T5.10</a></td>
 <td>Chốt state machine cho từng loại artifact/workflow.</td>
-</tr>
-<tr>
-<td><strong>M6</strong></td>
-<td>Xem các phương án prototype của bề mặt “Việc chờ Human” và chọn phương án chính thức trong hội thoại.</td>
-<td><a href="plan/M6-ui.html">T6.3</a></td>
-<td>Quyết định được ghi nhận qua <code>DecisionCapture</code> và hiện thực vào <code>crates/crew_ui/src/pending.rs</code>.</td>
 </tr>
 <tr>
 <td><strong>M7 (Trước manual test)</strong></td>
