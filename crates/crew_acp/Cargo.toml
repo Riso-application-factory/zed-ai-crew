@@ -1,0 +1,20 @@
+[package]
+name = "crew_acp"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+license = "GPL-3.0-or-later"
+
+[lints]
+workspace = true
+
+[lib]
+path = "src/crew_acp.rs"
+doctest = false
+
+[dev-dependencies]
+agent-client-protocol = { workspace = true, features = ["process"] }
+anyhow.workspace = true
+serde_json.workspace = true
+smol.workspace = true
+tempfile.workspace = true

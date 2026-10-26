@@ -264,6 +264,7 @@ CREW_CONTRACT=1 cargo test -p crew_acp --test contract claude_options_ -- --igno
 | Bàn giao | Bảng `crew_health` được cập nhật mỗi lần khởi động; session thăm dò dùng lại |
 
 **Thiết kế**
+- **S6 verified (2026-10-25):** register an exact-method `AuthStatusUpdate(serde_json::Value)` using `#[derive(JsonRpcNotification)]`, `#[notification(method = "_auth/status_update")]`, and `#[serde(transparent)]` beside the existing `on_receive_notification` handlers. Do not pass `ExtNotification` directly: it does not implement `JsonRpcNotification` in ACP 3.4.0. Decode/enqueue the payload without waiting for another RPC in the dispatch loop. See [S6](../spikes/S6.md).
 - Thuật toán theo spec 6.5:
   - Codex tin thông báo `_auth/status_update`.
   - Claude bắt buộc healthcheck ping-pong.
@@ -326,6 +327,8 @@ Hiện `update_usage` chỉ giữ `cost.meta` **[Đã kiểm]**. Giữ diff nh�
 
 H4b không đặt ở nhánh `_ => {}` của `handle_session_update` (`acp_thread.rs:4526`): update có loại lạ bị SDK từ chối ngay lúc parse (`agent-client-protocol-3.4.0 src/jsonrpc/handlers.rs:272-279`; enum `SessionUpdate` không có biến thể dự phòng) **[Đã kiểm]**, nên nhánh đó chỉ thấy loại đã biết. Crew đọc `AcpConnection::subscribe_debug_messages()` (`v1.rs:488-495`) và ghi update có loại lạ hoặc loại Zed không xử lý. Đây là công cụ gỡ lỗi, định dạng có thể đổi, nên test của task này chạy lại mỗi lần đồng bộ upstream (T1.14). Chỉ ghi loại update, không ghi payload.
 
+**Fork contract verified by T0.2:** `TokenUsageUpdated` is a unit variant on this fork, unlike upstream's `OutputTokensUpdate` payload. Keep the existing event and v1 entry points unchanged; add a separate usage-details event for `used`, `size` and top-level `_meta`. The v1-to-v2 conversion in `handle_session_update` already forwards `update.meta`; preserve it and retain the metadata in `update_usage`. Use [current fork locations](../hook-points.md), not the upstream line numbers above.
+
 **Tiêu chí nghiệm thu**
 - Cho usage update có `_meta["_claude/rateLimit"]` ở cấp trên, khi thread xử lý, thì event phát ra mang nguyên `_meta`.
 - Cho chuỗi usage update, khi xử lý, thì mỗi update phát một event với `used` và `size` của chính nó.
@@ -345,6 +348,8 @@ H4b không đặt ở nhánh `_ => {}` của `handle_session_update` (`acp_threa
 | Bàn giao | `docs/crew/spikes/S12.md`; fixture đã che dữ liệu trong `crates/crew_acp/test_fixtures/contract/` |
 
 **Các bước:** dùng harness T0.9 gửi `/usage` trong session thăm dò, và ghi `_meta` của usage update sau một prompt ngắn. Che email và id tài khoản trước khi lưu.
+
+Capture the raw ACP top-level usage `_meta` for S12. When checking the integrated path after T1.10, consume its separate usage-details event; the existing `TokenUsageUpdated` unit event does not contain quota metadata.
 
 **Tiêu chí xong:** fixture cho cả hai nguồn; báo cáo nêu các cửa sổ (5 giờ, 7 ngày), đơn vị và định dạng giờ reset.
 

@@ -219,3 +219,7 @@ Default five-role vocabulary (`needs-triage`, `needs-info`, `ready-for-agent`, `
 ### Domain docs
 
 Single-context layout: `GLOSSARY.md` at repo root + `docs/adr/`. See `docs/agents/domain.md`.
+
+### Crew implementation
+
+For Crew work, read `docs/crew/AGENTS.md` before the assigned task and its cited spec sections. Follow its hook boundaries, ACP-only provider access, feature flag, verification and spike rules.

@@ -34,6 +34,7 @@
 | Bàn giao | Flag `--crew-mcp-bridge <socket>`; MCP server theo session; helper đăng ký tool |
 
 **Thiết kế**
+- **S7 verified (2026-10-25):** all three pinned adapters called `crew_ping` through the actual app bridge. `McpServer` uses newline-delimited JSON; the bridge copies bytes unchanged. Register `initialize` explicitly with tool capabilities; the listener only provides `tools/list` and `tools/call`. Reuse askpass's early dispatch pattern, not its NUL-terminated single-shot implementation. See [S7](../spikes/S7.md).
 - **H1:** trong `main.rs`, xử lý `--crew-mcp-bridge` ngay cạnh `--askpass` (`:215-219`), trước khi khởi tạo app **[Đã kiểm]**. Hàm cầu nối chỉ dùng thư viện chuẩn, không cần GPUI:
   - sao chép hai chiều stdin → socket và socket → stdout;
   - thoát mã 0 khi stdin EOF hoặc socket đóng; thoát mã khác 0 khi không kết nối được;

@@ -390,6 +390,7 @@
 <td>07, 34</td>
 </tr>
 </tbody></table></div>
+<p><strong>Đối chiếu fork T0.2, 2026-10-25:</strong> H4 giữ nguyên API v1: <code>handle_session_update</code> đã chuyển <code>update.meta</code> sang kiểu usage v2, nhưng <code>update_usage</code> chưa giữ metadata cấp trên. Trên fork, <code>TokenUsageUpdated</code> không có payload; upstream <code>347f171</code> có <code>OutputTokensUpdate</code>. T1.10 thêm event chi tiết usage riêng mang <code>used</code>, <code>size</code>, <code>_meta</code>, giữ nguyên event và API v1 hiện tại. Chấp nhận bản ghim ACP <code>=3.4.0</code> cho M0 (upstream <code>=3.5.0</code>), kiểm qua S6; cả hai bật <code>schemars</code>, <code>unstable</code>, <code>unstable_protocol_v2</code>. Xem <a href="hook-points.html">bản đồ điểm nối đã kiểm</a>.</p>
 <p>API có sẵn, <strong>không cần sửa core</strong> <span class="tag tag-verified">[Đã kiểm]</span>:</p>
 <ul>
 <li>Gate: <code>AcpThreadEvent::ToolAuthorizationRequested</code> (<code>acp_thread.rs:3579</code>), <code>ElicitationRequested</code> (<code>:3581</code>), <code>authorize_tool_call</code> (<code>:6077</code>), <code>authorize_permission_request</code> (<code>:6092</code>).</li>

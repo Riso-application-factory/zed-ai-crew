@@ -72,6 +72,10 @@ extend-exclude = [
     "crates/edit_prediction_cli/evals/",
     # Tests contain `baˇr` that cause `"ba" should be "by" or "be".`-like false-positives
     "crates/editor/src/document_symbols.rs",
+    # Crew working documents are Vietnamese; the spellchecker is English-only.
+    "docs/crew/",
+    # Installed skill files are third-party content, not our typos.
+    ".devin/skills/",
 ]
 
 [default]

@@ -335,14 +335,19 @@ checksum = "89b41f18aeb4a6d1a463b994cb880cc562cdea7d616ea3e22f9c6f2a438fc4f6"
 dependencies = [
  "agent-client-protocol-derive",
  "agent-client-protocol-schema",
+ "async-io",
+ "async-process",
  "futures 0.3.34",
  "futures-concurrency",
  "rustc-hash 2.1.1",
+ "rustix",
  "schemars 1.0.4",
  "serde",
  "serde_json",
+ "shell-words",
  "tracing",
  "uuid",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -4141,6 +4146,47 @@ dependencies = [
  "futures 0.3.34",
  "gpui",
  "parking_lot",
+]
+
+[[package]]
+name = "crew"
+version = "0.1.0"
+dependencies = [
+ "regex",
+]
+
+[[package]]
+name = "crew_acp"
+version = "0.1.0"
+dependencies = [
+ "agent-client-protocol",
+ "anyhow",
+ "serde_json",
+ "smol",
+ "tempfile",
+]
+
+[[package]]
+name = "crew_github"
+version = "0.1.0"
+
+[[package]]
+name = "crew_mcp"
+version = "0.1.0"
+
+[[package]]
+name = "crew_models"
+version = "0.1.0"
+
+[[package]]
+name = "crew_ui"
+version = "0.1.0"
+dependencies = [
+ "command_palette_hooks",
+ "feature_flags",
+ "gpui",
+ "settings",
+ "util",
 ]
 
 [[package]]
@@ -22416,6 +22462,7 @@ dependencies = [
  "copilot_chat",
  "copilot_ui",
  "crashes",
+ "crew_ui",
  "dap_adapters",
  "db",
  "debug_adapter_extension",

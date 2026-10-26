@@ -1,0 +1,32 @@
+{
+  "provider": "claude",
+  "protocolVersion": 1,
+  "agentCapabilities": {
+    "promptCapabilities": {
+      "image": true,
+      "embeddedContext": true
+    },
+    "mcpCapabilities": {
+      "http": true,
+      "sse": true
+    },
+    "auth": {
+      "logout": {}
+    },
+    "providers": {},
+    "loadSession": true,
+    "sessionCapabilities": {
+      "additionalDirectories": {},
+      "close": {},
+      "delete": {},
+      "fork": {},
+      "list": {},
+      "resume": {},
+      "systemPrompt": {
+        "mode": {
+          "override": {}
+        }
+      }
+    }
+  }
+}
