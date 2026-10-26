@@ -1,0 +1,13 @@
+[package]
+name = "crew_models"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+license = "GPL-3.0-or-later"
+
+[lints]
+workspace = true
+
+[lib]
+path = "src/crew_models.rs"
+doctest = false
